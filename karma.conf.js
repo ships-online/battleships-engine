@@ -5,6 +5,9 @@ const rollupBabel = require('rollup-plugin-babel');
 // Karma configuration
 module.exports = (config) => {
 	config.set({
+		// base path that will be used to resolve all patterns (eg. files, exclude)
+		basePath: './',
+
 		// Frameworks to use
 		frameworks: [ 'mocha', 'chai', 'sinon' ],
 
@@ -23,9 +26,7 @@ module.exports = (config) => {
 			rollup: {
 				plugins: [
 					rollupBabel( {
-						presets: [
-							'babel-preset-es2015-rollup'
-						]
+						presets: [ 'es2015-rollup' ]
 					} )
 				]
 			},
@@ -35,6 +36,10 @@ module.exports = (config) => {
 		},
 
 		files: [
+			// Polyfills.
+			'node_modules/babel-polyfill/dist/polyfill.min.js',
+
+			// Test files.
 			'tests/**/*.js'
 		],
 
