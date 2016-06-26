@@ -1,6 +1,7 @@
 /**
  * Mixin that injects the events API into its host.
  *
+ * @mixin utils.EmitterMixin
  * @memberOf utils
  */
 const EmitterMixin = {
@@ -8,7 +9,6 @@ const EmitterMixin = {
 	 * Store for attached events witch callbacks.
 	 *
 	 * @private
-	 * @memberOf {Array<Object>} EmitterMixin#_events
 	 */
 	_events: [],
 
@@ -31,7 +31,7 @@ const EmitterMixin = {
 	 *
 	 * @param {String} event The name of the event.
 	 * @param {Function} callback The function to stop being called.
-     */
+	 */
 	off( event, callback ) {
 		if ( typeof this._events[ event ] === 'object' ) {
 			const index = this._events[ event ].indexOf( callback );

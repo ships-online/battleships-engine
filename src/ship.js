@@ -9,11 +9,19 @@ export default class Ship {
 	 *
 	 * @param {Number} length Ship size.
 	 */
-	constructor( length ) {
+	constructor( id, length ) {
+		/**
+		 * Ship id.
+		 *
+		 * @readonly
+		 * @member {Number} Ship#id
+		 */
+		this.id = id;
 		/**
 		 * Ship length. Amount of ship fields.
 		 *
-		 * @memberOf {Number} Ship#length
+		 * @readonly
+		 * @member {Number} Ship#length
 		 */
 		this.length = length;
 	}

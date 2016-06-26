@@ -9,16 +9,17 @@ export default class ShipsCollection {
 	/**
 	 * Create an instance of ShipsCollection class, initialize with a sets of ships.
 	 *
-	 * @param {Array<game.Ship>} shipsConfig
+	 * @param {Array<Number>} shipsConfig every array number define a ship with specified length.
 	 */
 	constructor( shipsConfig ) {
 		/**
-		 * @protected
-		 * @member {Map} game.ShipsCollection#_ships
+		 * Store for ship instances.
+		 *
+		 * @private
 		 */
 		this._ships = new Map();
 
-		// Initialize collection with passed data.
+		// Initialize collection base on passed data.
 		shipsConfig.map( ( shipLength ) => this._add( shipLength ) );
 	}
 
@@ -29,7 +30,9 @@ export default class ShipsCollection {
 	 * @param {Object} shipLength Ship length.
 	 */
 	_add( shipLength ) {
-		this._ships.set( this.length, new Ship( shipLength ) );
+		const nextId = this.length;
+
+		this._ships.set( nextId, new Ship( nextId, shipLength ) );
 	}
 
 	/**
