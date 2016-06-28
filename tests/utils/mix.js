@@ -2,21 +2,17 @@ import mix from '../../src/utils/mix.js';
 
 describe( 'utils', () => {
 	describe( 'mix', () => {
-		let MixinA, MixinB;
+		const MixinA = {
+			a() {
+				return 'a';
+			}
+		};
 
-		before( () => {
-			MixinA = {
-				a() {
-					return 'a';
-				}
-			};
-
-			MixinB = {
-				b() {
-					return 'b';
-				}
-			};
-		} );
+		const MixinB = {
+			b() {
+				return 'b';
+			}
+		};
 
 		it( 'mixes 2nd+ argument\'s properties into the first class', () => {
 			class Foo {}
