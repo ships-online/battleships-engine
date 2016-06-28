@@ -15,6 +15,7 @@ const EmitterMixin = {
 	/**
 	 * Registers a callback function to be executed when an event is emitted.
 	 *
+	 * @method utils.EmitterMixin#on
 	 * @param {String} event The name of the event.
 	 * @param {Function} callback The function to be called on event.
 	 */
@@ -29,6 +30,7 @@ const EmitterMixin = {
 	/**
 	 * Stops executing the callback on the given event.
 	 *
+	 * @method utils.EmitterMixin#off
 	 * @param {String} event The name of the event.
 	 * @param {Function} callback The function to stop being called.
 	 */
@@ -45,6 +47,7 @@ const EmitterMixin = {
 	/**
 	 * Fires an event, executing all callbacks registered for it.
 	 *
+	 * @method utils.EmitterMixin#emit
 	 * @param {String} event The name of the event.
 	 * @param {...*} [args] Additional arguments to be passed to the callbacks.
 	 */
