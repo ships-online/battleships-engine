@@ -22,25 +22,8 @@ module.exports = (config) => {
 			'tests/**/*.js': [ 'rollup' ]
 		},
 
-		rollupPreprocessor: {
-			rollup: {
-				plugins: [
-					rollupBabel( {
-						presets: [ 'es2015-rollup' ]
-					} )
-				]
-			},
-			bundle: {
-				sourceMap: 'inline'
-			}
-		},
-
 		files: [
-			// Polyfills.
-			'node_modules/babel-polyfill/dist/polyfill.min.js',
-
-			// Test files.
-			'tests/**/*.js'
+			'tests/main.js'
 		],
 
 		// Enable / disable colors in the output (reporters and logs)
@@ -51,7 +34,7 @@ module.exports = (config) => {
 		logLevel: config.LOG_INFO,
 
 		// Enable / disable watching file and executing tests whenever any file changes
-		autoWatch: false,
+		autoWatch: true,
 
 		// Start these browsers, currently available:
 		// - Chrome
@@ -62,13 +45,13 @@ module.exports = (config) => {
 		// - PhantomJS
 		// - PhantomJS2
 		// - IE (only Windows)
-		browsers: [ 'PhantomJS2' ],
+		browsers: [ 'Chrome' ],
 
 		// If browser does not capture in given timeout [ms], kill it
 		captureTimeout: 60000,
 
 		// Continuous Integration mode
 		// If true, it capture browsers, run tests and exit
-		singleRun: true
+		singleRun: false
 	});
 };
