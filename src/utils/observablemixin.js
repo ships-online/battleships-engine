@@ -88,19 +88,27 @@ const ObservableMixin = {
 	}
 };
 
-Object.assign( ObservableMixin, EmitterMixin );
-
 export default ObservableMixin;
 
-/**
- * Checks if `value` is the type of Object.
- *
- * @private
- * @param {*} value
- * @returns {boolean}
- */
+// Checks if `value` is the type of Object.
 function isObject( value ) {
 	const type = typeof value;
 
 	return !!value && ( type == 'object' || type == 'function' );
 }
+
+Object.assign( ObservableMixin, EmitterMixin );
+
+/**
+ * Fired when an specific attribute changed value.
+ *
+ * @event utils.ObservableMixin#change:{attribute}
+ * @param {*} value The new attribute value.
+ * @param {*} oldValue The previous attribute value.
+ */
+
+/**
+ * Interface representing classes which mix in {@link utils.ObservableMixin}.
+ *
+ * @interface utils.Observable
+ */

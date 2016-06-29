@@ -66,3 +66,9 @@ const EmitterMixin = {
 };
 
 export default EmitterMixin;
+
+/**
+ * Interface representing classes which mix in {@link utils.EmitterMixin}.
+ *
+ * @interface utils.Emitter
+ */
