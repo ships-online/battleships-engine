@@ -69,7 +69,7 @@ export default class ShipsCollection {
 	 */
 	get isValid() {
 		for ( let ship of this ) {
-			if ( !ship[1].isValid ) {
+			if ( !ship[ 1 ].isValid ) {
 				return false;
 			}
 		}
@@ -86,7 +86,7 @@ export default class ShipsCollection {
 		let result = [];
 
 		for ( let ship of this ) {
-			result.push( ship[1].toJSON() );
+			result.push( ship[ 1 ].toJSON() );
 		}
 
 		return result;
