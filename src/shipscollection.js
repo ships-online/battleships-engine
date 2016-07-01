@@ -19,8 +19,41 @@ export default class ShipsCollection {
 		 */
 		this._ships = new Map();
 
-		// Initialize collection base on passed data.
+		// Initialize collection base on passed shipsConfig.
 		shipsConfig.map( ( shipLength ) => this._add( shipLength ) );
+	}
+
+	/**
+	 * Collection iterator.
+	 */
+	[ Symbol.iterator ]() {
+		return this._ships.values()[ Symbol.iterator ]();
+	}
+
+	/**
+	 * Get length of the collection.
+	 *
+	 * @returns {Number}
+	 */
+	get length() {
+		return this._ships.size;
+	}
+
+	/**
+	 * Return array of ships which has a collision.
+	 *
+	 * @returns {Array<game.Ship>}
+	 */
+	getShipsWithCollision() {
+		let filtered = [];
+
+		for ( let ship of this ) {
+			if ( ship.isCollision ) {
+				filtered.push( ship );
+			}
+		}
+
+		return filtered;
 	}
 
 	/**
@@ -36,49 +69,17 @@ export default class ShipsCollection {
 	}
 
 	/**
-	 * Collection iterator.
-	 */
-	[ Symbol.iterator ]() {
-		return this._ships[ Symbol.iterator ]();
-	}
-
-	/**
-	 * Get ship instance by key.
+	 * Get ship instance by id.
 	 *
-	 * @param {Number} key
+	 * @param {Number} id Ship id.
 	 * @returns {Ship}
 	 */
-	get( key ) {
-		return this._ships.get( key );
+	get( id ) {
+		return this._ships.get( id );
 	}
 
 	/**
-	 * Get length of the collection.
-	 *
-	 * @returns {Number}
-	 */
-	get length() {
-		return this._ships.size;
-	}
-
-	/**
-	 * Check if each ship in collection is valid.
-	 * If every ship is valid then return `true` if at least one ship is not valid then return `false`.
-	 *
-	 * @returns {Boolean}
-	 */
-	get isValid() {
-		for ( let ship of this ) {
-			if ( !ship[ 1 ].isValid ) {
-				return false;
-			}
-		}
-
-		return true;
-	}
-
-	/**
-	 * Serialize each Ship to JSON format.
+	 * Serialize every Ship to JSON format.
 	 *
 	 * @returns {Array<Object>}
 	 */
@@ -86,7 +87,7 @@ export default class ShipsCollection {
 		let result = [];
 
 		for ( let ship of this ) {
-			result.push( ship[ 1 ].toJSON() );
+			result.push( ship.toJSON() );
 		}
 
 		return result;

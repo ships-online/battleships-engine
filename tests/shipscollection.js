@@ -26,8 +26,8 @@ describe( 'ShipsCollection:', () => {
 			let count = 0;
 
 			for ( let ship of shipsCollection ) {
-				expect( ship[ 0 ] ).to.be.equal( count++ );
-				expect( ship[ 1 ] ).to.be.instanceof( Ship );
+				expect( ship ).to.be.instanceof( Ship );
+				count++;
 			}
 
 			expect( count ).to.equal( shipsCollection.length );
@@ -40,24 +40,6 @@ describe( 'ShipsCollection:', () => {
 		} );
 	} );
 
-	describe( 'getter isValid', () => {
-		beforeEach( () => {
-			for ( let ship of shipsCollection ) {
-				ship[ 1 ].isValid = true;
-			}
-		} );
-
-		it( 'should return true if every item in collection is valid', () => {
-			expect( shipsCollection.isValid ).to.be.true;
-		} );
-
-		it( 'should return false if at least one item in collection is invalid', () => {
-			shipsCollection.get( 2 ).isValid = false;
-
-			expect( shipsCollection.isValid ).to.be.false;
-		} );
-	} );
-
 	describe( 'get()', () => {
 		it( 'should return specified ship by key', () => {
 			const result = shipsCollection.get( 1 );
@@ -67,10 +49,31 @@ describe( 'ShipsCollection:', () => {
 		} );
 	} );
 
+	describe( 'getShipsWithCollision()', () => {
+		it( 'should return array of ships witch has a collision', () => {
+			const ship1 = shipsCollection.get( 1 );
+			const ship2 = shipsCollection.get( 3 );
+
+			ship1.isCollision = true;
+			ship2.isCollision = true;
+
+			const result = shipsCollection.getShipsWithCollision();
+
+			expect( result ).to.have.length( 2 );
+
+			expect( result[ 0 ] ).to.deep.equal( ship1 );
+			expect( result[ 1 ] ).to.deep.equal( ship2 );
+		} );
+
+		it( 'should return empty array if there is no ships with collision', () => {
+			expect( shipsCollection.getShipsWithCollision() ).to.have.length( 0 );
+		} );
+	} );
+
 	describe( 'toJSON()', () => {
 		beforeEach( () => {
 			for ( let ship of shipsCollection ) {
-				sandbox.stub( ship[ 1 ], 'toJSON', () => {
+				sandbox.stub( ship, 'toJSON', () => {
 					return { foo: 'bar' };
 				} );
 			}
