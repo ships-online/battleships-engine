@@ -1,7 +1,7 @@
 import Ship from './ship.js';
 
 /**
- * Manages a list of ships.
+ * Manages a list of ship models.
  *
  * @memberOf game
  */
