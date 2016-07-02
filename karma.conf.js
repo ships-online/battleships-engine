@@ -1,7 +1,5 @@
 'use strict';
 
-const rollupBabel = require('rollup-plugin-babel');
-
 // Karma configuration
 module.exports = (config) => {
 	config.set({

@@ -88,8 +88,6 @@ class Ship {
 
 			++nextField[ this.orientation == 'horizontal' ? 0 : 1 ];
 
-			console.log( nextField );
-
 			fields.push( nextField );
 		}
 
