@@ -17,9 +17,9 @@ const tasks = {
 
 	lint() {
 		return gulp.src( jsFiles )
-			.pipe(gulpEslint())
-			.pipe(gulpEslint.format())
-			.pipe(gulpEslint.failAfterError());
+			.pipe( gulpEslint() )
+			.pipe( gulpEslint.format() )
+			.pipe( gulpEslint.failAfterError() );
 	},
 
 	lintStaged() {
@@ -27,9 +27,9 @@ const tasks = {
 
 		return guppy.stream( 'pre-commit', { base: './' } )
 			.pipe( gulpFilter( jsFiles ) )
-			.pipe(gulpEslint())
-			.pipe(gulpEslint.format())
-			.pipe(gulpEslint.failAfterError());
+			.pipe( gulpEslint() )
+			.pipe( gulpEslint.format() )
+			.pipe( gulpEslint.failAfterError() );
 	}
 };
 
@@ -42,7 +42,7 @@ function getGitIgnore() {
 	let gitIgnoredFiles = fs.readFileSync( '.gitignore', 'utf8' );
 
 	return gitIgnoredFiles
-		// Remove comment lines.
+	// Remove comment lines.
 		.replace( /^#.*$/gm, '' )
 		// Transform into array.
 		.split( /\n+/ )
