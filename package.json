@@ -4,7 +4,6 @@
   "description": "Battle ships HTML game",
   "main": "index.js",
   "scripts": {
-    "unit": "node_modules/.bin/gulp unit",
     "lint": "node_modules/.bin/gulp lint",
     "test": "node_modules/.bin/gulp test"
   },

@@ -9,7 +9,7 @@ const Server = require( 'karma' ).Server;
 const jsFiles = [ '**/*.js' ].concat( getGitIgnore() );
 
 const tasks = {
-	unit( done ) {
+	test( done ) {
 		new Server( {
 			configFile: __dirname + '/karma.conf.js'
 		}, done ).start();
@@ -52,7 +52,6 @@ function getGitIgnore() {
 		.map( i => '!' + i );
 }
 
-gulp.task( 'unit', tasks.unit );
+gulp.task( 'test', tasks.test );
 gulp.task( 'lint', tasks.lint );
-gulp.task( 'test', [ 'lint', 'unit' ] );
 gulp.task( 'pre-commit', tasks.lintStaged );
