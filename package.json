@@ -24,8 +24,10 @@
     "guppy-pre-commit": "^0.3.0",
     "karma": "^1.0.0",
     "karma-chai": "^0.1.0",
+    "karma-chrome-launcher": "^1.0.1",
     "karma-mocha": "^1.0.1",
     "karma-mocha-reporter": "^2.0.4",
+    "karma-rollup-preprocessor": "^2.0.2",
     "karma-sinon": "^1.0.5",
     "mocha": "^2.5.3",
     "sinon": "^1.17.4"

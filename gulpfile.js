@@ -42,7 +42,7 @@ function getGitIgnore() {
 	let gitIgnoredFiles = fs.readFileSync( '.gitignore', 'utf8' );
 
 	return gitIgnoredFiles
-	// Remove comment lines.
+		// Remove comment lines.
 		.replace( /^#.*$/gm, '' )
 		// Transform into array.
 		.split( /\n+/ )
