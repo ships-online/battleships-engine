@@ -2,19 +2,24 @@
 
 const fs = require( 'fs' );
 const gulp = require( 'gulp' );
-const gulpEslint = require( 'gulp-eslint' );
 const gulpFilter = require( 'gulp-filter' );
-const Server = require( 'karma' ).Server;
+const gulpEslint = require( 'gulp-eslint' );
+const KarmaServer = require( 'karma' ).Server;
 
+/**
+ * Paths definitions.
+ */
 const jsFiles = [ '**/*.js' ].concat( getGitIgnore() );
 
+/**
+ * Tasks definitions.
+ */
 const tasks = {
-	test( done ) {
-		new Server( {
-			configFile: __dirname + '/karma.conf.js'
-		}, done ).start();
-	},
-
+	/**
+	 * Analyze quality and code style of JS files.
+	 *
+	 * @returns {Stream}
+	 */
 	lint() {
 		return gulp.src( jsFiles )
 			.pipe( gulpEslint() )
@@ -22,6 +27,11 @@ const tasks = {
 			.pipe( gulpEslint.failAfterError() );
 	},
 
+	/**
+	 * Lints staged files - pre commit hook.
+	 *
+	 * @returns {Stream}
+	 */
 	lintStaged() {
 		const guppy = require( 'git-guppy' )( gulp );
 
@@ -30,13 +40,24 @@ const tasks = {
 			.pipe( gulpEslint() )
 			.pipe( gulpEslint.format() )
 			.pipe( gulpEslint.failAfterError() );
+	},
+
+	/**
+	 * Runs JS unit tests.
+	 *
+	 * @param {Function} done Finish callback.
+	 */
+	test( done ) {
+		new KarmaServer( {
+			configFile: __dirname + '/karma.conf.js'
+		}, done ).start();
 	}
 };
 
 /**
  * Gets the list of ignores from `.gitignore`.
  *
- * @returns {String[]} The list of ignores.
+ * @returns {Array<String>} The list of ignores.
  */
 function getGitIgnore() {
 	let gitIgnoredFiles = fs.readFileSync( '.gitignore', 'utf8' );
@@ -52,6 +73,9 @@ function getGitIgnore() {
 		.map( i => '!' + i );
 }
 
-gulp.task( 'test', tasks.test );
+// JS code sniffer.
 gulp.task( 'lint', tasks.lint );
 gulp.task( 'pre-commit', tasks.lintStaged );
+
+// JS unit tests.
+gulp.task( 'test', tasks.test );
