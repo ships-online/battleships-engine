@@ -1,28 +1,42 @@
 'use strict';
 
+const webpackConfig = require( './webpack.conf.js' );
+
 // Karma configuration
 module.exports = ( config ) => {
 	config.set( {
 		// base path that will be used to resolve all patterns (eg. files, exclude)
 		basePath: './',
 
+		// List of files/patterns to load in the browser.
+		files: [
+			'tests/**/*.js'
+		],
+
 		// Frameworks to use
 		frameworks: [ 'mocha', 'chai', 'sinon' ],
 
+		// Preprocess matching files before serving them to the browser.
+		// Available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
+		preprocessors: {
+			'tests/**/*.js': [ 'webpack', 'sourcemap' ],
+			'src/**/*.js': [ 'webpack', 'sourcemap' ]
+		},
+
+		// Webpack configuration.
+		webpack: webpackConfig,
+
 		// Test results reporter to use
 		// Possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
-		reporters: [ 'mocha' ],
+		reporters: [ 'mocha', 'coverage' ],
+
+		coverageReporter: {
+			dir: 'coverage/',
+			type: 'html'
+		},
 
 		// Web server port
 		port: 9876,
-
-		preprocessors: {
-			'tests/**/*.js': [ 'rollup' ]
-		},
-
-		files: [
-			'tests/main.js'
-		],
 
 		// Enable / disable colors in the output (reporters and logs)
 		colors: true,
@@ -50,6 +64,6 @@ module.exports = ( config ) => {
 
 		// Continuous Integration mode
 		// If true, it capture browsers, run tests and exit
-		singleRun: false
+		singleRun: true
 	} );
 };
