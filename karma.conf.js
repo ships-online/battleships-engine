@@ -45,9 +45,6 @@ module.exports = ( config ) => {
 		// Possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
 		logLevel: config.LOG_INFO,
 
-		// Enable / disable watching file and executing tests whenever any file changes
-		autoWatch: true,
-
 		// Start these browsers, currently available:
 		// - Chrome
 		// - ChromeCanary
@@ -61,6 +58,9 @@ module.exports = ( config ) => {
 
 		// If browser does not capture in given timeout [ms], kill it
 		captureTimeout: 60000,
+
+		// Enable / disable watching file and executing tests whenever any file changes
+		autoWatch: false,
 
 		// Continuous Integration mode
 		// If true, it capture browsers, run tests and exit
