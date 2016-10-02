@@ -20,6 +20,55 @@ describe( 'Battlefield:', () => {
 		} );
 	} );
 
+	describe( 'set()', () => {
+		it( 'should put item into empty field with no error', () => {
+			const item = new Item( 1 );
+
+			expect( () => battlefield.set( [ 1, 1 ], item ) ).to.not.throw;
+		} );
+
+		it( 'should put item into existing field with no error', () => {
+			const item1 = new Item( 1 );
+			const item2 = new Item( 1 );
+
+			battlefield.set( [ 1, 1 ], item1 );
+
+			expect( () => battlefield.set( [ 1, 1 ], item2 ) ).to.not.throw;
+		} );
+	} );
+
+	describe( 'get()', () => {
+		it( 'should get item from field where is only one item', () => {
+			const item = new Item( 1 );
+
+			battlefield.set( [ 1, 1 ], item );
+
+			const field = battlefield.get( [ 1, 1 ] );
+
+			expect( field ).to.have.length( 1 );
+			expect( field ).to.have.members( [ item ] );
+		} );
+
+		it( 'should get items from field where is more than one item', () => {
+			const item1 = new Item( 1 );
+			const item2 = new Item( 1 );
+
+			battlefield.set( [ 1, 1 ], item1 );
+			battlefield.set( [ 1, 1 ], item2 );
+
+			const field = battlefield.get( [ 1, 1 ] );
+
+			expect( field ).to.have.length( 2 );
+			expect( field ).to.have.members( [ item1, item2 ] );
+		} );
+
+		it( 'should retutn `null` when field is empty', () => {
+			const field = battlefield.get( [ 1, 1 ] );
+
+			expect( field ).to.null;
+		} );
+	} );
+
 	describe( 'move()', () => {
 		it( 'should put item on the battlefield', () => {
 			const item = new Item( 2 );
@@ -27,6 +76,12 @@ describe( 'Battlefield:', () => {
 			battlefield.move( item, [ 1, 1 ] );
 
 			expect( item.coordinates ).to.deep.equal( [ [ 1, 1 ], [ 2, 1 ] ] );
+
+			expect( battlefield.get( [ 1, 1 ] ) ).to.have.length( 1 );
+			expect( battlefield.get( [ 1, 1 ] ) ).to.have.members( [ item ] );
+
+			expect( battlefield.get( [ 2, 1 ] ) ).to.have.length( 1 );
+			expect( battlefield.get( [ 2, 1 ] ) ).to.have.members( [ item ] );
 		} );
 
 		it( 'should move item on the battlefield', () => {
@@ -36,9 +91,18 @@ describe( 'Battlefield:', () => {
 			battlefield.move( item, [ 2, 2 ] );
 
 			expect( item.coordinates ).to.deep.equal( [ [ 2, 2 ], [ 3, 2 ] ] );
+
+			expect( battlefield.get( [ 1, 1 ] ) ).to.null;
+			expect( battlefield.get( [ 2, 1 ] ) ).to.null;
+
+			expect( battlefield.get( [ 2, 2 ] ) ).to.have.length( 1 );
+			expect( battlefield.get( [ 2, 2 ] ) ).to.have.members( [ item ] );
+
+			expect( battlefield.get( [ 3, 2 ] ) ).to.have.length( 1 );
+			expect( battlefield.get( [ 3, 2 ] ) ).to.have.members( [ item ] );
 		} );
 
-		it( 'should move item when there is more than one item on he same field', () => {
+		it( 'should move item when there is more than one item on the same field', () => {
 			const item1 = new Item( 2 );
 			const item2 = new Item( 2 );
 

@@ -35,6 +35,35 @@ export default class Battlefield {
 	}
 
 	/**
+	 * Sets item into specified field.
+	 *
+	 * @param {Array<Number>} position Position on the battlefield e.g. [ x, y ].
+	 * @param {game.Item} item Item to put on the battlefield.
+	 */
+	set( position, item ) {
+		const field = this.get( position );
+
+		if ( field ) {
+			field.push( item );
+		} else {
+			this._fields.set( position.join( 'x' ), [ item ] );
+		}
+	}
+
+	/**
+	 * Gets items from specified field.
+	 *
+	 * @param {Array<Number>} position Position on the battlefield e.g. [ x, y ].
+	 * @returns {Array<game.Item>} List of items.
+	 * @returns {null} When field does not exist.
+	 */
+	get( position ) {
+		const key = position.join( 'x' );
+
+		return this._fields.has( key ) ? this._fields.get( key ) : null;
+	}
+
+	/**
 	 * Puts and moves item on the battlefield.
 	 *
 	 * @param {game.Item} item Item instance.
@@ -49,38 +78,7 @@ export default class Battlefield {
 		}
 
 		item.firstFieldPosition = position;
-		item.coordinates.forEach( ( pos ) => this._set( pos, item ) );
-	}
-
-	/**
-	 * Sets item into specified field.
-	 *
-	 * @private
-	 * @param {Array<Number>} position Position on the battlefield e.g. [ x, y ].
-	 * @param {game.Item} item Item to put on the battlefield.
-	 */
-	_set( position, item ) {
-		const field = this._get( position );
-
-		if ( field ) {
-			field.push( item );
-		} else {
-			this._fields.set( position.join( 'x' ), [ item ] );
-		}
-	}
-
-	/**
-	 * Gets items from specified field.
-	 *
-	 * @private
-	 * @param {Array<Number>} position Position on the battlefield e.g. [ x, y ].
-	 * @returns {Array<game.Item>} List of items.
-	 * @returns {null} When field does not exist.
-	 */
-	_get( position ) {
-		const key = position.join( 'x' );
-
-		return this._fields.has( key ) ? this._fields.get( key ) : null;
+		item.coordinates.forEach( ( pos ) => this.set( pos, item ) );
 	}
 
 	/**
@@ -92,7 +90,7 @@ export default class Battlefield {
 	 * @param {game.Item} item Item to delete from field.
 	 */
 	_remove( position, item ) {
-		const field = this._get( position );
+		const field = this.get( position );
 
 		if ( field.length == 1 ) {
 			this._fields.delete( position.join( 'x' ) );
@@ -112,7 +110,7 @@ export default class Battlefield {
 		let isCollision = false;
 
 		for ( let position of ship.coordinates ) {
-			let field = this._get( position );
+			let field = this.get( position );
 
 			// There is more than one ship on this position so there is a collision.
 			// Mark each ship on this field as collision.
@@ -120,17 +118,17 @@ export default class Battlefield {
 
 			// Get surrounded fields.
 			const top = Battlefield.getPositionAtTheTopOf( position );
-			const topRight = Battlefield.getPositionAtTheRightOf( top );
-			const right = Battlefield.getPositionAtTheBottomOf( topRight );
-			const bottomRight = Battlefield.getPositionAtTheBottomOf( right );
-			const bottom = Battlefield.getPositionAtTheLeftOf( bottomRight );
-			const bottomLeft = Battlefield.getPositionAtTheLeftOf( bottom );
-			const left = Battlefield.getPositionAtTheTopOf( bottomLeft );
+			const right = Battlefield.getPositionAtTheRightOf( position );
+			const bottom = Battlefield.getPositionAtTheBottomOf( position );
+			const left = Battlefield.getPositionAtTheLeftOf( position );
 			const topLeft = Battlefield.getPositionAtTheTopOf( left );
+			const topRight = Battlefield.getPositionAtTheTopOf( right );
+			const bottomRight = Battlefield.getPositionAtTheBottomOf( right );
+			const bottomLeft = Battlefield.getPositionAtTheBottomOf( left );
 
 			// If surrounded field contains other ship then mark each ship on this fields as collision.
 			[ top, topRight, right, bottomRight, bottom, bottomLeft, left, topLeft ].forEach( ( pos ) => {
-				field = this._get( pos );
+				field = this.get( pos );
 
 				if ( field ) {
 					isCollision = checkShipCollisionOnField( ship, field ) || isCollision;

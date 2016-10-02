@@ -5,6 +5,7 @@
  * 		const battlefield = new Battlefield();
  * 		console.table( serializeBattlefield( battlefield ) );
  *
+ * @memberOf utils.test
  * @param {game.Battlefield} battlefield Battlefield instance.
  * @returns {Object} Serialized battlefield.
  */
@@ -15,7 +16,7 @@ export default function serializeBattlefield( battlefield ) {
 		let row = {};
 
 		for ( let x = 0; x < battlefield.size; x++ ) {
-			const field = battlefield._get( [ x, y ] );
+			const field = battlefield.get( [ x, y ] );
 
 			row[ x ] = field ? field.map( item => item.id ).join( ',' ) : '';
 		}
