@@ -1,12 +1,13 @@
+import Ship from './ship.js';
+
 /**
- * Battlefield.
- * Store information about ship placement on battlefield and move ships.
+ * Stores information about items placed on the battlefield.
  *
- * @memberOf {Game}
+ * @memberOf {game}
  */
 export default class Battlefield {
 	/**
-	 * Create instance of Battlefield class.
+	 * Creates instance of Battlefield class.
 	 *
 	 * @param {Number} size Size of the battlefield.
 	 */
@@ -19,26 +20,41 @@ export default class Battlefield {
 		this.size = size;
 
 		/**
-		 * Store information about ships placed on the battlefield in format:
+		 * Information about items placed on the battlefield.
 		 *
-		 * 		{ 'XxY' => [ {@link Ship#id}, {@link Ship#id} ] }
+		 * E.g:
+		 *
+		 * 		{ 'XxY' => [ {@link game.Item}, {@link game.Item} ] }
 		 *
 		 * where `XxY` is a position on the battlefield (result of `[ positionX, positionY ].join( 'x' )`).
 		 *
 		 * @private
-		 * @type {Map}
+		 * @member {Map} Battlefield#_fields
 		 */
 		this._fields = new Map();
 	}
 
 	/**
-	 * Set any item to specific place on the battlefield.
+	 * Puts and moves item on the battlefield.
 	 *
-	 * @param {Array<Number>} position Position on the battlefield e.g. [ x, y ].
-	 * @param {*} item Item to put on the battlefield.
+	 * @param {game.Item} item Item instance.
+	 * @param {Array<Number>} position Position x, y e.g. [ 1, 1 ].
 	 */
-	setToField( position, item ) {
-		const field = this.getField( position );
+	move( item, position ) {
+		item.coordinates.forEach( ( pos ) => this._remove( pos, item ) );
+		item.firstFieldPosition = position;
+		item.coordinates.forEach( ( pos ) => this._set( pos, item ) );
+	}
+
+	/**
+	 * Sets item into specified field.
+	 *
+	 * @private
+	 * @param {Array<Number>} position Position on the battlefield e.g. [ x, y ].
+	 * @param {game.Item} item Item to put on the battlefield.
+	 */
+	_set( position, item ) {
+		const field = this._get( position );
 
 		if ( field ) {
 			field.push( item );
@@ -48,85 +64,70 @@ export default class Battlefield {
 	}
 
 	/**
-	 * Get every item on specified field.
+	 * Gets items from specified field.
 	 *
+	 * @private
 	 * @param {Array<Number>} position Position on the battlefield e.g. [ x, y ].
-	 * @returns {Array<*>} Array of items.
+	 * @returns {Array<game.Item>} List of items.
 	 * @returns {null} When field does not exist.
 	 */
-	getField( position ) {
+	_get( position ) {
 		const key = position.join( 'x' );
 
-		if ( this._fields.has( key ) ) {
-			return this._fields.get( key );
-		}
-
-		return null;
+		return this._fields.has( key ) ? this._fields.get( key ) : null;
 	}
 
 	/**
-	 * Delete specified item from specified field. If item is the only item on the field,
+	 * Deletes specified item from specified field. If item is the only item on the field,
 	 * then delete whole field from storage.
 	 *
+	 * @private
 	 * @param {Array<Number>} position Position on the battlefield e.g. [ x, y ].
-	 * @param {*} item Item to delete from field.
+	 * @param {game.Item} item Item to delete from field.
 	 */
-	removeFromField( position, item ) {
-		const field = this.getField( position );
+	_remove( position, item ) {
+		const field = this._get( position );
 
-		if ( field ) {
-			if ( field.length == 1 ) {
-				this._fields.delete( position.join( 'x' ) );
-			} else {
-				field.splice( field.indexOf( item ), 1 );
-			}
+		if ( field.length == 1 ) {
+			this._fields.delete( position.join( 'x' ) );
+		} else {
+			field.splice( field.indexOf( item ), 1 );
 		}
 	}
 
 	/**
-	 * Update position of ship on the battlefield.
-	 *
-	 * @param {game.Ship} ship Ship instance.
-	 * @param {Array<Number>} position Position x, y e.g. [ 1, 1 ].
-	 */
-	updateShipPosition( ship, position ) {
-		ship.coordinates.forEach( ( pos ) => this.removeFromField( pos, ship ) );
-		ship.position = position;
-		ship.coordinates.forEach( ( pos ) => this.setToField( pos, ship ) );
-	}
-
-	/**
-	 * Check if ship has a collision with other ship. For every ship which has a collision set
+	 * Check if ship has a collision with other ships. For each ship which has a collision set
 	 * {@link game.Ship#isCollision} as `true`. If ship has no collision set {@link game.Ship#isCollision} as `false`.
 	 *
 	 * @param {game.Ship} ship Ship instance.
 	 * @returns {Boolean} if ship has collision return `true`, return `false` when there is no collision.
 	 */
-	checkCollision( ship ) {
+	validateShipCollision( ship ) {
 		let isCollision = false;
 
 		for ( let position of ship.coordinates ) {
-			let field = this.getField( position );
+			let field = this._get( position );
 
 			// There is more than one ship on this position so there is a collision.
-			// Mark every ship on this field as collision.
-			if ( field.length > 1 ) {
-				field.forEach( ( ship ) => ship.isCollision = true );
-				isCollision = true;
-			}
+			// Mark each ship on this field as collision.
+			isCollision = checkShipCollisionOnField( ship, field );
 
-			// If on sibling field are other ship then mark each as collision.
-			[
-				'getPositionAtTheTopOf',
-				'getPositionAtTheRightOf',
-				'getPositionAtTheBottomOf',
-				'getPositionAtTheLeftOf'
-			].forEach( ( fn ) => {
-				field = this.getField( Battlefield[ fn ]( position ) );
+			// Get surrounded fields.
+			const top = Battlefield.getPositionAtTheTopOf( position );
+			const topRight = Battlefield.getPositionAtTheRightOf( top );
+			const right = Battlefield.getPositionAtTheRightOf( position );
+			const bottomRight = Battlefield.getPositionAtTheBottomOf( right );
+			const bottom = Battlefield.getPositionAtTheBottomOf( position );
+			const bottomLeft = Battlefield.getPositionAtTheLeftOf( bottom );
+			const left = Battlefield.getPositionAtTheLeftOf( position );
+			const topLeft = Battlefield.getPositionAtTheTopOf( left );
 
-				if ( field && ( field.length == 1 && field[ 0 ] != ship ) ) {
-					field.forEach( ( ship ) => ship.isCollision = true );
-					isCollision = true;
+			// If surrounded field contains other ship then mark each ship on this fields as collision.
+			[ top, topRight, right, bottomRight, bottom, bottomLeft, left, topLeft ].forEach( ( pos ) => {
+				field = this._get( pos );
+
+				if ( field ) {
+					isCollision = checkShipCollisionOnField( ship, this._get( position ) );
 				}
 			} );
 		}
@@ -179,4 +180,17 @@ export default class Battlefield {
 	static getPositionAtTheLeftOf( position ) {
 		return [ position[ 0 ] - 1, position[ 1 ] ];
 	}
+}
+
+function checkShipCollisionOnField( ship, field ) {
+	let isCollision = false;
+
+	field.forEach( ( item ) => {
+		if ( item instanceof Ship && item !== ship ) {
+			item.isCollision = true;
+			isCollision = true;
+		}
+	} );
+
+	return isCollision;
 }
