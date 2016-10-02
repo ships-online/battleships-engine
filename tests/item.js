@@ -35,6 +35,10 @@ describe( 'Item', () => {
 			expect( positionSpy.calledOnce ).to.true;
 			expect( orientationSpy.calledOnce ).to.true;
 		} );
+
+		it( 'should create id when is not specified', () => {
+			expect( new Item( 3 ) ).to.have.property( 'id' ).to.be.number;
+		} );
 	} );
 
 	describe( 'coordinates', () => {

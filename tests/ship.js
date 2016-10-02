@@ -6,7 +6,7 @@ describe( 'Ship:', () => {
 
 	beforeEach( () => {
 		sandbox = sinon.sandbox.create();
-		ship = new Ship( 3, 1 );
+		ship = new Ship( 3 );
 	} );
 
 	afterEach( () => {

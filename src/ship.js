@@ -38,13 +38,6 @@ class Ship extends Item {
 		 */
 		this.set( 'damages', new Array( length ) );
 	}
-
-	/**
-	 * Toggle {#orientation} between `vertical` and `horizontal`.
-	 */
-	rotate() {
-		this.orientation = this.orientation == 'horizontal' ? 'vertical' : 'horizontal';
-	}
 }
 
 export default Ship;
