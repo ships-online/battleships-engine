@@ -6,7 +6,15 @@ const gulpFilter = require( 'gulp-filter' );
 const gulpEslint = require( 'gulp-eslint' );
 const KarmaServer = require( 'karma' ).Server;
 
-const argv = require( 'minimist' )( process.argv.slice( 2 ), { boolean: 'coverage', string: 'files' } );
+const argv = require( 'minimist' )( process.argv.slice( 3 ), {
+	boolean: [ 'coverage', 'debug' ],
+	string: [ 'files' ],
+	alias: {
+		coverage: 'c',
+		debug: 'd',
+		files: 'f'
+	}
+} );
 const karmaConfig = require( './karma.conf' );
 
 /**

@@ -78,5 +78,9 @@ module.exports = ( options ) => {
 		karmaConfig.reporters.push( 'coverage' );
 	}
 
+	if ( options.debug ) {
+		karmaConfig.singleRun = false;
+	}
+
 	return karmaConfig;
 };
