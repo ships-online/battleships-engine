@@ -108,7 +108,7 @@ export default class Battlefield {
 	 * @param {game.Ship} ship Ship instance.
 	 * @returns {Boolean} if ship has collision return `true`, return `false` when there is no collision.
 	 */
-	validateShipCollision( ship ) {
+	checkShipCollision( ship ) {
 		let isCollision = false;
 
 		for ( let position of ship.coordinates ) {
@@ -121,11 +121,11 @@ export default class Battlefield {
 			// Get surrounded fields.
 			const top = Battlefield.getPositionAtTheTopOf( position );
 			const topRight = Battlefield.getPositionAtTheRightOf( top );
-			const right = Battlefield.getPositionAtTheRightOf( position );
+			const right = Battlefield.getPositionAtTheBottomOf( topRight );
 			const bottomRight = Battlefield.getPositionAtTheBottomOf( right );
-			const bottom = Battlefield.getPositionAtTheBottomOf( position );
+			const bottom = Battlefield.getPositionAtTheLeftOf( bottomRight );
 			const bottomLeft = Battlefield.getPositionAtTheLeftOf( bottom );
-			const left = Battlefield.getPositionAtTheLeftOf( position );
+			const left = Battlefield.getPositionAtTheTopOf( bottomLeft );
 			const topLeft = Battlefield.getPositionAtTheTopOf( left );
 
 			// If surrounded field contains other ship then mark each ship on this fields as collision.
@@ -133,7 +133,7 @@ export default class Battlefield {
 				field = this._get( pos );
 
 				if ( field ) {
-					isCollision = checkShipCollisionOnField( ship, this._get( position ) );
+					isCollision = checkShipCollisionOnField( ship, field ) || isCollision;
 				}
 			} );
 		}
@@ -188,6 +188,12 @@ export default class Battlefield {
 	}
 }
 
+// Check if ship has collision with other ship in specified field.
+//
+// @private
+// @param {game.Ship} ship Ship instance.
+// @param {Array<{game.Item}>|null} field
+// @returns {boolean}
 function checkShipCollisionOnField( ship, field ) {
 	let isCollision = false;
 

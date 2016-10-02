@@ -77,13 +77,13 @@ describe( 'Battlefield:', () => {
 		} );
 	} );
 
-	describe( 'validateShipCollision()', () => {
+	describe( 'checkShipCollision()', () => {
 		it( 'should return `false` and mark ship as no collision when ship has no contact with other ships #1', () => {
 			const ship = new Ship( 1 );
 
 			battlefield.move( ship, [ 1, 1 ] );
 
-			expect( battlefield.validateShipCollision( ship ) ).to.false;
+			expect( battlefield.checkShipCollision( ship ) ).to.false;
 			expect( ship.isCollision ).to.false;
 		} );
 
@@ -108,7 +108,7 @@ describe( 'Battlefield:', () => {
 			battlefield.move( ship4, [ 1, 4 ] );
 			battlefield.move( ship5, [ 0, 1 ], true );
 
-			expect( battlefield.validateShipCollision( ship1 ) ).to.false;
+			expect( battlefield.checkShipCollision( ship1 ) ).to.false;
 			expect( ship1.isCollision ).to.false;
 			expect( ship2.isCollision ).to.false;
 			expect( ship3.isCollision ).to.false;
@@ -124,7 +124,7 @@ describe( 'Battlefield:', () => {
 			battlefield.move( ship1, [ 3, 3 ] );
 			battlefield.move( ship2, [ 3, 3 ] );
 
-			expect( battlefield.validateShipCollision( ship1 ) ).to.true;
+			expect( battlefield.checkShipCollision( ship1 ) ).to.true;
 			expect( ship1.isCollision ).to.true;
 			expect( ship2.isCollision ).to.true;
 		} );
@@ -137,12 +137,12 @@ describe( 'Battlefield:', () => {
 			battlefield.move( ship1, [ 0, 0 ] );
 			battlefield.move( ship2, [ 1, 0 ] );
 
-			expect( battlefield.validateShipCollision( ship1 ) ).to.true;
+			expect( battlefield.checkShipCollision( ship1 ) ).to.true;
 			expect( ship1.isCollision ).to.true;
 			expect( ship2.isCollision ).to.true;
 		} );
 
-		it( 'should return `true` and mark ships as collision when there is more than one ship on the same field #2', () => {
+		it( 'should return `true` and mark ships as collision when there is more than one ship on the same field #3', () => {
 			//      [ 1 ]
 			// [ 2 ][1,2]
 			const ship1 = new Ship( 2 );
@@ -151,9 +151,45 @@ describe( 'Battlefield:', () => {
 			battlefield.move( ship1, [ 1, 0 ], true );
 			battlefield.move( ship2, [ 0, 1 ] );
 
-			expect( battlefield.validateShipCollision( ship1 ) ).to.true;
+			expect( battlefield.checkShipCollision( ship1 ) ).to.true;
 			expect( ship1.isCollision ).to.true;
 			expect( ship2.isCollision ).to.true;
+		} );
+
+		it( 'should return `true` and mark ships as collision when ship stick to other ships', () => {
+			// [2][3][4]
+			// [5][1][6]
+			// [7][8][9]
+			const ship1 = new Ship( 1 );
+			const ship2 = new Ship( 1 );
+			const ship3 = new Ship( 1 );
+			const ship4 = new Ship( 1 );
+			const ship5 = new Ship( 1 );
+			const ship6 = new Ship( 1 );
+			const ship7 = new Ship( 1 );
+			const ship8 = new Ship( 1 );
+			const ship9 = new Ship( 1 );
+
+			battlefield.move( ship1, [ 2, 2 ] );
+			battlefield.move( ship2, [ 1, 1 ] );
+			battlefield.move( ship3, [ 2, 1 ] );
+			battlefield.move( ship4, [ 3, 1 ] );
+			battlefield.move( ship5, [ 3, 2 ] );
+			battlefield.move( ship6, [ 3, 3 ] );
+			battlefield.move( ship7, [ 2, 3 ] );
+			battlefield.move( ship8, [ 1, 3 ] );
+			battlefield.move( ship9, [ 1, 2 ] );
+
+			expect( battlefield.checkShipCollision( ship1 ) ).to.true;
+			expect( ship1.isCollision ).to.true;
+			expect( ship2.isCollision ).to.true;
+			expect( ship3.isCollision ).to.true;
+			expect( ship4.isCollision ).to.true;
+			expect( ship5.isCollision ).to.true;
+			expect( ship6.isCollision ).to.true;
+			expect( ship7.isCollision ).to.true;
+			expect( ship8.isCollision ).to.true;
+			expect( ship9.isCollision ).to.true;
 		} );
 	} );
 
