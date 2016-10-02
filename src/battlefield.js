@@ -39,9 +39,15 @@ export default class Battlefield {
 	 *
 	 * @param {game.Item} item Item instance.
 	 * @param {Array<Number>} position Position x, y e.g. [ 1, 1 ].
+	 * @param {Boolean} [rotate] When `true` then item will be rotated.
 	 */
-	move( item, position ) {
+	move( item, position, rotate ) {
 		item.coordinates.forEach( ( pos ) => this._remove( pos, item ) );
+
+		if ( rotate ) {
+			item.rotate();
+		}
+
 		item.firstFieldPosition = position;
 		item.coordinates.forEach( ( pos ) => this._set( pos, item ) );
 	}

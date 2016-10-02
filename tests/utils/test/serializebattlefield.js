@@ -21,10 +21,9 @@ describe( 'serializeBattlefield', () => {
 		const battlefield = new Battlefield( 2 );
 		const item1 = new Item( 2, 1 );
 		const item2 = new Item( 2, 2 );
-		item2.rotate();
 
 		battlefield.move( item1, [ 0, 1 ] );
-		battlefield.move( item2, [ 1, 0 ] );
+		battlefield.move( item2, [ 1, 0 ], true );
 
 		const result = serializeBattlefield( battlefield );
 
