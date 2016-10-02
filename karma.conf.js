@@ -3,8 +3,8 @@
 const webpackConfig = require( './webpack.conf.js' );
 
 // Karma configuration
-module.exports = ( config ) => {
-	config.set( {
+module.exports = ( options ) => {
+	const karmaConfig = {
 		// base path that will be used to resolve all patterns (eg. files, exclude)
 		basePath: './',
 
@@ -28,11 +28,14 @@ module.exports = ( config ) => {
 
 		// Test results reporter to use
 		// Possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
-		reporters: [ 'mocha', 'coverage' ],
+		reporters: [ 'mocha' ],
 
 		coverageReporter: {
 			dir: 'coverage/',
-			type: 'html'
+			reporters: [
+				{ type: 'html', subdir: 'html' }
+			]
+
 		},
 
 		// Web server port
@@ -43,7 +46,7 @@ module.exports = ( config ) => {
 
 		// Level of logging
 		// Possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-		logLevel: config.LOG_INFO,
+		logLevel: 'INFO',
 
 		// Start these browsers, currently available:
 		// - Chrome
@@ -65,5 +68,15 @@ module.exports = ( config ) => {
 		// Continuous Integration mode
 		// If true, it capture browsers, run tests and exit
 		singleRun: true
-	} );
+	};
+
+	if ( options.files ) {
+		karmaConfig.files = [ options.files ];
+	}
+
+	if ( options.coverage ) {
+		karmaConfig.reporters.push( 'coverage' );
+	}
+
+	return karmaConfig;
 };

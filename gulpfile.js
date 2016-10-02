@@ -6,6 +6,9 @@ const gulpFilter = require( 'gulp-filter' );
 const gulpEslint = require( 'gulp-eslint' );
 const KarmaServer = require( 'karma' ).Server;
 
+const argv = require( 'minimist' )( process.argv.slice( 2 ), { boolean: 'coverage', string: 'files' } );
+const karmaConfig = require( './karma.conf' );
+
 /**
  * Paths definitions.
  */
@@ -46,11 +49,12 @@ const tasks = {
 	 * Runs JS unit tests.
 	 *
 	 * @param {Function} done Finish callback.
+	 * @param {Object} [options={}] Additional options.
+	 * @param {Boolean} [options.coverage] When `true` then coverage report will be generated.
+	 * @param {String} [options.files] Glob with selected for test files.
 	 */
-	test( done ) {
-		new KarmaServer( {
-			configFile: __dirname + '/karma.conf.js'
-		}, done ).start();
+	test( done, options ) {
+		new KarmaServer( karmaConfig( options ), done ).start();
 	}
 };
 
@@ -78,4 +82,4 @@ gulp.task( 'lint', tasks.lint );
 gulp.task( 'pre-commit', tasks.lintStaged );
 
 // JS unit tests.
-gulp.task( 'test', tasks.test );
+gulp.task( 'test', ( done ) => tasks.test( done, argv ) );
