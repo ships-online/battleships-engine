@@ -15,7 +15,7 @@ export default class Battlefield {
 		/**
 		 * Size of the battlefield.
 		 *
-		 * @member {Number} Battlefield#size
+		 * @member {Number} game.Battlefield#size
 		 */
 		this.size = size;
 
@@ -29,7 +29,7 @@ export default class Battlefield {
 		 * where `XxY` is a position on the battlefield (result of `[ positionX, positionY ].join( 'x' )`).
 		 *
 		 * @private
-		 * @member {Map} Battlefield#_fields
+		 * @member {Map} game.Battlefield#_fields
 		 */
 		this._fields = new Map();
 	}

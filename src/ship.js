@@ -4,14 +4,14 @@ import Item from './item.js';
  * Ship.
  *
  * @memberOf game
- * @extends {game.Item}
+ * @extends game.Item
  */
 class Ship extends Item {
 	/**
 	 * Create instance of Ship class.
 	 *
-	 * @param {Number} id Ship id.
 	 * @param {Number} length Ship size.
+	 * @param {Number} [id] Ship id.
 	 */
 	constructor( length, id ) {
 		super( length, id );

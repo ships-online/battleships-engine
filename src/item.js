@@ -12,7 +12,7 @@ class Item {
 	 * Create instance of Item class.
 	 *
 	 * @param {Number} length Item size.
-	 * @param {Number} id Item id.
+	 * @param {Number} [id=uid()] Item id.
 	 */
 	constructor( length, id = uid() ) {
 		/**
