@@ -6,27 +6,24 @@ describe( 'ShipsCollection:', () => {
 
 	beforeEach( () => {
 		sandbox = sinon.sandbox.create();
-		shipsCollection = new ShipsCollection( [ 1, 2, 2, 3, 4 ] );
+		shipsCollection = new ShipsCollection();
 	} );
 
-	afterEach( () => {
-		sandbox.restore();
-	} );
+	afterEach( () => sandbox.restore() );
 
 	describe( 'constructor()', () => {
-		it( 'should create an instance of ShipCollection with store for ships instances', () => {
-			expect( shipsCollection ).to.have.property( '_ships' ).to.be.instanceof( Map );
-		} );
-
-		it( 'should create the same amount of ship instances as length of passed config', () => {
-			expect( shipsCollection ).to.have.property( '_ships' ).to.have.property( 'size' ).to.be.equal( 5 );
+		it( 'should create shipsCollection with some properties', () => {
+			expect( shipsCollection ).to.have.property( 'length' ).to.equal( 0 );
 		} );
 
 		it( 'should provide iterator interface', () => {
+			shipsCollection.add( new Ship( 1 ) );
+			shipsCollection.add( new Ship( 1 ) );
+
 			let count = 0;
 
 			for ( let ship of shipsCollection ) {
-				expect( ship ).to.be.instanceof( Ship );
+				expect( ship ).to.instanceof( Ship );
 				count++;
 			}
 
@@ -34,60 +31,84 @@ describe( 'ShipsCollection:', () => {
 		} );
 	} );
 
-	describe( 'getter length', () => {
-		it( 'should return collection length', () => {
-			expect( shipsCollection.length ).to.be.equal( 5 );
+	describe( 'add()', () => {
+		it( 'should add new ship to collection', () => {
+			expect( shipsCollection ).to.have.property( 'length' ).to.equal( 0 );
+
+			shipsCollection.add( new Ship( 1 ) );
+
+			expect( shipsCollection ).to.have.property( 'length' ).to.be.equal( 1 );
+
+			shipsCollection.add( new Ship( 1 ) );
+
+			expect( shipsCollection ).to.have.property( 'length' ).to.be.equal( 2 );
 		} );
 	} );
 
 	describe( 'get()', () => {
-		it( 'should return specified ship by key', () => {
-			const result = shipsCollection.get( 1 );
+		it( 'should return specified ship by id', () => {
+			const ship1 = new Ship( 3, 1 );
+			const ship2 = new Ship( 3, 2 );
+			const ship3 = new Ship( 3, 3 );
 
-			expect( result ).to.be.instanceof( Ship );
-			expect( result ).to.have.property( 'length' ).to.be.equal( 2 );
+			shipsCollection.add( ship1 );
+			shipsCollection.add( ship2 );
+			shipsCollection.add( ship3 );
+
+			expect( shipsCollection.get( 1 ) ).to.deep.equal( ship1 );
+			expect( shipsCollection.get( 2 ) ).to.deep.equal( ship2 );
+			expect( shipsCollection.get( 3 ) ).to.deep.equal( ship3 );
 		} );
 	} );
 
-	describe( 'getShipsWithCollision()', () => {
-		it( 'should return array of ships witch has a collision', () => {
-			const ship1 = shipsCollection.get( 1 );
-			const ship2 = shipsCollection.get( 3 );
+	describe( 'getWithCollision()', () => {
+		it( 'should return array of ships which has a collision', () => {
+			const ship1 = new Ship( 1 );
+			const ship2 = new Ship( 1 );
+			const ship3 = new Ship( 1 );
+			const ship4 = new Ship( 1 );
 
 			ship1.isCollision = true;
-			ship2.isCollision = true;
+			ship3.isCollision = true;
 
-			const result = shipsCollection.getShipsWithCollision();
+			shipsCollection.add( ship1 );
+			shipsCollection.add( ship2 );
+			shipsCollection.add( ship3 );
+			shipsCollection.add( ship4 );
+
+			const result = shipsCollection.getWithCollision();
 
 			expect( result ).to.have.length( 2 );
 
 			expect( result[ 0 ] ).to.deep.equal( ship1 );
-			expect( result[ 1 ] ).to.deep.equal( ship2 );
+			expect( result[ 1 ] ).to.deep.equal( ship3 );
 		} );
 
 		it( 'should return empty array if there is no ships with collision', () => {
-			expect( shipsCollection.getShipsWithCollision() ).to.have.length( 0 );
+			expect( shipsCollection.getWithCollision() ).to.have.length( 0 );
 		} );
 	} );
 
 	describe( 'toJSON()', () => {
-		beforeEach( () => {
-			for ( let ship of shipsCollection ) {
-				sandbox.stub( ship, 'toJSON', () => {
-					return { foo: 'bar' };
-				} );
-			}
-		} );
-
 		it( 'should return serialized ships collection', () => {
+			const ship1 = new Ship( 3, 1 );
+			const ship2 = new Ship( 3, 2 );
+			const ship3 = new Ship( 3, 3 );
+
+			sandbox.stub( ship1, 'toJSON' ).returns( { a: 'b' } );
+			sandbox.stub( ship2, 'toJSON' ).returns( { c: 'd' } );
+			sandbox.stub( ship3, 'toJSON' ).returns( { e: 'f' } );
+
+			shipsCollection.add( ship1 );
+			shipsCollection.add( ship2 );
+			shipsCollection.add( ship3 );
+
 			const result = shipsCollection.toJSON();
 
-			expect( result ).to.have.length( 5 );
-			expect( result[ 0 ] ).to.be.deep.equal( { foo: 'bar' } );
-			expect( result[ 1 ] ).to.be.deep.equal( { foo: 'bar' } );
-			expect( result[ 2 ] ).to.be.deep.equal( { foo: 'bar' } );
-			expect( result[ 3 ] ).to.be.deep.equal( { foo: 'bar' } );
-			expect( result[ 4 ] ).to.be.deep.equal( { foo: 'bar' } );
+			expect( result ).to.have.length( 3 );
+			expect( result[ 0 ] ).to.be.deep.equal( { a: 'b' } );
+			expect( result[ 1 ] ).to.be.deep.equal( { c: 'd' } );
+			expect( result[ 2 ] ).to.be.deep.equal( { e: 'f' } );
 		} );
 	} );
 } );
