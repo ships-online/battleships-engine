@@ -5,6 +5,7 @@ const fs = require( 'fs' );
 const gulp = require( 'gulp' );
 const gulpFilter = require( 'gulp-filter' );
 const gulpEslint = require( 'gulp-eslint' );
+const gulpBabel = require( 'gulp-babel' );
 const KarmaServer = require( 'karma' ).Server;
 const karmaConfig = require( './karma.conf.js' );
 
@@ -55,6 +56,29 @@ module.exports = ( config ) => {
 		 */
 		test( done, options ) {
 			new KarmaServer( karmaConfig( config, options ), done ).start();
+		},
+
+		/**
+		 * Compile source files to specified format.
+		 *
+		 * @param {String} src Source file glob.
+		 * @param {String} dest Destination path.
+		 * @param {'esnext'|'cjs'} format Output format.
+		 * @returns {Stream}
+		 */
+		compile( src, dest, format = 'esnext' ) {
+			const plugins = [];
+
+
+			if ( format == 'cjs' ) {
+				plugins.push( 'babel-plugin-transform-es2015-modules-commonjs' );
+			} else if ( format != 'esnext' ) {
+				throw new Error( 'Unsupported format.' );
+			}
+
+			return gulp.src( src )
+				.pipe( gulpBabel( { plugins } ) )
+				.pipe( gulp.dest( dest ) );
 		}
 	};
 

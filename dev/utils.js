@@ -5,7 +5,7 @@ module.exports = () => {
 		parseArgs( args ) {
 			return require( 'minimist' )( args, {
 				boolean: [ 'coverage', 'debug' ],
-				string: [ 'files' ],
+				string: [ 'files', 'format' ],
 				alias: {
 					coverage: 'c',
 					debug: 'd',
