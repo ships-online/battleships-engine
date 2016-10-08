@@ -1,12 +1,11 @@
 'use strict';
 
-const webpackConfig = require( './webpack.conf.js' );
+module.exports = ( config, options ) => {
+	const webpackConfig = require( './webpack.conf.js' )( config );
 
-// Karma configuration
-module.exports = ( options ) => {
 	const karmaConfig = {
 		// base path that will be used to resolve all patterns (eg. files, exclude)
-		basePath: './',
+		basePath: config.ROOT_PATH,
 
 		// List of files/patterns to load in the browser.
 		files: [
