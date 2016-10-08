@@ -1,4 +1,4 @@
-import serializeBattlefield from '../../../src/utils/test/serializebattlefield.js';
+import serializeBattlefield from '../../../src/utils/_test/serializebattlefield.js';
 import Battlefield from '../../../src/battlefield.js';
 import Item from '../../../src/item.js';
 
