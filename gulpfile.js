@@ -6,13 +6,14 @@ const config = {
 
 const gulp = require( 'gulp' );
 const utils = require( './dev/utils.js' )( config );
-const tasks = require( './dev/tasks.js' )( config );
+const lintTasks = require( './dev/tasks/lint.js' )( config );
+const testTasks = require( './dev/tasks/test.js' )( config );
 
 const options = utils.parseArgs( process.argv.slice( 3 ) );
 
 // JS code sniffer.
-gulp.task( 'lint', () => tasks.lint( './**/*.js' ) );
-gulp.task( 'pre-commit', () => tasks.lintStaged( './**/*.js' ) );
+gulp.task( 'lint', () => lintTasks.lint( './**/*.js' ) );
+gulp.task( 'pre-commit', () => lintTasks.lintStaged( './**/*.js' ) );
 
 // JS unit tests.
-gulp.task( 'test', ( done ) => tasks.test( done, options ) );
+gulp.task( 'test', ( done ) => testTasks.test( done, options ) );
