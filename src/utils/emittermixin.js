@@ -10,7 +10,7 @@ const EmitterMixin = {
 	 *
 	 * @private
 	 */
-	_events: [],
+	_events: {},
 
 	/**
 	 * Registers a callback function to be executed when an event is emitted.
