@@ -1,4 +1,5 @@
 import Battlefield from '../src/battlefield.js';
+import ShipsCollection from '../src/shipscollection.js';
 import Item from '../src/item.js';
 import Ship from '../src/ship.js';
 
@@ -17,6 +18,8 @@ describe( 'Battlefield:', () => {
 	describe( 'constructor()', () => {
 		it( 'should create an instance of Battlefield with some properties', () => {
 			expect( battlefield ).to.have.property( 'size', 5 );
+			expect( battlefield ).to.have.property( 'shipsCollection' ).to.instanceof( ShipsCollection );
+			expect( battlefield ).to.have.property( 'shipsCollection' ).to.have.property( 'length', 10 );
 		} );
 	} );
 

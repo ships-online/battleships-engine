@@ -1,4 +1,5 @@
 import Ship from './ship.js';
+import ShipsCollection from './shipscollection.js';
 
 /**
  * Stores information about items placed on the battlefield.
@@ -10,14 +11,22 @@ export default class Battlefield {
 	 * Creates instance of Battlefield class.
 	 *
 	 * @param {Number} size Size of the battlefield.
+	 * @param {Object} [ships={ 4: 1, 3: 2, 2: 3, 1: 4 }] Defines how many ships of specified length will be on the battlefield.
 	 */
-	constructor( size ) {
+	constructor( size, ships = { 4: 1, 3: 2, 2: 3, 1: 4 } ) {
 		/**
 		 * Size of the battlefield.
 		 *
-		 * @member {Number} game.Battlefield#size
+		 * @type {Number}
 		 */
 		this.size = size;
+
+		/**
+		 * Ships collection.
+		 *
+		 * @type {game.ShipsCollection}
+		 */
+		this.shipsCollection = new ShipsCollection( ships );
 
 		/**
 		 * Information about items placed on the battlefield.
@@ -29,7 +38,7 @@ export default class Battlefield {
 		 * where `XxY` is a position on the battlefield (result of `[ positionX, positionY ].join( 'x' )`).
 		 *
 		 * @private
-		 * @member {Map} game.Battlefield#_fields
+		 * @type {Map}
 		 */
 		this._fields = new Map();
 	}
@@ -186,12 +195,14 @@ export default class Battlefield {
 	}
 }
 
-// Check if ship has collision with other ship in specified field.
-//
-// @private
-// @param {game.Ship} ship Ship instance.
-// @param {Array<{game.Item}>|null} field
-// @returns {boolean}
+/**
+ * Check if ship has collision with other ship in specified field.
+ *
+ * @private
+ * @param {game.Ship} ship Ship instance.
+ * @param {Array<{game.Item}>|null} field
+ * @returns {boolean}
+ */
 function checkShipCollisionOnField( ship, field ) {
 	let isCollision = false;
 
