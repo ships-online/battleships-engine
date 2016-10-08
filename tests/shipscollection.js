@@ -12,8 +12,14 @@ describe( 'ShipsCollection:', () => {
 	afterEach( () => sandbox.restore() );
 
 	describe( 'constructor()', () => {
-		it( 'should create shipsCollection with some properties', () => {
-			expect( shipsCollection ).to.have.property( 'length' ).to.equal( 0 );
+		it( 'should create empty shipsCollection', () => {
+			expect( shipsCollection ).to.have.property( 'length', 0 );
+		} );
+
+		it( 'should create not empty shipsCollection when ships config is provided', () => {
+			shipsCollection = new ShipsCollection( { 2: 2 } );
+
+			expect( shipsCollection ).to.have.property( 'length', 2 );
 		} );
 
 		it( 'should provide iterator interface', () => {
@@ -38,8 +44,12 @@ describe( 'ShipsCollection:', () => {
 			shipsCollection.add( new Ship( 1 ) );
 
 			expect( shipsCollection ).to.have.property( 'length' ).to.be.equal( 1 );
+		} );
 
-			shipsCollection.add( new Ship( 1 ) );
+		it( 'should add new ships to collection', () => {
+			expect( shipsCollection ).to.have.property( 'length' ).to.equal( 0 );
+
+			shipsCollection.add( [ new Ship( 1 ), new Ship( 1 ) ] );
 
 			expect( shipsCollection ).to.have.property( 'length' ).to.be.equal( 2 );
 		} );
@@ -109,6 +119,25 @@ describe( 'ShipsCollection:', () => {
 			expect( result[ 0 ] ).to.be.deep.equal( { a: 'b' } );
 			expect( result[ 1 ] ).to.be.deep.equal( { c: 'd' } );
 			expect( result[ 2 ] ).to.be.deep.equal( { e: 'f' } );
+		} );
+	} );
+
+	describe( 'getShipsFromConfig()', () => {
+		it( 'should create ships of the same length', () => {
+			const result = ShipsCollection.getShipsFromConfig( { 2: 2 } );
+
+			expect( result ).to.have.length( 2 );
+			expect( result[ 0 ] ).to.have.property( 'length', 2 );
+			expect( result[ 1 ] ).to.have.property( 'length', 2 );
+		} );
+
+		it( 'should create ships of different length', () => {
+			const result = ShipsCollection.getShipsFromConfig( { 4: 1, 2: 2 } );
+
+			expect( result ).to.have.length( 3 );
+			expect( result[ 0 ] ).to.have.property( 'length', 2 );
+			expect( result[ 1 ] ).to.have.property( 'length', 2 );
+			expect( result[ 2 ] ).to.have.property( 'length', 4 );
 		} );
 	} );
 } );
