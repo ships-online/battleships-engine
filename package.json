@@ -1,5 +1,5 @@
 {
-  "name": "battle-ships-core",
+  "name": "battle-ships-engine",
   "version": "0.0.1",
   "description": "Battle ships HTML game",
   "scripts": {
