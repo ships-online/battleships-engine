@@ -19,7 +19,12 @@ describe( 'Battlefield:', () => {
 		it( 'should create an instance of Battlefield with some properties', () => {
 			expect( battlefield ).to.have.property( 'size', 5 );
 			expect( battlefield ).to.have.property( 'shipsCollection' ).to.instanceof( ShipsCollection );
-			expect( battlefield ).to.have.property( 'shipsCollection' ).to.have.property( 'length', 10 );
+			expect( battlefield ).to.have.property( 'shipsCollection' ).to.have.property( 'length', 0 );
+		} );
+
+		it( 'should create an instance of Battlefield initial ships configuration', () => {
+			battlefield = new Battlefield( 5, { 2: 2 } );
+			expect( battlefield ).to.have.property( 'shipsCollection' ).to.have.property( 'length', 2 );
 		} );
 	} );
 

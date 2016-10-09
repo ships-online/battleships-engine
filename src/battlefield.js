@@ -11,9 +11,9 @@ export default class Battlefield {
 	 * Creates instance of Battlefield class.
 	 *
 	 * @param {Number} size Size of the battlefield.
-	 * @param {Object} [ships={ 4: 1, 3: 2, 2: 3, 1: 4 }] Defines how many ships of specified length will be on the battlefield.
+	 * @param {Object} [ships] Defines how many ships of specified length will be on the battlefield.
 	 */
-	constructor( size, ships = { 4: 1, 3: 2, 2: 3, 1: 4 } ) {
+	constructor( size, ships ) {
 		/**
 		 * Size of the battlefield.
 		 *
