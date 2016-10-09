@@ -3,8 +3,6 @@
   "version": "0.0.1",
   "description": "Battle ships HTML game",
   "scripts": {
-    "build": "./node_modules/.bin/gulp build",
-    "build:debug": "./node_modules/.bin/gulp build:debug",
     "lint": "./node_modules/.bin/gulp lint",
     "test": "./node_modules/.bin/gulp test"
   },
