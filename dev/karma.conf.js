@@ -98,7 +98,6 @@ module.exports = ( config, options = {} ) => {
 
 	if ( options.watch ) {
 		karmaConfig.singleRun = false;
-		karmaConfig.autoWatchDelay = 1000;
 	}
 
 	return karmaConfig;

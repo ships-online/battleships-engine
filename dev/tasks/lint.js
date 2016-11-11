@@ -50,7 +50,7 @@ module.exports = ( config ) => {
 	 * @returns {Array<String>} The list of ignores.
 	 */
 	function getGitIgnore() {
-		let gitIgnoredFiles = fs.readFileSync( path.join( config.ROOT_PATH, '.gitignore' ), 'utf8' );
+		const gitIgnoredFiles = fs.readFileSync( path.join( config.ROOT_PATH, '.gitignore' ), 'utf8' );
 
 		return gitIgnoredFiles
 			// Remove comment lines.
