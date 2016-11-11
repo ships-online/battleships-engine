@@ -1,1 +1,1 @@
-# Battle ships
+# Battleships engine

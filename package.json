@@ -1,15 +1,14 @@
 {
-  "name": "battle-ships-engine",
+  "name": "battleships-engine",
   "version": "0.0.1",
-  "description": "Battle ships HTML game",
+  "description": "The engine of Battleships game.",
   "scripts": {
     "lint": "./node_modules/.bin/gulp lint",
     "test": "./node_modules/.bin/gulp test"
   },
   "keywords": [
-    "game",
-    "html",
-    "battleships"
+    "battleships",
+    "game"
   ],
   "author": "Oskar Wróbel <kontakt@oskarwrobel.pl>",
   "license": "ISC",
