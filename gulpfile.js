@@ -1,7 +1,7 @@
 'use strict';
 
 const config = {
-	ROOT_PATH: '.'
+	ROOT_PATH: __dirname
 };
 
 const gulp = require( 'gulp' );
@@ -16,4 +16,4 @@ gulp.task( 'lint', () => lintTasks.lint( './**/*.js' ) );
 gulp.task( 'pre-commit', () => lintTasks.lintStaged( './**/*.js' ) );
 
 // JS unit tests.
-gulp.task( 'test', ( done ) => testTasks.test( done, options ) );
+gulp.task( 'test', ( done ) => testTasks.test( options, done ) );

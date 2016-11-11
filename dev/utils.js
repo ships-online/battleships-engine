@@ -4,11 +4,12 @@ module.exports = () => {
 	return {
 		parseArgs( args ) {
 			return require( 'minimist' )( args, {
-				boolean: [ 'coverage', 'debug' ],
+				boolean: [ 'coverage', 'watch', 'sourcemap' ],
 				string: [ 'files', 'format' ],
 				alias: {
 					coverage: 'c',
-					debug: 'd',
+					sourcemap: 's',
+					watch: 'w',
 					files: 'f'
 				}
 			} );

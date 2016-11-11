@@ -1,7 +1,7 @@
 'use strict';
 
-module.exports = ( config ) => {
-	return {
+module.exports = ( config, options = {} ) => {
+	const webpackConfig = {
 		resolve: {
 			root: [ config.ROOT_PATH ]
 		},
@@ -15,14 +15,27 @@ module.exports = ( config ) => {
 					query: {
 						cacheDirectory: true,
 						plugins: [
-							'transform-es2015-modules-commonjs',
-							[ 'istanbul', { 'exclude': [ 'tests/**/*.js' ] } ]
+							'transform-es2015-modules-commonjs'
 						]
 					}
 				}
 			]
-		},
-
-		devtool: 'eval'
+		}
 	};
+
+	if ( options.sourcemap ) {
+		webpackConfig.devtool = 'eval';
+	}
+
+	if ( options.coverage ) {
+		webpackConfig.module.preLoaders[ 0 ].query.plugins.push(
+			[ 'istanbul', { 'exclude': [
+				'tests/**/*.js',
+				'engine/**/*.js',
+				'core/**/*.js'
+			] } ]
+		);
+	}
+
+	return webpackConfig;
 };

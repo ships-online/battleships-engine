@@ -1,10 +1,10 @@
 'use strict';
 
-module.exports = ( config, options ) => {
-	const webpackConfig = require( './webpack.conf.js' )( config );
+module.exports = ( config, options = {} ) => {
+	const webpackConfig = require( './webpack.conf.js' )( config, options );
 
 	const karmaConfig = {
-		// base path that will be used to resolve all patterns (eg. files, exclude)
+		// Base path that will be used to resolve all patterns (eg. files, exclude)
 		basePath: config.ROOT_PATH,
 
 		// List of files/patterns to load in the browser.
@@ -15,11 +15,12 @@ module.exports = ( config, options ) => {
 		// Frameworks to use
 		frameworks: [ 'mocha', 'chai', 'sinon' ],
 
-		// Preprocess matching files before serving them to the browser.
-		// Available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
+		// A map of preprocessors to use.
 		preprocessors: {
-			'tests/**/*.js': [ 'webpack', 'sourcemap' ],
-			'src/**/*.js': [ 'webpack', 'sourcemap' ]
+			'tests/**/*.js': [ 'webpack' ],
+			'src/**/*.js': [ 'webpack' ],
+			'engine/**/*.js': [ 'webpack' ],
+			'core/**/*.js': [ 'webpack' ]
 		},
 
 		// Webpack configuration.
@@ -29,10 +30,12 @@ module.exports = ( config, options ) => {
 		// Possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
 		reporters: [ 'mocha' ],
 
+		// Istanbul coverage reporter configuration.
 		coverageReporter: {
 			dir: 'coverage/',
 			reporters: [
-				{ type: 'html', subdir: 'html' }
+				{ type: 'html' },
+				{ type: 'text-summary' }
 			]
 
 		},
@@ -62,11 +65,21 @@ module.exports = ( config, options ) => {
 		captureTimeout: 60000,
 
 		// Enable / disable watching file and executing tests whenever any file changes
-		autoWatch: false,
+		autoWatch: true,
+
+		// When Karma is watching the files for changes, it tries to batch multiple changes into a single run so
+		// that the test runner doesn't try to start and restart running tests more than it should.
+		// The configuration setting tells Karma how long to wait (in milliseconds) after any changes
+		// have occurred before starting the test process again.
+		autoWatchBatchDelay: 1000,
 
 		// Continuous Integration mode
 		// If true, it capture browsers, run tests and exit
-		singleRun: true
+		singleRun: true,
+
+		// When Karma is watching the files for changes, it will delay a new run until the current run is finished.
+		// Enabling this setting will cancel the current run and start a new run immediately when a change is detected.
+		restartOnFileChange: true
 	};
 
 	if ( options.files ) {
@@ -77,8 +90,15 @@ module.exports = ( config, options ) => {
 		karmaConfig.reporters.push( 'coverage' );
 	}
 
-	if ( options.debug ) {
+	if ( options.sourcemap ) {
+		for ( let preprocessor in karmaConfig.preprocessors ) {
+			karmaConfig.preprocessors[ preprocessor ].push( 'sourcemap' );
+		}
+	}
+
+	if ( options.watch ) {
 		karmaConfig.singleRun = false;
+		karmaConfig.autoWatchDelay = 1000;
 	}
 
 	return karmaConfig;

@@ -4,19 +4,21 @@ const gulp = require( 'gulp' );
 const gulpBabel = require( 'gulp-babel' );
 const path = require( 'path' );
 
-module.exports = () => {
+module.exports = ( config ) => {
 	/**
-	 * Tasks definitions.
+	 * Tasks definition.
 	 */
 	return {
 		/**
 		 * Compiles source files to specified format.
 		 *
-		 * @param {String} dest Destination path.
+		 * @param {String} source Source path.
+		 * @param {String} destination Destination path.
 		 * @param {'esnext'|'cjs'} format Output format.
 		 * @returns {Stream}
 		 */
-		compile( dest, format = 'esnext' ) {
+		compile( source, destination, format = 'esnext' ) {
+			const sourcePath = path.join( config.ROOT_PATH, source );
 			const plugins = [];
 
 			if ( format == 'cjs' ) {
@@ -25,9 +27,9 @@ module.exports = () => {
 				throw new Error( 'Unsupported format.' );
 			}
 
-			return gulp.src( path.join( __dirname, '..', '..', 'src', '**', '*.js' ) )
+			return gulp.src( path.join( sourcePath, '**', '*.js' ), { base: sourcePath } )
 				.pipe( gulpBabel( { plugins } ) )
-				.pipe( gulp.dest( dest ) );
+				.pipe( gulp.dest( destination ) );
 		}
 	};
 };

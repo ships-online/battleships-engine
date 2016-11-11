@@ -1,7 +1,7 @@
 'use strict';
 
 const KarmaServer = require( 'karma' ).Server;
-const karmaConfig = require( '../karma.conf.js' );
+const getKarmaConfig = require( '../karma.conf.js' );
 
 module.exports = ( config ) => {
 	/**
@@ -16,8 +16,15 @@ module.exports = ( config ) => {
 		 * @param {Boolean} [options.coverage] When `true` then coverage report will be generated.
 		 * @param {String} [options.files] Glob with selected for test files.
 		 */
-		test( done, options ) {
-			new KarmaServer( karmaConfig( config, options ), done ).start();
+		test( options, done ) {
+			new KarmaServer( getKarmaConfig( config, options ), () => {
+				done();
+
+				// Fix for not finishing process.
+				if ( !options.watch ) {
+					process.exit( 1 );
+				}
+			} ).start();
 		}
 	};
 };
