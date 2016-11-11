@@ -1,6 +1,6 @@
-import Server from '../src/server.js';
-import ioMock from '../src/utils/_test/iomock.js';
-import EmitterMixin from '../src/utils/emittermixin.js';
+import Server from 'src/server.js';
+import ioMock from 'src/_utils/iomock.js';
+import EmitterMixin from 'utils/emittermixin.js';
 
 describe( 'Server', () => {
 	let server, gameEmitter, ioInstance;
@@ -14,7 +14,7 @@ describe( 'Server', () => {
 	} );
 
 	describe( 'create()', () => {
-		it( 'should return Promise with game id', ( done ) => {
+		it.skip( 'should return Promise with game id', ( done ) => {
 			server.create().then( ( gameID ) => {
 				expect( gameID ).to.equal( 123 );
 				done();

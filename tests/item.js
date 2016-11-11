@@ -1,4 +1,4 @@
-import Item from '../src/item.js';
+import Item from 'src/item.js';
 
 describe( 'Item', () => {
 	let item, sandbox;

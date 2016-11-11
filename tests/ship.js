@@ -1,5 +1,5 @@
-import Ship from '../src/ship.js';
-import Item from '../src/item.js';
+import Ship from 'src/ship.js';
+import Item from 'src/item.js';
 
 describe( 'Ship:', () => {
 	let ship, sandbox;

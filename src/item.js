@@ -1,6 +1,6 @@
-import mix from './utils/mix.js';
-import ObservableMixin from './utils/observablemixin.js';
-import uid from './utils/uid.js';
+import mix from 'utils/mix.js';
+import ObservableMixin from 'utils/observablemixin.js';
+import uid from 'utils/uid.js';
 
 /**
  * Item which can be placed on the {@link game.Battlefield}.

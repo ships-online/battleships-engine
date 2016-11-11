@@ -1,7 +1,7 @@
-import Battlefield from '../src/battlefield.js';
-import ShipsCollection from '../src/shipscollection.js';
-import Item from '../src/item.js';
-import Ship from '../src/ship.js';
+import Battlefield from 'src/battlefield.js';
+import ShipsCollection from 'src/shipscollection.js';
+import Item from 'src/item.js';
+import Ship from 'src/ship.js';
 
 describe( 'Battlefield:', () => {
 	let battlefield, sandbox;

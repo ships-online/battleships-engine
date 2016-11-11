@@ -46,9 +46,9 @@ export default class Server {
 	 * Sends event to the server.
 	 *
 	 * @param {String} eventName Event name.
-	 * @param {Object} data Event data.
+	 * @param {Object} data Additional data.
 	 */
-	emit( eventName, data ) {
+	fire( eventName, data ) {
 		this._socket.emit( eventName, data );
 	}
 
@@ -57,12 +57,13 @@ export default class Server {
 	 *
 	 * @private
 	 * @param {String} requestEvent
+	 * @param {Object} data Additional data.
 	 * @returns {Promise<data>}
 	 */
-	_request( requestEvent ) {
+	_request( eventName, data ) {
 		return new Promise( ( resolve ) => {
 			this._socket.once( `${ requestEvent }Response`, ( ...args ) => resolve( ...args ) );
-			this._socket.emit( requestEvent );
+			this._socket.emit( eventName, data  );
 		} );
 	}
 }

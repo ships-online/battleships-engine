@@ -1,5 +1,5 @@
-import ShipsCollection from '../src/shipscollection.js';
-import Ship from '../src/ship.js';
+import ShipsCollection from 'src/shipscollection.js';
+import Ship from 'src/ship.js';
 
 describe( 'ShipsCollection:', () => {
 	let shipsCollection, sandbox;
