@@ -6,9 +6,9 @@ const config = {
 
 const path = require( 'path' );
 const gulp = require( 'gulp' );
-const utils = require( './dev/utils.js' )( config );
-const lintTasks = require( './dev/tasks/lint.js' )( config );
-const testTasks = require( './dev/tasks/test.js' )( config );
+const utils = require( 'battleships-dev-tools/lib/utils.js' )( config );
+const lintTasks = require( 'battleships-dev-tools/lib/tasks/lint.js' )( config );
+const testTasks = require( 'battleships-dev-tools/lib/tasks/test.js' )( config );
 
 const options = utils.parseArgs( process.argv.slice( 3 ) );
 
