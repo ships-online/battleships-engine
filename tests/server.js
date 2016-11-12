@@ -1,6 +1,6 @@
 import Server from 'src/server.js';
 import ioMock from 'src/_utils/iomock.js';
-import EmitterMixin from 'utils/emittermixin.js';
+import EmitterMixin from 'lib/utils/emittermixin.js';
 
 describe( 'Server', () => {
 	let server, gameEmitter, ioInstance;
