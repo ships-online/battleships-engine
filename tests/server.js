@@ -14,7 +14,7 @@ describe( 'Server', () => {
 	} );
 
 	describe( 'create()', () => {
-		it.skip( 'should return Promise with game id', ( done ) => {
+		it( 'should return Promise with game id', ( done ) => {
 			server.create().then( ( gameID ) => {
 				expect( gameID ).to.equal( 123 );
 				done();
@@ -23,6 +23,25 @@ describe( 'Server', () => {
 			ioInstance.emit( 'connect' );
 			ioInstance.emit( 'create' );
 			ioInstance.emit( 'createResponse', 123 );
+		} );
+	} );
+
+	describe( 'fire', () => {
+		it( 'should emit socket event', ( done ) => {
+			server.create().then( () => {
+				const spy = sinon.spy( ioInstance, 'emit' );
+
+				server.fire( 'eventName', 'foo', 'bar' );
+
+				expect( spy.calledOnce ).to.true;
+				expect( spy.calledWithExactly( 'eventName', 'foo', 'bar' ) ).to.true;
+
+				done();
+			} ).catch( ( err ) => done( err ) );
+
+			ioInstance.emit( 'connect' );
+			ioInstance.emit( 'create' );
+			ioInstance.emit( 'createResponse' );
 		} );
 	} );
 } );

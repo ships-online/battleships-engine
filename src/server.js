@@ -1,5 +1,3 @@
-/* global io */
-
 /**
  * Class for communication between client and server.
  */
@@ -34,7 +32,7 @@ export default class Server {
 	 */
 	create() {
 		return new Promise( ( resolve ) => {
-			this._socket = io();
+			this._socket = window.io();
 
 			this._socket.on( 'connect', () => {
 				this._request( 'create' ).then( ( gameID ) => resolve( gameID ) );
@@ -46,23 +44,23 @@ export default class Server {
 	 * Sends event to the server.
 	 *
 	 * @param {String} eventName Event name.
-	 * @param {Object} data Additional data.
+	 * @param {*} [...args] Additional argumentsdata.
 	 */
-	fire( eventName, data ) {
-		this._socket.emit( eventName, data );
+	fire( eventName, ...args ) {
+		this._socket.emit( eventName, ...args );
 	}
 
 	/**
 	 * Emits event to server and wait for immediate response.
 	 *
 	 * @private
-	 * @param {String} requestEvent
+	 * @param {String} eventName
 	 * @param {Object} data Additional data.
 	 * @returns {Promise<data>}
 	 */
 	_request( eventName, data ) {
 		return new Promise( ( resolve ) => {
-			this._socket.once( `${ requestEvent }Response`, ( ...args ) => resolve( ...args ) );
+			this._socket.once( `${ eventName }Response`, ( ...args ) => resolve( ...args ) );
 			this._socket.emit( eventName, data  );
 		} );
 	}
