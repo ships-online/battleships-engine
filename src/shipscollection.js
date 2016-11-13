@@ -9,9 +9,9 @@ export default class ShipsCollection {
 	/**
 	 * Creates an instance of ShipsCollection class, initialize with a sets of ships.
 	 *
-	 * @param {Object} [shipsConfiguration] Initial ships configuration.
+	 * @param {Object} [shipsConfig] Initial ships configuration.
 	 */
-	constructor( shipsConfiguration ) {
+	constructor( shipsConfig ) {
 		/**
 		 * Collection store.
 		 *
@@ -20,8 +20,8 @@ export default class ShipsCollection {
 		 */
 		this._ships = [];
 
-		if ( shipsConfiguration ) {
-			this.add( ShipsCollection.getShipsFromConfig( shipsConfiguration ) );
+		if ( shipsConfig ) {
+			this.add( ShipsCollection.getShipsFromConfig( shipsConfig ) );
 		}
 	}
 

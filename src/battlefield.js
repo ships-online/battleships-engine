@@ -11,9 +11,9 @@ export default class Battlefield {
 	 * Creates instance of Battlefield class.
 	 *
 	 * @param {Number} size Size of the battlefield.
-	 * @param {Object} [ships] Defines how many ships of specified length will be on the battlefield.
+	 * @param {Object} [shipsConfig] Defines how many ships of specified length will be on the battlefield.
 	 */
-	constructor( size, ships ) {
+	constructor( size, shipsConfig ) {
 		/**
 		 * Size of the battlefield.
 		 *
@@ -26,7 +26,7 @@ export default class Battlefield {
 		 *
 		 * @type {game.ShipsCollection}
 		 */
-		this.shipsCollection = new ShipsCollection( ships );
+		this.shipsCollection = new ShipsCollection( shipsConfig );
 
 		/**
 		 * Information about items placed on the battlefield.
@@ -77,12 +77,12 @@ export default class Battlefield {
 	 *
 	 * @param {game.Item} item Item instance.
 	 * @param {Array<Number>} position Position x, y e.g. [ 1, 1 ].
-	 * @param {Boolean} [rotate] When `true` then item will be rotated.
+	 * @param {Boolean} [isRotated] When `true` then item will be rotated.
 	 */
-	move( item, position, rotate ) {
+	move( item, position, isRotated ) {
 		item.coordinates.forEach( ( pos ) => this._remove( pos, item ) );
 
-		if ( rotate ) {
+		if ( isRotated ) {
 			item.rotate();
 		}
 
