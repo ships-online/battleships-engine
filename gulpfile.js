@@ -17,11 +17,8 @@ const options = utils.parseArgs( process.argv.slice( 3 ) );
 
 gulp.task( 'relink', linkTask.relink );
 
-// build engine to esnext format.
-gulp.task( 'clean:build:utils', () => utils.del( './lib/utils' ) );
-gulp.task( 'build:utils', [ 'clean:build:utils' ], () => {
-	compileTasks.build( 'node_modules/battleships-utils/src', './lib/utils' );
-} );
+// Build dependency.
+gulp.task( 'build:utils', () => compileTasks.buildDependency( 'utils' ) );
 gulp.task( 'build', [ 'build:utils' ], ( done ) => done() );
 
 // JS code sniffer.
