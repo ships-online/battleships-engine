@@ -91,6 +91,20 @@ describe( 'Item', () => {
 		} );
 	} );
 
+	describe( 'isRotated', () => {
+		it( 'should return `false` when orientation is `horizontal`', () => {
+			item.orientation = 'horizontal';
+
+			expect( item.isRotated ).to.false;
+		} );
+
+		it( 'should return `true` when orientation is `vertical`', () => {
+			item.orientation = 'vertical';
+
+			expect( item.isRotated ).to.true;
+		} );
+	} );
+
 	describe( 'rotate()', () => {
 		it( 'should toggle orientation between `horizontal` and `vertical`', () => {
 			expect( item.orientation ).to.equal( 'horizontal' );

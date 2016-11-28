@@ -61,11 +61,11 @@ class Item {
 
 		const fields = [ this.firstFieldPosition ];
 
-		for ( let i = 1; i <= this.length - 1; i++ ) {
-			// Copy last field.
+		for ( let i = 1; i < this.length; i++ ) {
+			// Clone previous field.
 			let nextField = fields[ i - 1 ].concat( [] );
 
-			++nextField[ this.orientation == 'horizontal' ? 0 : 1 ];
+			++nextField[ this.isRotated ? 1 : 0 ];
 
 			fields.push( nextField );
 		}
@@ -77,7 +77,11 @@ class Item {
 	 * Toggle {#orientation} between `vertical` and `horizontal`.
 	 */
 	rotate() {
-		this.orientation = this.orientation == 'horizontal' ? 'vertical' : 'horizontal';
+		this.orientation = this.isRotated ? 'horizontal' : 'vertical';
+	}
+
+	get isRotated() {
+		return this.orientation === 'vertical';
 	}
 
 	/**
