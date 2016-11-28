@@ -72,6 +72,23 @@ export default class Battlefield {
 		return this._fields.has( key ) ? this._fields.get( key ) : null;
 	}
 
+	moveShip( ship, position, isRotated ) {
+		if ( isRotated === undefined ) {
+			isRotated = ship.isRotated;
+		}
+
+		// Update position of moved ship on the battlefield.
+		this.moveItem( ship, position, isRotated );
+
+		// Check if ships with collision still have a collision after one ship was moved.
+		for ( let collisionShip of this.shipsCollection.getWithCollision() ) {
+			this.checkShipCollision( collisionShip );
+		}
+
+		// Check if moved ship has a collision.
+		this.checkShipCollision( ship );
+	}
+
 	/**
 	 * Puts and moves item on the battlefield.
 	 *
@@ -79,15 +96,15 @@ export default class Battlefield {
 	 * @param {Array<Number>} position Position x, y e.g. [ 1, 1 ].
 	 * @param {Boolean} [isRotated] When `true` then item will be rotated.
 	 */
-	move( item, position, isRotated ) {
+	moveItem( item, position, isRotated ) {
 		item.coordinates.forEach( ( pos ) => this._remove( pos, item ) );
-
-		if ( isRotated ) {
-			item.rotate();
-		}
-
+		item.orientation = isRotated ? 'vertical' : 'horizontal';
 		item.firstFieldPosition = position;
 		item.coordinates.forEach( ( pos ) => this.set( pos, item ) );
+	}
+
+	rotateShip( ship ) {
+		this.moveShip( ship, ship.firstFieldPosition, !ship.isRotated );
 	}
 
 	/**
@@ -121,11 +138,11 @@ export default class Battlefield {
 		for ( let position of ship.coordinates ) {
 			let field = this.get( position );
 
-			// There is more than one ship on this position so there is a collision.
+			// If there is more than one ship on this position then there is a collision.
 			// Mark each ship on this field as collision.
-			isCollision = checkShipCollisionOnField( ship, field );
+			isCollision = checkShipCollisionOnField( ship, field, position ) || isCollision;
 
-			// Get surrounded fields.
+			// Get surrounding fields.
 			const top = Battlefield.getPositionAtTheTopOf( position );
 			const right = Battlefield.getPositionAtTheRightOf( position );
 			const bottom = Battlefield.getPositionAtTheBottomOf( position );
@@ -135,12 +152,12 @@ export default class Battlefield {
 			const bottomRight = Battlefield.getPositionAtTheBottomOf( right );
 			const bottomLeft = Battlefield.getPositionAtTheBottomOf( left );
 
-			// If surrounded field contains other ship then mark each ship on this fields as collision.
+			// If surrounding fields contain other ship then mark each ship on this fields as collision.
 			[ top, topRight, right, bottomRight, bottom, bottomLeft, left, topLeft ].forEach( ( pos ) => {
 				field = this.get( pos );
 
 				if ( field ) {
-					isCollision = checkShipCollisionOnField( ship, field ) || isCollision;
+					isCollision = checkShipCollisionOnField( ship, field, pos ) || isCollision;
 				}
 			} );
 		}
@@ -203,7 +220,7 @@ export default class Battlefield {
  * @param {Array<{game.Item}>|null} field
  * @returns {boolean}
  */
-function checkShipCollisionOnField( ship, field ) {
+function checkShipCollisionOnField( ship, field, pos ) {
 	let isCollision = false;
 
 	field.forEach( ( item ) => {
