@@ -1,20 +1,52 @@
-import Item from './item.js';
+import ObservableMixin from 'lib/utils/observablemixin.js';
+import mix from 'lib/utils/mix.js';
+import uid from 'lib/utils/uid.js';
 
 /**
  * Ship.
  *
  * @memberOf game
- * @extends game.Item
  */
-class Ship extends Item {
+export default class Ship  {
 	/**
 	 * Create instance of Ship class.
 	 *
 	 * @param {Number} length Ship size.
 	 * @param {Number} [id] Ship id.
 	 */
-	constructor( length, id ) {
-		super( length, id );
+	constructor( length, id = uid() ) {
+		/**
+		 * Ship id.
+		 *
+		 * @readonly
+		 * @member {Number} game.Ship#id
+		 */
+		this.id = id;
+
+		/**
+		 * Ship length.
+		 *
+		 * @readonly
+		 * @member {Number} game.Ship#length
+		 */
+		this.length = length;
+
+		/**
+		 * Ship orientation.
+		 *
+		 * @observable
+		 * @readonly
+		 * @member {Boolean} game.Ship#isRotated
+		 */
+		this.set( 'isRotated', false );
+
+		/**
+		 * Position of the ship first field on the battlefield. E.g. [ 1, 1 ].
+		 *
+		 * @observable
+		 * @member {Array} game.Ship#position
+		 */
+		this.set( 'position', [ null, null ] );
 
 		/**
 		 * Flag defines if ship placement on the battlefield is valid or invalid (ship has a collision with other ship
@@ -27,7 +59,7 @@ class Ship extends Item {
 
 		/**
 		 * Store information with field of ship is damaged (hit). Array of damages has the same length as ship length
-		 * and at default every item is a falsy value (no damage).
+		 * and at default every ship is a falsy value (no damage).
 		 *
 		 * 		[ false, false, false ] // Ship has length 3 and is no damaged.
 		 * 		[ false, true, false ] // Ship has length 3 and middle field is hit.
@@ -38,6 +70,49 @@ class Ship extends Item {
 		 */
 		this.set( 'damages', new Array( length ) );
 	}
+
+	/**
+	 * Return array of coordinates on battlefield.
+	 *
+	 * @returns {Array<Array>}
+	 */
+	get coordinates() {
+		if ( typeof this.position[ 0 ] != 'number' || typeof this.position[ 1 ] != 'number' ) {
+			return [];
+		}
+
+		const fields = [ this.position ];
+
+		for ( let i = 1; i < this.length; i++ ) {
+			// Clone previous field.
+			let nextField = fields[ i - 1 ].concat( [] );
+
+			++nextField[ this.isRotated ? 1 : 0 ];
+
+			fields.push( nextField );
+		}
+
+		return fields;
+	}
+
+	/**
+	 * Toggle {#isRotated} between `vertical` and `horizontal`.
+	 */
+	rotate() {
+		this.isRotated = !this.isRotated;
+	}
+
+	/**
+	 * Serialize ship to JSON format.
+	 *
+	 * @returns {Object}
+	 */
+	toJSON() {
+		return {
+			id: this.id,
+			coordinates: this.coordinates
+		};
+	}
 }
 
-export default Ship;
+mix( Ship, ObservableMixin );
