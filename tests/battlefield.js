@@ -1,6 +1,5 @@
 import Battlefield from 'src/battlefield.js';
 import ShipsCollection from 'src/shipscollection.js';
-import Item from 'src/item.js';
 import Ship from 'src/ship.js';
 
 describe( 'Battlefield:', () => {
@@ -29,15 +28,15 @@ describe( 'Battlefield:', () => {
 	} );
 
 	describe( 'set()', () => {
-		it( 'should put item into empty field with no error', () => {
-			const item = new Item( 1 );
+		it( 'should put ship into empty field with no error', () => {
+			const ship = new Ship( 1 );
 
-			expect( () => battlefield.set( [ 1, 1 ], item ) ).to.not.throw;
+			expect( () => battlefield.set( [ 1, 1 ], ship ) ).to.not.throw;
 		} );
 
-		it( 'should put item into existing field with no error', () => {
-			const item1 = new Item( 1 );
-			const item2 = new Item( 1 );
+		it( 'should put ship into existing field with no error', () => {
+			const item1 = new Ship( 1 );
+			const item2 = new Ship( 1 );
 
 			battlefield.set( [ 1, 1 ], item1 );
 
@@ -46,20 +45,20 @@ describe( 'Battlefield:', () => {
 	} );
 
 	describe( 'get()', () => {
-		it( 'should get item from field where is only one item', () => {
-			const item = new Item( 1 );
+		it( 'should get ship from field where is only one ship', () => {
+			const ship = new Ship( 1 );
 
-			battlefield.set( [ 1, 1 ], item );
+			battlefield.set( [ 1, 1 ], ship );
 
 			const field = battlefield.get( [ 1, 1 ] );
 
 			expect( field ).to.have.length( 1 );
-			expect( field ).to.have.members( [ item ] );
+			expect( field ).to.have.members( [ ship ] );
 		} );
 
-		it( 'should get items from field where is more than one item', () => {
-			const item1 = new Item( 1 );
-			const item2 = new Item( 1 );
+		it( 'should get items from field where is more than one ship', () => {
+			const item1 = new Ship( 1 );
+			const item2 = new Ship( 1 );
 
 			battlefield.set( [ 1, 1 ], item1 );
 			battlefield.set( [ 1, 1 ], item2 );
@@ -77,74 +76,74 @@ describe( 'Battlefield:', () => {
 		} );
 	} );
 
-	describe( 'moveItem()', () => {
-		it( 'should put item on the battlefield', () => {
-			const item = new Item( 2 );
+	describe( 'moveShip()', () => {
+		it( 'should put ship on the battlefield', () => {
+			const ship = new Ship( 2 );
 
-			battlefield.moveItem( item, [ 1, 1 ] );
+			battlefield.moveShip( ship, [ 1, 1 ] );
 
-			expect( item.coordinates ).to.deep.equal( [ [ 1, 1 ], [ 2, 1 ] ] );
+			expect( ship.coordinates ).to.deep.equal( [ [ 1, 1 ], [ 2, 1 ] ] );
 
 			expect( battlefield.get( [ 1, 1 ] ) ).to.have.length( 1 );
-			expect( battlefield.get( [ 1, 1 ] ) ).to.have.members( [ item ] );
+			expect( battlefield.get( [ 1, 1 ] ) ).to.have.members( [ ship ] );
 
 			expect( battlefield.get( [ 2, 1 ] ) ).to.have.length( 1 );
-			expect( battlefield.get( [ 2, 1 ] ) ).to.have.members( [ item ] );
+			expect( battlefield.get( [ 2, 1 ] ) ).to.have.members( [ ship ] );
 		} );
 
-		it( 'should move item on the battlefield', () => {
-			const item = new Item( 2 );
+		it( 'should move ship on the battlefield', () => {
+			const ship = new Ship( 2 );
 
-			battlefield.moveItem( item, [ 1, 1 ] );
-			battlefield.moveItem( item, [ 2, 2 ] );
+			battlefield.moveShip( ship, [ 1, 1 ] );
+			battlefield.moveShip( ship, [ 2, 2 ] );
 
-			expect( item.coordinates ).to.deep.equal( [ [ 2, 2 ], [ 3, 2 ] ] );
+			expect( ship.coordinates ).to.deep.equal( [ [ 2, 2 ], [ 3, 2 ] ] );
 
 			expect( battlefield.get( [ 1, 1 ] ) ).to.null;
 			expect( battlefield.get( [ 2, 1 ] ) ).to.null;
 
 			expect( battlefield.get( [ 2, 2 ] ) ).to.have.length( 1 );
-			expect( battlefield.get( [ 2, 2 ] ) ).to.have.members( [ item ] );
+			expect( battlefield.get( [ 2, 2 ] ) ).to.have.members( [ ship ] );
 
 			expect( battlefield.get( [ 3, 2 ] ) ).to.have.length( 1 );
-			expect( battlefield.get( [ 3, 2 ] ) ).to.have.members( [ item ] );
+			expect( battlefield.get( [ 3, 2 ] ) ).to.have.members( [ ship ] );
 		} );
 
-		it( 'should move item when there is more than one item on the same field', () => {
-			const item1 = new Item( 2 );
-			const item2 = new Item( 2 );
+		it( 'should move ship when there is more than one ship on the same field', () => {
+			const item1 = new Ship( 2 );
+			const item2 = new Ship( 2 );
 
-			battlefield.moveItem( item1, [ 1, 1 ] );
-			battlefield.moveItem( item2, [ 2, 1 ] );
-			battlefield.moveItem( item1, [ 2, 4 ] );
+			battlefield.moveShip( item1, [ 1, 1 ] );
+			battlefield.moveShip( item2, [ 2, 1 ] );
+			battlefield.moveShip( item1, [ 2, 4 ] );
 
 			expect( item1.coordinates ).to.deep.equal( [ [ 2, 4 ], [ 3, 4 ] ] );
 		} );
 
-		it( 'should put rotated item on the battlefield', () => {
-			const item = new Item( 2 );
+		it( 'should put rotated ship on the battlefield', () => {
+			const ship = new Ship( 2 );
 
-			battlefield.moveItem( item, [ 1, 1 ], true );
+			battlefield.moveShip( ship, [ 1, 1 ], true );
 
-			expect( item.coordinates ).to.deep.equal( [ [ 1, 1 ], [ 1, 2 ] ] );
+			expect( ship.coordinates ).to.deep.equal( [ [ 1, 1 ], [ 1, 2 ] ] );
 		} );
 
-		it( 'should rotated item without moving', () => {
-			const item = new Item( 2 );
+		it( 'should rotated ship without moving', () => {
+			const ship = new Ship( 2 );
 
-			battlefield.moveItem( item, [ 1, 1 ] );
-			battlefield.moveItem( item, [ 1, 1 ], true );
+			battlefield.moveShip( ship, [ 1, 1 ] );
+			battlefield.moveShip( ship, [ 1, 1 ], true );
 
-			expect( item.coordinates ).to.deep.equal( [ [ 1, 1 ], [ 1, 2 ] ] );
+			expect( ship.coordinates ).to.deep.equal( [ [ 1, 1 ], [ 1, 2 ] ] );
 		} );
 
-		it( 'should rotated item while moving', () => {
-			const item = new Item( 2 );
+		it( 'should rotated ship while moving', () => {
+			const ship = new Ship( 2 );
 
-			battlefield.moveItem( item, [ 1, 1 ] );
-			battlefield.moveItem( item, [ 2, 2 ], true );
+			battlefield.moveShip( ship, [ 1, 1 ] );
+			battlefield.moveShip( ship, [ 2, 2 ], true );
 
-			expect( item.coordinates ).to.deep.equal( [ [ 2, 2 ], [ 2, 3 ] ] );
+			expect( ship.coordinates ).to.deep.equal( [ [ 2, 2 ], [ 2, 3 ] ] );
 		} );
 	} );
 
@@ -152,7 +151,7 @@ describe( 'Battlefield:', () => {
 		it( 'should return `false` and mark ship as no collision when ship has no contact with other ships #1', () => {
 			const ship = new Ship( 1 );
 
-			battlefield.moveItem( ship, [ 1, 1 ] );
+			battlefield.moveShip( ship, [ 1, 1 ] );
 
 			expect( battlefield.checkShipCollision( ship ) ).to.false;
 			expect( ship.isCollision ).to.false;
@@ -173,18 +172,13 @@ describe( 'Battlefield:', () => {
 			const ship4 = new Ship( 4 );
 			const ship5 = new Ship( 4 );
 
-			battlefield.moveItem( ship1, [ 2, 2 ] );
-			battlefield.moveItem( ship2, [ 0, 0 ] );
-			battlefield.moveItem( ship3, [ 4, 0 ], true );
-			battlefield.moveItem( ship4, [ 1, 4 ] );
-			battlefield.moveItem( ship5, [ 0, 1 ], true );
+			battlefield.moveShip( ship1, [ 2, 2 ] );
+			battlefield.moveShip( ship2, [ 0, 0 ] );
+			battlefield.moveShip( ship3, [ 4, 0 ], true );
+			battlefield.moveShip( ship4, [ 1, 4 ] );
+			battlefield.moveShip( ship5, [ 0, 1 ], true );
 
 			expect( battlefield.checkShipCollision( ship1 ) ).to.false;
-			expect( ship1.isCollision ).to.false;
-			expect( ship2.isCollision ).to.false;
-			expect( ship3.isCollision ).to.false;
-			expect( ship4.isCollision ).to.false;
-			expect( ship5.isCollision ).to.false;
 		} );
 
 		it( 'should return `true` and mark ships as collision when there is more than one ship on the same field #1', () => {
@@ -192,8 +186,8 @@ describe( 'Battlefield:', () => {
 			const ship1 = new Ship( 1 );
 			const ship2 = new Ship( 1 );
 
-			battlefield.moveItem( ship1, [ 3, 3 ] );
-			battlefield.moveItem( ship2, [ 3, 3 ] );
+			battlefield.moveShip( ship1, [ 3, 3 ] );
+			battlefield.moveShip( ship2, [ 3, 3 ] );
 
 			expect( battlefield.checkShipCollision( ship1 ) ).to.true;
 			expect( ship1.isCollision ).to.true;
@@ -205,8 +199,8 @@ describe( 'Battlefield:', () => {
 			const ship1 = new Ship( 2 );
 			const ship2 = new Ship( 2 );
 
-			battlefield.moveItem( ship1, [ 0, 0 ] );
-			battlefield.moveItem( ship2, [ 1, 0 ] );
+			battlefield.moveShip( ship1, [ 0, 0 ] );
+			battlefield.moveShip( ship2, [ 1, 0 ] );
 
 			expect( battlefield.checkShipCollision( ship1 ) ).to.true;
 			expect( ship1.isCollision ).to.true;
@@ -219,8 +213,8 @@ describe( 'Battlefield:', () => {
 			const ship1 = new Ship( 2 );
 			const ship2 = new Ship( 2 );
 
-			battlefield.moveItem( ship1, [ 1, 0 ], true );
-			battlefield.moveItem( ship2, [ 0, 1 ] );
+			battlefield.moveShip( ship1, [ 1, 0 ], true );
+			battlefield.moveShip( ship2, [ 0, 1 ] );
 
 			expect( battlefield.checkShipCollision( ship1 ) ).to.true;
 			expect( ship1.isCollision ).to.true;
@@ -241,15 +235,15 @@ describe( 'Battlefield:', () => {
 			const ship8 = new Ship( 1 );
 			const ship9 = new Ship( 1 );
 
-			battlefield.moveItem( ship1, [ 2, 2 ] );
-			battlefield.moveItem( ship2, [ 1, 1 ] );
-			battlefield.moveItem( ship3, [ 2, 1 ] );
-			battlefield.moveItem( ship4, [ 3, 1 ] );
-			battlefield.moveItem( ship5, [ 3, 2 ] );
-			battlefield.moveItem( ship6, [ 3, 3 ] );
-			battlefield.moveItem( ship7, [ 2, 3 ] );
-			battlefield.moveItem( ship8, [ 1, 3 ] );
-			battlefield.moveItem( ship9, [ 1, 2 ] );
+			battlefield.moveShip( ship1, [ 2, 2 ] );
+			battlefield.moveShip( ship2, [ 1, 1 ] );
+			battlefield.moveShip( ship3, [ 2, 1 ] );
+			battlefield.moveShip( ship4, [ 3, 1 ] );
+			battlefield.moveShip( ship5, [ 3, 2 ] );
+			battlefield.moveShip( ship6, [ 3, 3 ] );
+			battlefield.moveShip( ship7, [ 2, 3 ] );
+			battlefield.moveShip( ship8, [ 1, 3 ] );
+			battlefield.moveShip( ship9, [ 1, 2 ] );
 
 			expect( battlefield.checkShipCollision( ship1 ) ).to.true;
 			expect( ship1.isCollision ).to.true;

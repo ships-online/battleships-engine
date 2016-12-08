@@ -1,6 +1,6 @@
 import serializeBattlefield from 'src/_utils/serializebattlefield.js';
 import Battlefield from 'src/battlefield.js';
-import Item from 'src/item.js';
+import Ship from 'src/ship.js';
 
 describe( 'serializeBattlefield', () => {
 	it( 'should return data of empty battlefield', () => {
@@ -19,11 +19,11 @@ describe( 'serializeBattlefield', () => {
 
 	it( 'should return data of not empty battlefield', () => {
 		const battlefield = new Battlefield( 2 );
-		const item1 = new Item( 2, 1 );
-		const item2 = new Item( 2, 2 );
+		const item1 = new Ship( 2, 1 );
+		const item2 = new Ship( 2, 2 );
 
-		battlefield.moveItem( item1, [ 0, 1 ] );
-		battlefield.moveItem( item2, [ 1, 0 ], true );
+		battlefield.moveShip( item1, [ 0, 1 ] );
+		battlefield.moveShip( item2, [ 1, 0 ], true );
 
 		const result = serializeBattlefield( battlefield );
 

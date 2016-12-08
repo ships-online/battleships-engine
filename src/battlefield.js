@@ -78,7 +78,12 @@ export default class Battlefield {
 		}
 
 		// Update position of moved ship on the battlefield.
-		this.moveItem( ship, position, isRotated );
+		ship.coordinates.forEach( ( pos ) => this._remove( pos, ship ) );
+
+		ship.isRotated = isRotated;
+		ship.position = position;
+
+		ship.coordinates.forEach( ( pos ) => this.set( pos, ship ) );
 
 		// Check if ships with collision still have a collision after one ship was moved.
 		for ( let collisionShip of this.shipsCollection.getWithCollision() ) {
@@ -89,22 +94,8 @@ export default class Battlefield {
 		this.checkShipCollision( ship );
 	}
 
-	/**
-	 * Puts and moves item on the battlefield.
-	 *
-	 * @param {game.Item} item Item instance.
-	 * @param {Array<Number>} position Position x, y e.g. [ 1, 1 ].
-	 * @param {Boolean} [isRotated] When `true` then item will be rotated.
-	 */
-	moveItem( item, position, isRotated ) {
-		item.coordinates.forEach( ( pos ) => this._remove( pos, item ) );
-		item.orientation = isRotated ? 'vertical' : 'horizontal';
-		item.firstFieldPosition = position;
-		item.coordinates.forEach( ( pos ) => this.set( pos, item ) );
-	}
-
 	rotateShip( ship ) {
-		this.moveShip( ship, ship.firstFieldPosition, !ship.isRotated );
+		this.moveShip( ship, ship.position, !ship.isRotated );
 	}
 
 	/**
@@ -220,7 +211,7 @@ export default class Battlefield {
  * @param {Array<{game.Item}>|null} field
  * @returns {boolean}
  */
-function checkShipCollisionOnField( ship, field, pos ) {
+function checkShipCollisionOnField( ship, field ) {
 	let isCollision = false;
 
 	field.forEach( ( item ) => {
