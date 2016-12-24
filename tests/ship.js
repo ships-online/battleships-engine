@@ -5,7 +5,11 @@ describe( 'Ship:', () => {
 
 	beforeEach( () => {
 		sandbox = sinon.sandbox.create();
-		ship = new Ship( 3, 1 );
+		ship = new Ship( {
+			length: 3,
+			id: 1,
+			isRotated: true
+		} );
 	} );
 
 	afterEach( () => {
@@ -13,17 +17,26 @@ describe( 'Ship:', () => {
 	} );
 
 	describe( 'constructor()', () => {
-		it( 'should create an instance of Ship with some properties', () => {
+		it( 'should create an instance of Ship with given values', () => {
 			expect( ship ).to.have.property( 'id' ).to.equal( 1 );
+			expect( ship ).to.have.property( 'length' ).to.equal( 3 );
+			expect( ship ).to.have.property( 'isRotated' ).to.true;
+			expect( ship ).to.have.property( 'isCollision' ).to.false;
+			expect( ship ).to.have.property( 'position' ).to.have.members( [ null, null ] );
+			expect( ship ).to.have.property( 'damages' ).to.have.members( [ false, false, false ] );
+		} );
+
+		it( 'should create an instance of Ship with default values', () => {
+			ship = new Ship( {
+				length: 3
+			} );
+
+			expect( ship ).to.have.property( 'id' ).to.ok;
 			expect( ship ).to.have.property( 'length' ).to.equal( 3 );
 			expect( ship ).to.have.property( 'isRotated' ).to.false;
 			expect( ship ).to.have.property( 'isCollision' ).to.false;
-			expect( ship ).to.have.property( 'damages' ).to.have.members( [ ,, ] );
 			expect( ship ).to.have.property( 'position' ).to.have.members( [ null, null ] );
-		} );
-
-		it( 'should create id when is not specified', () => {
-			expect( new Ship( 3 ) ).to.have.property( 'id' ).to.not.empty;
+			expect( ship ).to.have.property( 'damages' ).to.have.members( [ false, false, false ] );
 		} );
 
 
@@ -32,7 +45,7 @@ describe( 'Ship:', () => {
 
 			ship.on( 'change:isRotated', spy );
 
-			ship.isRotated = true;
+			ship.isRotated = false;
 
 			expect( spy.calledOnce ).to.true;
 		} );
@@ -43,16 +56,6 @@ describe( 'Ship:', () => {
 			ship.on( 'change:isCollision', spy );
 
 			ship.isCollision = true;
-
-			expect( spy.calledOnce ).to.true;
-		} );
-
-		it( 'should make some `damages` observable', () => {
-			const spy = sinon.spy();
-
-			ship.on( 'change:damages', spy );
-
-			ship.damages = [ undefined, true, undefined ];
 
 			expect( spy.calledOnce ).to.true;
 		} );
@@ -69,57 +72,57 @@ describe( 'Ship:', () => {
 	} );
 
 	describe( 'coordinates', () => {
-		it( 'should return array of coordinates on the battlefield when ship has is not rotated', () => {
+		it( 'should return array of coordinates when ship is not rotated', () => {
 			ship.position = [ 1, 1 ];
+			ship.isRotated = true;
 
 			const result = ship.coordinates;
 
-			expect( result ).to.instanceof( Array );
 			expect( result ).to.have.length( 3 );
-
-			expect( result[ 0 ] ).to.have.length( 2 );
-			expect( result[ 0 ][ 0 ] ).to.equal( 1 );
-			expect( result[ 0 ][ 1 ] ).to.equal( 1 );
-
-			expect( result[ 1 ] ).to.have.length( 2 );
-			expect( result[ 1 ][ 0 ] ).to.equal( 2 );
-			expect( result[ 1 ][ 1 ] ).to.equal( 1 );
-
-			expect( result[ 2 ] ).to.have.length( 2 );
-			expect( result[ 2 ][ 0 ] ).to.equal( 3 );
-			expect( result[ 2 ][ 1 ] ).to.equal( 1 );
+			expect( result[ 0 ] ).to.have.members( [ 1, 1 ] );
+			expect( result[ 1 ] ).to.have.members( [ 2, 1 ] );
+			expect( result[ 2 ] ).to.have.members( [ 3, 1 ] );
 		} );
 
 		it( 'should return array of coordinates on the battlefield when ship is rotated', () => {
 			ship.position = [ 1, 1 ];
-			ship.rotate();
+			ship.isRotated = false;
 
 			const result = ship.coordinates;
 
-			expect( result ).to.instanceof( Array );
 			expect( result ).to.have.length( 3 );
-
-			expect( result[ 0 ] ).to.have.length( 2 );
-			expect( result[ 0 ][ 0 ] ).to.equal( 1 );
-			expect( result[ 0 ][ 1 ] ).to.equal( 1 );
-
-			expect( result[ 1 ] ).to.have.length( 2 );
-			expect( result[ 1 ][ 0 ] ).to.equal( 1 );
-			expect( result[ 1 ][ 1 ] ).to.equal( 2 );
-
-			expect( result[ 2 ] ).to.have.length( 2 );
-			expect( result[ 2 ][ 0 ] ).to.equal( 1 );
-			expect( result[ 2 ][ 1 ] ).to.equal( 3 );
+			expect( result[ 0 ] ).to.have.members( [ 1, 1 ] );
+			expect( result[ 1 ] ).to.have.members( [ 1, 2 ] );
+			expect( result[ 2 ] ).to.have.members( [ 1, 3 ] );
 		} );
 
 		it( 'should return empty array if ship is not placed on the battlefield', () => {
-			expect( ship.coordinates ).to.instanceof( Array );
 			expect( ship.coordinates ).to.have.length( 0 );
+		} );
+	} );
+
+	describe( 'isSunk', () => {
+		it( 'should return false when there is at least one non hit field', () => {
+			ship.damages = [ false, false, false ];
+
+			expect( ship.isSunk ).to.false;
+
+			ship.damages = [ false, true, true ];
+
+			expect( ship.isSunk ).to.false;
+		} );
+
+		it( 'should return true when there all fields are hit', () => {
+			ship.damages = [ true, true, true ];
+
+			expect( ship.isSunk ).to.true;
 		} );
 	} );
 
 	describe( 'rotate()', () => {
 		it( 'should toggle rotation', () => {
+			ship.isRotated = false;
+
 			expect( ship.isRotated ).to.false;
 
 			ship.rotate();
@@ -134,10 +137,41 @@ describe( 'Ship:', () => {
 
 	describe( 'toJSON()', () => {
 		it( 'should return ship in JSON format', () => {
-			let result = ship.toJSON();
+			ship = new Ship( {
+				id: 1,
+				length: 3,
+				isRotated: true
+			} );
+
+			ship.position = [ 1, 1 ];
+
+			const result = ship.toJSON();
 
 			expect( result ).to.have.property( 'id', 1 );
-			expect( result ).to.have.property( 'coordinates' ).to.instanceof( Array );
+			expect( result ).to.have.property( 'length', 3 );
+			expect( result ).to.have.property( 'isRotated', true );
+			expect( result ).to.have.property( 'position' ).to.have.members( [ 1, 1 ] );
 		} );
 	} );
+
+	describe( 'setDamage()', () => {
+		it( 'should set damage to to corresponding index', () => {
+			ship.position = [ 1, 1 ];
+			ship.isRotated = false;
+
+			expect( ship.damages ).to.have.members( [ false, false, false ] );
+
+			ship.setDamage( [ 2, 1 ] );
+
+			expect( ship.damages ).to.have.members( [ false, true, false ] );
+
+			ship.setDamage( [ 3, 1 ] );
+
+			expect( ship.damages ).to.have.members( [ false, true, true ] );
+
+			ship.setDamage( [ 1, 1 ] );
+
+			expect( ship.damages ).to.have.members( [ true, true, true ] );
+		} );
+	} )
 } );

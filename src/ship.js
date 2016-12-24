@@ -10,18 +10,15 @@ import uid from 'lib/utils/uid.js';
 export default class Ship  {
 	/**
 	 * Create instance of Ship class.
-	 *
-	 * @param {Number} length Ship size.
-	 * @param {Number} [id] Ship id.
 	 */
-	constructor( length, id = uid() ) {
+	constructor( data ) {
 		/**
 		 * Ship id.
 		 *
 		 * @readonly
 		 * @member {Number} game.Ship#id
 		 */
-		this.id = id;
+		this.id = data.id || uid();
 
 		/**
 		 * Ship length.
@@ -29,7 +26,7 @@ export default class Ship  {
 		 * @readonly
 		 * @member {Number} game.Ship#length
 		 */
-		this.length = length;
+		this.length = data.length;
 
 		/**
 		 * Ship orientation.
@@ -38,7 +35,7 @@ export default class Ship  {
 		 * @readonly
 		 * @member {Boolean} game.Ship#isRotated
 		 */
-		this.set( 'isRotated', false );
+		this.set( 'isRotated', data.isRotated || false );
 
 		/**
 		 * Position of the ship first field on the battlefield. E.g. [ 1, 1 ].
@@ -65,10 +62,9 @@ export default class Ship  {
 		 * 		[ false, true, false ] // Ship has length 3 and middle field is hit.
 		 * 		[ true, true, true ] // Ship has length 3 and is destroyed.
 		 *
-		 * @observable
 		 * @member {Array} game.Ship#damages
 		 */
-		this.set( 'damages', new Array( length ) );
+		this.damages = createFalsyArray( data.length );
 	}
 
 	/**
@@ -95,8 +91,12 @@ export default class Ship  {
 		return fields;
 	}
 
+	get isSunk() {
+		return !this.damages.some( ( field ) => !field );
+	}
+
 	/**
-	 * Toggle {#isRotated} between `vertical` and `horizontal`.
+	 * Toggle {#isRotated}
 	 */
 	rotate() {
 		this.isRotated = !this.isRotated;
@@ -110,9 +110,33 @@ export default class Ship  {
 	toJSON() {
 		return {
 			id: this.id,
-			coordinates: this.coordinates
+			length: this.length,
+			position: this.position,
+			isRotated: this.isRotated
 		};
+	}
+
+	setDamage( position ) {
+		let index = 0;
+
+		for( const pos of this.coordinates ) {
+			if ( pos[ 0 ] === position[ 0 ] && pos[ 1 ] === position[ 1 ] ) {
+				this.damages[ index ] = true;
+			}
+
+			index++;
+		}
 	}
 }
 
 mix( Ship, ObservableMixin );
+
+function createFalsyArray( length ) {
+	const arr = [];
+
+	for( let i = 0; i < length; i++ ) {
+		arr[ i ] = false;
+	}
+
+	return arr;
+}
