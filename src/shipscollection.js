@@ -1,76 +1,44 @@
 import Ship from './ship.js';
+import Collection from 'lib/utils/collection.js';
 
 /**
  * Manages a list of ship.
  *
  * @memberOf game
  */
-export default class ShipsCollection {
+export default class ShipsCollection extends Collection {
 	/**
 	 * Creates an instance of ShipsCollection class, initialize with a sets of ships.
 	 *
 	 * @param {Object} [shipsConfig] Initial ships configuration.
 	 */
 	constructor( shipsConfig ) {
-		/**
-		 * Collection store.
-		 *
-		 * @private
-		 * @member {Array} game.ShipsCollection#_ships
-		 */
-		this._ships = [];
+		super();
 
 		if ( shipsConfig ) {
-			this.add( ShipsCollection.getShipsFromConfig( shipsConfig ) );
+			if ( Array.isArray( shipsConfig ) ) {
+				this.add( ShipsCollection.getShipsFromJSON( shipsConfig ) );
+			} else {
+				this.add( ShipsCollection.getShipsFromConfig( shipsConfig ) );
+			}
 		}
-	}
-
-	/**
-	 * Collection iterator.
-	 */
-	[ Symbol.iterator ]() {
-		return this._ships[ Symbol.iterator ]();
-	}
-
-	/**
-	 * Gets length of the collection.
-	 *
-	 * @returns {Number}
-	 */
-	get length() {
-		return this._ships.length;
 	}
 
 	/**
 	 * Adds ships to the collection.
 	 *
-	 * @param {game.Ship|Array<game.Ship>} ships Ship instance ore list of ship instances.
+	 * @param {game.Ship|Array<game.Ship>} ship Ship instance ore list of ship instances.
 	 */
 	add( ship ) {
 		if ( Array.isArray( ship ) ) {
-			ship.forEach( ( shipItem ) => this.add( shipItem ) );
+			ship.forEach( ( shipItem ) => super.add( shipItem ) );
 		} else {
-			this._ships.push( ship );
+			super.add( ship );
 		}
 	}
 
-	/**
-	 * Gets ship by id.
-	 *
-	 * @param {game.Ship#id} id Ship id.
-	 * @returns {game.Ship|undefined}
-	 */
-	get( id ) {
-		return this._ships.find( ( ship ) => ship.id == id );
-	}
-
-	/**
-	 * Returns list of ships which has a collision.
-	 *
-	 * @returns {Array<game.Ship>}
-	 */
-	getWithCollision() {
-		return this._ships.filter( ( item ) => item.isCollision );
+	getReversed() {
+		return Array.from( this._items ).reverse();
 	}
 
 	/**
@@ -79,7 +47,7 @@ export default class ShipsCollection {
 	 * @returns {Array<Object>}
 	 */
 	toJSON() {
-		return this._ships.map( ( ship ) => ship.toJSON() );
+		return this.map( ( ship ) => ship.toJSON() );
 	}
 
 	/**
@@ -93,10 +61,14 @@ export default class ShipsCollection {
 			let count = config[ length ];
 
 			while ( count-- ) {
-				result.push( new Ship( parseInt( length ) ) );
+				result.push( new Ship( { length: parseInt( length ) } ) );
 			}
 
 			return result;
 		}, [] );
+	}
+
+	static getShipsFromJSON( config ) {
+		return config.map( ( data ) => new Ship( data ) );
 	}
 }
