@@ -1,5 +1,6 @@
 import Battlefield from 'src/battlefield.js';
 import randomInterface from 'src/battlefieldinterfaces/randominterface.js';
+import collisionInterface from 'src/battlefieldinterfaces/collisioninterface.js';
 import mix from 'lib/utils/mix.js';
 
 describe( 'Battlefield random interface', () => {
@@ -13,6 +14,10 @@ describe( 'Battlefield random interface', () => {
 
 	it( 'should be as class interface', () => {
 		expect( battlefield.random ).to.function;
+	} );
+
+	it( 'should implement collsion interface', () => {
+		expect( battlefield.checkCollision ).to.function;
 	} );
 
 	describe( 'random', () => {

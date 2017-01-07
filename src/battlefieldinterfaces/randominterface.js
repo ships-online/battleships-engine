@@ -1,6 +1,7 @@
 import random from 'lib/utils/random.js';
+import collisionInterface from './collisioninterface.js';
 
-export default {
+const randomInterface = {
 	random() {
 		for ( const ship of this.shipsCollection ) {
 			ship.position = [ null, null ];
@@ -17,8 +18,13 @@ export default {
 				const y = random( 0, this.size - 1 );
 
 				this.moveShip( ship, [ x, y ], isRotated );
-				done = !this._checkShipCollision( ship );
+				this.verifyExistingCollisions();
+				done = !this.checkShipCollision( ship );
 			}
 		}
 	}
 };
+
+Object.assign( randomInterface, collisionInterface );
+
+export default randomInterface;
