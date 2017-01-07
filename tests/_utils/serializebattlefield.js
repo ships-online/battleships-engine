@@ -19,8 +19,8 @@ describe( 'serializeBattlefield', () => {
 
 	it( 'should return data of not empty battlefield', () => {
 		const battlefield = new Battlefield( 2 );
-		const item1 = new Ship( 2, 1 );
-		const item2 = new Ship( 2, 2 );
+		const item1 = new Ship( { id: 1, length: 2 } );
+		const item2 = new Ship( { id: 2, length: 2 } );
 
 		battlefield.moveShip( item1, [ 0, 1 ] );
 		battlefield.moveShip( item2, [ 1, 0 ], true );
