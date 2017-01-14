@@ -1,19 +1,20 @@
 import Ship from './ship.js';
-import Collection from 'lib/utils/collection.js';
+import EmitterMixin from 'battleships-utils/src/emittermixin.js';
+import mix from 'battleships-utils/src/mix.js';
 
 /**
  * Manages a list of ship.
  *
  * @memberOf game
  */
-export default class ShipsCollection extends Collection {
+export default class ShipsCollection {
 	/**
 	 * Creates an instance of ShipsCollection class, initialize with a sets of ships.
 	 *
 	 * @param {Object} [shipsConfig] Initial ships configuration.
 	 */
 	constructor( shipsConfig ) {
-		super();
+		this._items = new Map();
 
 		if ( shipsConfig ) {
 			if ( Array.isArray( shipsConfig ) ) {
@@ -24,6 +25,10 @@ export default class ShipsCollection extends Collection {
 		}
 	}
 
+	get length() {
+		return this._items.size;
+	}
+
 	/**
 	 * Adds ships to the collection.
 	 *
@@ -31,23 +36,32 @@ export default class ShipsCollection extends Collection {
 	 */
 	add( ship ) {
 		if ( Array.isArray( ship ) ) {
-			ship.forEach( ( shipItem ) => super.add( shipItem ) );
+			ship.forEach( ( shipItem ) => this.add( shipItem ) );
 		} else {
-			super.add( ship );
+			this._items.set( ship.id, ship );
+			this.fire( 'add', ship );
 		}
 	}
 
+	get( id ) {
+		return this._items.get( id );
+	}
+
 	getReversed() {
-		return Array.from( this._items ).reverse();
+		return Array.from( this._items.values() ).reverse();
 	}
 
 	/**
-	 * Serializes every Ship in collection.
+	 * Serializes collection to JSON.
 	 *
 	 * @returns {Array<Object>}
 	 */
 	toJSON() {
-		return this.map( ( ship ) => ship.toJSON() );
+		return Array.from( this._items.values() ).map( ( ship ) => ship.toJSON() );
+	}
+
+	[ Symbol.iterator]() {
+		return this._items.values();
 	}
 
 	/**
@@ -72,3 +86,5 @@ export default class ShipsCollection extends Collection {
 		return config.map( ( data ) => new Ship( data ) );
 	}
 }
+
+mix( ShipsCollection, EmitterMixin );

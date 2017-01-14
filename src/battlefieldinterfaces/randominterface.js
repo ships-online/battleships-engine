@@ -1,4 +1,4 @@
-import random from 'lib/utils/random.js';
+import random from 'battleships-utils/src/random.js';
 import collisionInterface from './collisioninterface.js';
 
 const randomInterface = {

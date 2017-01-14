@@ -32,7 +32,7 @@ export default class Server {
 	 */
 	create() {
 		return new Promise( ( resolve ) => {
-			this._socket = window.io();
+			this._socket = window.io( 'localhost:8080' );
 
 			this._socket.on( 'connect', () => {
 				this._request( 'create' ).then( ( gameID ) => resolve( gameID ) );

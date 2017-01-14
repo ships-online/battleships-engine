@@ -1,4 +1,4 @@
-import { getSurroundingPositions } from 'lib/utils/positions.js';
+import { getSurroundingPositions } from 'battleships-utils/src/positions.js';
 
 export default {
 	/**

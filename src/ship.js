@@ -1,6 +1,6 @@
-import ObservableMixin from 'lib/utils/observablemixin.js';
-import mix from 'lib/utils/mix.js';
-import uid from 'lib/utils/uid.js';
+import ObservableMixin from 'battleships-utils/src/observablemixin.js';
+import mix from 'battleships-utils/src/mix.js';
+import uid from 'battleships-utils/src/uid.js';
 
 /**
  * Ship.

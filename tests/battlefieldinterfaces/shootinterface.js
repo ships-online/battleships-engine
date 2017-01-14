@@ -1,7 +1,7 @@
 import Battlefield from 'src/battlefield.js';
 import shootInterface from 'src/battlefieldinterfaces/shootinterface.js';
 import Ship from 'src/ship.js';
-import mix from 'lib/utils/mix.js';
+import mix from 'battleships-utils/src/mix.js';
 
 describe( 'Battlefield shoot interface', () => {
 	let battlefield;

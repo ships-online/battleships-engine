@@ -1,5 +1,4 @@
 import ShipsCollection from 'src/shipscollection.js';
-import Collection from 'lib/utils/collection.js';
 import Ship from 'src/ship.js';
 
 describe( 'ShipsCollection:', () => {
@@ -15,10 +14,6 @@ describe( 'ShipsCollection:', () => {
 	} );
 
 	describe( 'constructor()', () => {
-		it( 'should extend Collection class', () => {
-			expect( shipsCollection ).instanceof( Collection )
-		} );
-
 		it( 'should create empty shipsCollection', () => {
 			expect( shipsCollection ).to.have.property( 'length', 0 );
 		} );
