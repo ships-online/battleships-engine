@@ -29,6 +29,14 @@ export default class ShipsCollection {
 		return this._items.size;
 	}
 
+	get shipsConfig() {
+		return Array.from( this ).reduce( ( result, ship ) => {
+			result[ ship.length ] = !result[ ship.length ] ? 1 : result[ ship.length ] + 1;
+
+			return result;
+		}, {} );
+	}
+
 	/**
 	 * Adds ships to the collection.
 	 *
@@ -57,7 +65,7 @@ export default class ShipsCollection {
 	 * @returns {Array<Object>}
 	 */
 	toJSON() {
-		return Array.from( this._items.values() ).map( ( ship ) => ship.toJSON() );
+		return Array.from( this._items.values(), ship => ship.toJSON() );
 	}
 
 	[ Symbol.iterator]() {
