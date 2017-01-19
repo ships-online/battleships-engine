@@ -2,7 +2,6 @@ import Field from './field.js';
 import ShipsCollection from './shipscollection.js';
 import EmitterMixin from 'battleships-utils/src/emittermixin.js';
 import mix from 'battleships-utils/src/mix.js';
-import { getSurroundingPositions } from 'battleships-utils/src/positions.js';
 
 /**
  * Stores information about items placed on the battlefield.
