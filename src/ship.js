@@ -91,6 +91,10 @@ export default class Ship  {
 		return fields;
 	}
 
+	get tail() {
+		return this.coordinates[ this.length - 1 ];
+	}
+
 	get isSunk() {
 		return !this.damages.some( ( field ) => !field );
 	}

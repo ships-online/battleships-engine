@@ -39,7 +39,6 @@ describe( 'Ship:', () => {
 			expect( ship ).to.have.property( 'damages' ).to.have.members( [ false, false, false ] );
 		} );
 
-
 		it( 'should make some `isRotated` observable', () => {
 			const spy = sinon.spy();
 
@@ -68,6 +67,33 @@ describe( 'Ship:', () => {
 			ship.position = [ 3, 2 ];
 
 			expect( spy.calledOnce ).to.true;
+		} );
+	} );
+
+	describe( 'tail', () => {
+		it( 'should return position of ship tail #1', () => {
+			ship = new Ship( { length: 4 } );
+
+			ship.position = [ 1, 1 ];
+
+			expect( ship.tail ).to.deep.equal( [ 4, 1 ] );
+		} );
+
+		it( 'should return position of ship tail #2', () => {
+			ship = new Ship( { length: 4 } );
+
+			ship.position = [ 1, 1 ];
+			ship.rotate();
+
+			expect( ship.tail ).to.deep.equal( [ 1, 4 ] );
+		} );
+
+		it( 'should return position of ship tail #3', () => {
+			ship = new Ship( { length: 1 } );
+
+			ship.position = [ 1, 1 ];
+
+			expect( ship.tail ).to.deep.equal( [ 1, 1 ] );
 		} );
 	} );
 
