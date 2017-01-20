@@ -17,12 +17,18 @@ export default class PlayerBattlefield extends Battlefield {
 	constructor( size, shipsConfig ) {
 		super( size, shipsConfig );
 
+		this.set( 'isCollision', false );
+
 		this.on( 'shipMoved', ( evt, ship ) => this._handleShipMove( ship ) );
 	}
 
 	_handleShipMove( ship ) {
 		this.verifyExistingCollisions( ship );
 		this.checkShipCollision( ship );
+
+		this.isCollision = Array.from( this ).some( ( field ) => {
+			return Array.from( field ).some( ship => ship.isCollision );
+		} );
 	}
 }
 

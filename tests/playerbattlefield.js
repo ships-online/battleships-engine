@@ -20,11 +20,13 @@ describe( 'Battlefield:', () => {
 		playerbattlefield.moveShip( ship1, [ 1, 1 ] );
 		playerbattlefield.moveShip( ship2, [ 1, 2 ] );
 
+		expect( playerbattlefield.isCollision ).to.true;
 		expect( ship1.isCollision ).to.true;
 		expect( ship2.isCollision ).to.true;
 
 		playerbattlefield.moveShip( ship2, [ 1, 3 ] );
 
+		expect( playerbattlefield.isCollision ).to.false;
 		expect( ship1.isCollision ).to.false;
 		expect( ship2.isCollision ).to.false;
 	} );
