@@ -221,6 +221,74 @@ describe( 'Battlefield:', () => {
 		} );
 	} );
 
+	describe( 'isShipInBound()', () => {
+		it( 'it should return true when given ship is in bound #1', () => {
+			const ship = new Ship( { length: 4 } );
+
+			ship.position = [ 1, 1 ];
+
+			expect( battlefield.isShipInBound( ship ) ).to.true;
+		} );
+
+		it( 'it should return true when given ship is in bound #2', () => {
+			const ship = new Ship( { length: 4 } );
+
+			ship.position = [ 1, 1 ];
+			ship.rotate();
+
+			expect( battlefield.isShipInBound( ship ) ).to.true;
+		} );
+
+		it( 'it should return true when given ship is in bound #3', () => {
+			const ship = new Ship( { length: 4 } );
+
+			ship.position = [ 2, 1 ];
+
+			expect( battlefield.isShipInBound( ship ) ).to.false;
+		} );
+
+		it( 'it should return true when given ship is in bound #4', () => {
+			const ship = new Ship( { length: 4 } );
+
+			ship.position = [ 1, 2 ];
+			ship.rotate();
+
+			expect( battlefield.isShipInBound( ship ) ).to.false;
+		} );
+	} );
+
+	describe( 'validateShips()', () => {
+		it( 'should return true when ships are in battlefield bounds and do not have a collision', () => {
+			const ship1 = new Ship( { length: 4 } );
+			const ship2 = new Ship( { length: 4 } );
+
+			ship1.position = [ 1, 1 ];
+			ship2.position = [ 1, 3 ];
+
+			expect( battlefield.validateShips( [ ship1, ship2 ] ) ).to.true;
+		} );
+
+		it( 'should return false when ships are not battlefield bounds and do not have a collision', () => {
+			const ship1 = new Ship( { length: 4 } );
+			const ship2 = new Ship( { length: 4 } );
+
+			ship1.position = [ 1, 1 ];
+			ship2.position = [ 2, 3 ];
+
+			expect( battlefield.validateShips( [ ship1, ship2 ] ) ).to.false;
+		} );
+
+		it( 'should return false when ships are not battlefield bounds and do have a collision', () => {
+			const ship1 = new Ship( { length: 4 } );
+			const ship2 = new Ship( { length: 4 } );
+
+			ship1.position = [ 1, 1 ];
+			ship2.position = [ 2, 1 ];
+
+			expect( battlefield.validateShips( [ ship1, ship2 ] ) ).to.false;
+		} );
+	} );
+
 	describe( 'iterator', () => {
 		it( 'should provide interface to iterate over fields', () => {
 			const ship1 = new Ship( { length: 2 } );
@@ -229,7 +297,7 @@ describe( 'Battlefield:', () => {
 
 			battlefield.moveShip( ship1, [ 1, 1 ] );
 			battlefield.moveShip( ship2, [ 1, 1 ] ); // The same field!
-			battlefield.moveShip( ship2, [ 2, 2 ] ); // The same field!
+			battlefield.moveShip( ship3, [ 2, 2 ] );
 
 			let index = 0;
 

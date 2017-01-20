@@ -1,6 +1,6 @@
 import Field from './field.js';
 import ShipsCollection from './shipscollection.js';
-import EmitterMixin from 'battleships-utils/src/emittermixin.js';
+import ObservableMixin from 'battleships-utils/src/observablemixin.js';
 import mix from 'battleships-utils/src/mix.js';
 
 /**
@@ -33,7 +33,7 @@ export default class Battlefield {
 		/**
 		 * Information about items placed on the battlefield.
 		 *
-		 * @private
+		 * @protected
 		 * @type {Map}
 		 */
 		this._fields = new Map();
@@ -107,9 +107,20 @@ export default class Battlefield {
 		this.moveShip( ship, ship.position, !ship.isRotated );
 	}
 
+	isShipInBound( ship ) {
+		return ship.position[ 0 ] >= 0 && ship.tail[ 0 ] < this.size &&
+			ship.position[ 1 ] >= 0 && ship.tail[ 1 ] < this.size;
+	}
+
+	validateShips( ships ) {
+		return ships.every( ( ship ) => {
+			return !ship.isCollision && this.isShipInBound( ship );
+		} );
+	}
+
 	[ Symbol.iterator ]() {
 		return this._fields.values();
 	}
 }
 
-mix( Battlefield, EmitterMixin );
+mix( Battlefield, ObservableMixin );
