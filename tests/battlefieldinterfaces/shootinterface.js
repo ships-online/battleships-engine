@@ -17,25 +17,54 @@ describe( 'Battlefield shoot interface', () => {
 	} );
 
 	describe( 'shoot', () => {
-		it( 'should mark field as missed when field is empty', () => {
-			battlefield.shoot( [ 1, 1 ] );
+		it( 'should mark field as missed and return data when field is empty', () => {
+			const result = battlefield.shoot( [ 1, 1 ] );
 
 			expect( battlefield.get( [ 1, 1 ] ).isMissed ).to.true;
 			expect( battlefield.get( [ 1, 1 ] ).isHit ).to.false;
+			expect( result ).to.deep.equal( {
+				type: 'missed',
+				position: [ 1, 1 ]
+			} );
 		} );
 
-		it( 'should mark field as hit when ship is on the field', () => {
+		it( 'should return data when field is missed', () => {
+			battlefield.setMissed( [ 1, 1 ] );
+
+			expect( battlefield.shoot( [ 1, 1 ] ) ).to.deep.equal( {
+				type: 'missed',
+				position: [ 1, 1 ]
+			} );
+		} );
+
+		it( 'should mark field as hit and return data when ship is on the field', () => {
 			const ship = new Ship( { length: 2 } );
 
 			battlefield.moveShip( ship, [ 1, 1 ] );
 
-			battlefield.shoot( [ 1, 1 ] );
+			const result = battlefield.shoot( [ 1, 1 ] );
 
 			expect( battlefield.get( [ 1, 1 ] ).isMissed ).to.false;
 			expect( battlefield.get( [ 1, 1 ] ).isHit ).to.true;
+			expect( result ).to.deep.equal( {
+				type: 'hit',
+				position: [ 1, 1 ]
+			} );
 		} );
 
-		it( 'should set damage to field as hit when ship is on the field', () => {
+		it( 'should return data when field is hit', () => {
+			const ship = new Ship( { length: 2 } );
+
+			battlefield.moveShip( ship, [ 1, 1 ] );
+			battlefield.setHit( [ 1, 1 ] );
+
+			expect( battlefield.shoot( [ 1, 1 ] ) ).to.deep.equal( {
+				type: 'hit',
+				position: [ 1, 1 ]
+			} );
+		} );
+
+		it( 'should set damage to ship when ship is on the field', () => {
 			const ship = new Ship( { length: 2 } );
 
 			battlefield.moveShip( ship, [ 1, 1 ] );
