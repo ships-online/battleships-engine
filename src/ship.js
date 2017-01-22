@@ -43,7 +43,7 @@ export default class Ship  {
 		 * @observable
 		 * @member {Array} game.Ship#position
 		 */
-		this.set( 'position', [ null, null ] );
+		this.set( 'position', data.position || [ null, null ] );
 
 		/**
 		 * Flag defines if ship placement on the battlefield is valid or invalid (ship has a collision with other ship
@@ -73,7 +73,7 @@ export default class Ship  {
 	 * @returns {Array<Array>}
 	 */
 	get coordinates() {
-		if ( typeof this.position[ 0 ] != 'number' || typeof this.position[ 1 ] != 'number' ) {
+		if ( !this.hasPosition() ) {
 			return [];
 		}
 
@@ -97,6 +97,10 @@ export default class Ship  {
 
 	get isSunk() {
 		return !this.damages.some( ( field ) => !field );
+	}
+
+	hasPosition() {
+		return this.position.every( Number.isInteger );
 	}
 
 	/**

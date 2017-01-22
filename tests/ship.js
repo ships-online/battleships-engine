@@ -8,7 +8,8 @@ describe( 'Ship:', () => {
 		ship = new Ship( {
 			length: 3,
 			id: 1,
-			isRotated: true
+			isRotated: true,
+			position: [ 1, 1 ]
 		} );
 	} );
 
@@ -22,8 +23,8 @@ describe( 'Ship:', () => {
 			expect( ship ).to.have.property( 'length' ).to.equal( 3 );
 			expect( ship ).to.have.property( 'isRotated' ).to.true;
 			expect( ship ).to.have.property( 'isCollision' ).to.false;
-			expect( ship ).to.have.property( 'position' ).to.have.members( [ null, null ] );
-			expect( ship ).to.have.property( 'damages' ).to.have.members( [ false, false, false ] );
+			expect( ship ).to.have.property( 'position' ).to.deep.equal( [ 1, 1 ] );
+			expect( ship ).to.have.property( 'damages' ).to.deep.equal( [ false, false, false ] );
 		} );
 
 		it( 'should create an instance of Ship with default values', () => {
@@ -35,11 +36,11 @@ describe( 'Ship:', () => {
 			expect( ship ).to.have.property( 'length' ).to.equal( 3 );
 			expect( ship ).to.have.property( 'isRotated' ).to.false;
 			expect( ship ).to.have.property( 'isCollision' ).to.false;
-			expect( ship ).to.have.property( 'position' ).to.have.members( [ null, null ] );
-			expect( ship ).to.have.property( 'damages' ).to.have.members( [ false, false, false ] );
+			expect( ship ).to.have.property( 'position' ).to.deep.equal( [ null, null ] );
+			expect( ship ).to.have.property( 'damages' ).to.deep.equal( [ false, false, false ] );
 		} );
 
-		it( 'should make some `isRotated` observable', () => {
+		it( 'should make `isRotated` observable', () => {
 			const spy = sinon.spy();
 
 			ship.on( 'change:isRotated', spy );
@@ -49,7 +50,7 @@ describe( 'Ship:', () => {
 			expect( spy.calledOnce ).to.true;
 		} );
 
-		it( 'should make some `isCollision` observable', () => {
+		it( 'should make `isCollision` observable', () => {
 			const spy = sinon.spy();
 
 			ship.on( 'change:isCollision', spy );
@@ -59,7 +60,7 @@ describe( 'Ship:', () => {
 			expect( spy.calledOnce ).to.true;
 		} );
 
-		it( 'should make some `position` observable', () => {
+		it( 'should make `position` observable', () => {
 			const spy = sinon.spy();
 
 			ship.on( 'change:position', spy );
@@ -123,6 +124,8 @@ describe( 'Ship:', () => {
 		} );
 
 		it( 'should return empty array if ship is not placed on the battlefield', () => {
+			ship.position = [ null, null ];
+
 			expect( ship.coordinates ).to.have.length( 0 );
 		} );
 	} );
@@ -142,6 +145,20 @@ describe( 'Ship:', () => {
 			ship.damages = [ true, true, true ];
 
 			expect( ship.isSunk ).to.true;
+		} );
+	} );
+
+	describe( 'hasPosition()', () => {
+		it( 'should return `true` when ship position is set', () => {
+			ship.position = [ 1, 1 ];
+
+			expect( ship.hasPosition() ).to.true;
+		} );
+
+		it( 'should return `false` when ship position is not ste', () => {
+			ship.position = [ null, null ];
+
+			expect( ship.hasPosition() ).to.false;
 		} );
 	} );
 
