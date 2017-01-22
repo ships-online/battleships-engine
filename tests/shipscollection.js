@@ -1,7 +1,7 @@
 import ShipsCollection from 'src/shipscollection.js';
 import Ship from 'src/ship.js';
 
-describe( 'ShipsCollection:', () => {
+describe( 'ShipsCollection', () => {
 	let shipsCollection, sandbox;
 
 	beforeEach( () => {

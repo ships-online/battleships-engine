@@ -1,6 +1,6 @@
 import Ship from 'src/ship.js';
 
-describe( 'Ship:', () => {
+describe( 'Ship', () => {
 	let ship, sandbox;
 
 	beforeEach( () => {

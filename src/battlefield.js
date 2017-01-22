@@ -49,7 +49,7 @@ export default class Battlefield {
 		this.isLocked = false;
 	}
 
-	set( position, type ) {
+	setField( position, type ) {
 		if ( type == 'missed' ) {
 			this.setMissed( position );
 		} else {
@@ -58,12 +58,12 @@ export default class Battlefield {
 	}
 
 	setMissed( position ) {
-		this._getOrCreate( position ).isMissed = true;
+		this._getFieldOrCreate( position ).isMissed = true;
 		this.fire( 'missed', position );
 	}
 
 	setHit( position ) {
-		this._getOrCreate( position ).isHit = true;
+		this._getFieldOrCreate( position ).isHit = true;
 		this.fire( 'hit', position );
 	}
 
@@ -74,12 +74,12 @@ export default class Battlefield {
 	 * @returns {Array<game.Item>} List of items.
 	 * @returns {null} When field does not exist.
 	 */
-	get( position ) {
+	getField( position ) {
 		return this._fields.get( position.join( 'x' ) );
 	}
 
-	_getOrCreate( position ) {
-		let field = this.get( position );
+	_getFieldOrCreate( position ) {
+		let field = this.getField( position );
 
 		if ( !field ) {
 			field = new Field( position );
@@ -109,7 +109,7 @@ export default class Battlefield {
 
 		// Update position of moved ship on the battlefield.
 		ship.coordinates.forEach( ( pos ) => {
-			const field = this.get( pos );
+			const field = this.getField( pos );
 
 			if ( field && field.getShip( ship.id ) ) {
 				if ( field.length == 1 ) {
@@ -122,7 +122,7 @@ export default class Battlefield {
 
 		ship.isRotated = isRotated;
 		ship.position = [ x, y ];
-		ship.coordinates.forEach( ( pos ) => this._getOrCreate( pos ).addShip( ship ) );
+		ship.coordinates.forEach( ( pos ) => this._getFieldOrCreate( pos ).addShip( ship ) );
 
 		this.fire( 'shipMoved', ship );
 	}

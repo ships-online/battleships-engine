@@ -20,8 +20,8 @@ describe( 'Battlefield shoot interface', () => {
 		it( 'should mark field as missed and return data when field is empty', () => {
 			const result = battlefield.shoot( [ 1, 1 ] );
 
-			expect( battlefield.get( [ 1, 1 ] ).isMissed ).to.true;
-			expect( battlefield.get( [ 1, 1 ] ).isHit ).to.false;
+			expect( battlefield.getField( [ 1, 1 ] ).isMissed ).to.true;
+			expect( battlefield.getField( [ 1, 1 ] ).isHit ).to.false;
 			expect( result ).to.deep.equal( {
 				type: 'missed',
 				position: [ 1, 1 ]
@@ -44,8 +44,8 @@ describe( 'Battlefield shoot interface', () => {
 
 			const result = battlefield.shoot( [ 1, 1 ] );
 
-			expect( battlefield.get( [ 1, 1 ] ).isMissed ).to.false;
-			expect( battlefield.get( [ 1, 1 ] ).isHit ).to.true;
+			expect( battlefield.getField( [ 1, 1 ] ).isMissed ).to.false;
+			expect( battlefield.getField( [ 1, 1 ] ).isHit ).to.true;
 			expect( result ).to.deep.equal( {
 				type: 'hit',
 				position: [ 1, 1 ]

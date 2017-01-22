@@ -1,6 +1,6 @@
 export default {
 	shoot( position ) {
-		const field = this.get( position );
+		const field = this.getField( position );
 		const result = { position, type: 'missed' };
 
 		if ( !field ) {

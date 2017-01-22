@@ -14,8 +14,8 @@ export default class PlayerBattlefield extends Battlefield {
 	 *
 	 * @inheritDoc
 	 */
-	constructor( size, shipsConfig ) {
-		super( size, shipsConfig );
+	constructor( size, shipsSchema ) {
+		super( size, shipsSchema );
 
 		this.set( 'isCollision', false );
 

@@ -3,7 +3,7 @@ import ShipsCollection from 'src/shipscollection.js';
 import Ship from 'src/ship.js';
 import Field from 'src/field.js';
 
-describe( 'Battlefield:', () => {
+describe( 'Battlefield', () => {
 	let battlefield, sandbox;
 
 	beforeEach( () => {
@@ -32,8 +32,8 @@ describe( 'Battlefield:', () => {
 
 			battlefield.shipsCollection.add( ship );
 
-			expect( battlefield.get( [ 1, 1 ] ).getFirstShip() ).to.equal( ship );
-			expect( battlefield.get( [ 2, 1 ] ).getFirstShip() ).to.equal( ship );
+			expect( battlefield.getField( [ 1, 1 ] ).getFirstShip() ).to.equal( ship );
+			expect( battlefield.getField( [ 2, 1 ] ).getFirstShip() ).to.equal( ship );
 		} );
 	} );
 
@@ -41,7 +41,7 @@ describe( 'Battlefield:', () => {
 		it( 'should create field marked as hit', () => {
 			battlefield.setHit( [ 1, 1 ] );
 
-			const result = battlefield.get( [ 1, 1 ] );
+			const result = battlefield.getField( [ 1, 1 ] );
 
 			expect( result ).to.instanceof( Field );
 			expect( result.length ).to.equal( 0 );
@@ -63,7 +63,7 @@ describe( 'Battlefield:', () => {
 		it( 'should create field marked as missed', () => {
 			battlefield.setMissed( [ 1, 1 ] );
 
-			const result = battlefield.get( [ 1, 1 ] );
+			const result = battlefield.getField( [ 1, 1 ] );
 
 			expect( result ).to.instanceof( Field );
 			expect( result.length ).to.equal( 0 );
@@ -85,7 +85,7 @@ describe( 'Battlefield:', () => {
 		it( 'should call `setMissed` when given type is `missed`', () => {
 			const spy = sandbox.spy( battlefield, 'setMissed' );
 
-			battlefield.set( [ 1, 1 ], 'missed' );
+			battlefield.setField( [ 1, 1 ], 'missed' );
 
 			expect( spy.calledOnce ).to.true;
 			expect( spy.calledWithExactly( [ 1, 1 ] ) );
@@ -94,7 +94,7 @@ describe( 'Battlefield:', () => {
 		it( 'should call `setHit` when given type is `hit`', () => {
 			const spy = sandbox.spy( battlefield, 'setHit' );
 
-			battlefield.set( [ 1, 1 ], 'hit' );
+			battlefield.setField( [ 1, 1 ], 'hit' );
 
 			expect( spy.calledOnce ).to.true;
 			expect( spy.calledWithExactly( [ 1, 1 ] ) );
@@ -103,7 +103,7 @@ describe( 'Battlefield:', () => {
 
 	describe( 'get()', () => {
 		it( 'should return `undefined` when field is empty', () => {
-			expect( battlefield.get( [ 1, 1 ] ) ).to.undefined;
+			expect( battlefield.getField( [ 1, 1 ] ) ).to.undefined;
 		} );
 	} );
 
@@ -113,8 +113,8 @@ describe( 'Battlefield:', () => {
 
 			battlefield.moveShip( ship, [ 1, 1 ] );
 
-			const field1 = battlefield.get( [ 1, 1 ] );
-			const field2 = battlefield.get( [ 2, 1 ] );
+			const field1 = battlefield.getField( [ 1, 1 ] );
+			const field2 = battlefield.getField( [ 2, 1 ] );
 
 			expect( ship.coordinates ).to.deep.equal( [ [ 1, 1 ], [ 2, 1 ] ] );
 
@@ -137,15 +137,15 @@ describe( 'Battlefield:', () => {
 			expect( ship.coordinates ).to.deep.equal( [ [ 3, 3 ], [ 4, 3 ] ] );
 
 			// Previous position should be empty.
-			expect( battlefield.get( [ 1, 1 ] ) ).to.undefined;
-			expect( battlefield.get( [ 2, 1 ] ) ).to.undefined;
+			expect( battlefield.getField( [ 1, 1 ] ) ).to.undefined;
+			expect( battlefield.getField( [ 2, 1 ] ) ).to.undefined;
 
 			// Ship should be on the next position.
-			expect( battlefield.get( [ 3, 3 ] ) ).to.have.length( 1 );
-			expect( battlefield.get( [ 3, 3 ] ).getFirstShip() ).to.equal( ship );
+			expect( battlefield.getField( [ 3, 3 ] ) ).to.have.length( 1 );
+			expect( battlefield.getField( [ 3, 3 ] ).getFirstShip() ).to.equal( ship );
 
-			expect( battlefield.get( [ 4, 3 ] ) ).to.have.length( 1 );
-			expect( battlefield.get( [ 4, 3 ] ).getFirstShip() ).to.equal( ship );
+			expect( battlefield.getField( [ 4, 3 ] ) ).to.have.length( 1 );
+			expect( battlefield.getField( [ 4, 3 ] ).getFirstShip() ).to.equal( ship );
 
 			expect( ship.coordinates ).to.deep.equal( [ [ 3, 3 ], [ 4, 3 ] ] );
 		} );
@@ -236,8 +236,8 @@ describe( 'Battlefield:', () => {
 			battlefield.moveShip( ship, [ 1, 1 ] );
 			battlefield.rotateShip( ship );
 
-			const field1 = battlefield.get( [ 1, 1 ] );
-			const field2 = battlefield.get( [ 1, 2 ] );
+			const field1 = battlefield.getField( [ 1, 1 ] );
+			const field2 = battlefield.getField( [ 1, 2 ] );
 
 			expect( ship.coordinates ).to.deep.equal( [ [ 1, 1 ], [ 1, 2 ] ] );
 

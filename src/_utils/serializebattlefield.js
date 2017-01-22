@@ -16,7 +16,7 @@ export default function serializeBattlefield( battlefield ) {
 		let row = {};
 
 		for ( let x = 0; x < battlefield.size; x++ ) {
-			const field = battlefield.get( [ x, y ] );
+			const field = battlefield.getField( [ x, y ] );
 
 			row[ x ] = field ? Array.from( field ).map( ship => ship.id ).join( ',' ) : '';
 		}

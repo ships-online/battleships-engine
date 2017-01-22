@@ -2,31 +2,31 @@ import PlayerBattlefield from 'src/playerbattlefield.js';
 import Battlefield from 'src/battlefield.js';
 import Ship from 'src/ship.js';
 
-describe( 'Battlefield:', () => {
-	let playerbattlefield;
+describe( 'PlayerBattlefield', () => {
+	let playerBattlefield;
 
 	beforeEach( () => {
-		playerbattlefield = new PlayerBattlefield( 5 );
+		playerBattlefield = new PlayerBattlefield( 5 );
 	} );
 
 	it( 'should extend Battlefield', () => {
-		expect( playerbattlefield ).to.instanceof( Battlefield );
+		expect( playerBattlefield ).to.instanceof( Battlefield );
 	} );
 
 	it( 'should check collision after move', () => {
 		const ship1 = new Ship( { length: 2 } );
 		const ship2 = new Ship( { length: 2 } );
 
-		playerbattlefield.moveShip( ship1, [ 1, 1 ] );
-		playerbattlefield.moveShip( ship2, [ 1, 2 ] );
+		playerBattlefield.moveShip( ship1, [ 1, 1 ] );
+		playerBattlefield.moveShip( ship2, [ 1, 2 ] );
 
-		expect( playerbattlefield.isCollision ).to.true;
+		expect( playerBattlefield.isCollision ).to.true;
 		expect( ship1.isCollision ).to.true;
 		expect( ship2.isCollision ).to.true;
 
-		playerbattlefield.moveShip( ship2, [ 1, 3 ] );
+		playerBattlefield.moveShip( ship2, [ 1, 3 ] );
 
-		expect( playerbattlefield.isCollision ).to.false;
+		expect( playerBattlefield.isCollision ).to.false;
 		expect( ship1.isCollision ).to.false;
 		expect( ship2.isCollision ).to.false;
 	} );

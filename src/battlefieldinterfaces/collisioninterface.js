@@ -12,7 +12,7 @@ export default {
 		let isCollision = false;
 
 		for ( const position of ship.coordinates ) {
-			let field = this.get( position );
+			let field = this.getField( position );
 
 			// If there is more than one ship on this position then there is a collision.
 			// Mark each ship on this field as collision.
@@ -20,7 +20,7 @@ export default {
 
 			// If surrounding fields contain other ship then mark each ship on this fields as collision.
 			for ( const surroundingPosition of getSurroundingPositions( position ) ) {
-				field = this.get( surroundingPosition );
+				field = this.getField( surroundingPosition );
 
 				if ( field ) {
 					isCollision = checkShipCollisionOnField( ship, field ) || isCollision;
