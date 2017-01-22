@@ -124,7 +124,7 @@ export default class Ship  {
 	setDamage( position ) {
 		let index = 0;
 
-		for( const pos of this.coordinates ) {
+		for ( const pos of this.coordinates ) {
 			if ( pos[ 0 ] === position[ 0 ] && pos[ 1 ] === position[ 1 ] ) {
 				this.damages[ index ] = true;
 			}
@@ -139,7 +139,7 @@ mix( Ship, ObservableMixin );
 function createFalsyArray( length ) {
 	const arr = [];
 
-	for( let i = 0; i < length; i++ ) {
+	for ( let i = 0; i < length; i++ ) {
 		arr[ i ] = false;
 	}
 

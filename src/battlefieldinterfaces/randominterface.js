@@ -16,7 +16,7 @@ const randomInterface = {
 		for ( const ship of this.shipsCollection.getReversed() ) {
 			let done = false;
 
-			while( !done ) {
+			while ( !done ) {
 				const isRotated = !!random( 0, 1 );
 				const x = random( 0, this.size - 1 );
 				const y = random( 0, this.size - 1 );

@@ -200,5 +200,5 @@ describe( 'Ship:', () => {
 
 			expect( ship.damages ).to.have.members( [ true, true, true ] );
 		} );
-	} )
+	} );
 } );

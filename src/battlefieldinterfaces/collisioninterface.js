@@ -42,7 +42,7 @@ export default {
 			}
 		}
 	}
-}
+};
 
 /**
  * Check if ship has collision with other ships at the same field.

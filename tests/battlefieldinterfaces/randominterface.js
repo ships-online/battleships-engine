@@ -1,6 +1,5 @@
 import Battlefield from 'src/battlefield.js';
 import randomInterface from 'src/battlefieldinterfaces/randominterface.js';
-import collisionInterface from 'src/battlefieldinterfaces/collisioninterface.js';
 import mix from 'battleships-utils/src/mix.js';
 
 describe( 'Battlefield random interface', () => {
