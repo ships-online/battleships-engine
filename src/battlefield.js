@@ -1,7 +1,7 @@
 import Field from './field.js';
 import ShipsCollection from './shipscollection.js';
-import ObservableMixin from 'battleships-utils/src/observablemixin.js';
-import mix from 'battleships-utils/src/mix.js';
+import ObservableMixin from '@ckeditor/ckeditor5-utils/src/observablemixin.js';
+import mix from '@ckeditor/ckeditor5-utils/src/mix.js';
 
 /**
  * Stores information about items placed on the battlefield.

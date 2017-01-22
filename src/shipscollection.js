@@ -1,6 +1,6 @@
 import Ship from './ship.js';
-import EmitterMixin from 'battleships-utils/src/emittermixin.js';
-import mix from 'battleships-utils/src/mix.js';
+import EmitterMixin from '@ckeditor/ckeditor5-utils/src/emittermixin.js';
+import mix from '@ckeditor/ckeditor5-utils/src/mix.js';
 
 /**
  * Manages a list of ship.

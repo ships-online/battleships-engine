@@ -1,6 +1,6 @@
-import ObservableMixin from 'battleships-utils/src/observablemixin.js';
-import mix from 'battleships-utils/src/mix.js';
-import uid from 'battleships-utils/src/uid.js';
+import ObservableMixin from '@ckeditor/ckeditor5-utils/src/observablemixin.js';
+import mix from '@ckeditor/ckeditor5-utils/src/mix.js';
+import uid from '@ckeditor/ckeditor5-utils/src/uid.js';
 
 /**
  * Ship.

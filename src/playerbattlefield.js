@@ -1,7 +1,7 @@
 import Battlefield from './battlefield.js';
 import randomInterface from './battlefieldinterfaces/randominterface.js';
 import collisionInterface from './battlefieldinterfaces/collisioninterface.js';
-import mix from 'battleships-utils/src/mix.js';
+import mix from '@ckeditor/ckeditor5-utils/src/mix.js';
 
 /**
  * Stores information about items placed on the battlefield.
