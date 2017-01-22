@@ -37,6 +37,8 @@ export default class Battlefield {
 		 * @type {Map}
 		 */
 		this._fields = new Map();
+
+		this.isLocked = false;
 	}
 
 	_get( position ) {
@@ -72,6 +74,10 @@ export default class Battlefield {
 	}
 
 	moveShip( ship, position, isRotated ) {
+		if ( this.isLocked ) {
+			return;
+		}
+
 		if ( isRotated === undefined ) {
 			isRotated = ship.isRotated;
 		}

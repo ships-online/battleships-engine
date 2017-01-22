@@ -3,6 +3,10 @@ import collisionInterface from './collisioninterface.js';
 
 const randomInterface = {
 	random() {
+		if ( this.isLocked ) {
+			return;
+		}
+
 		for ( const ship of this.shipsCollection ) {
 			ship.position = [ null, null ];
 		}
