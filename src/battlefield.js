@@ -13,9 +13,9 @@ export default class Battlefield {
 	 * Creates instance of Battlefield class.
 	 *
 	 * @param {Number} size Size of the battlefield.
-	 * @param {Object} [shipsConfig] Defines how many ships of specified length will be on the battlefield.
+	 * @param {Object} [shipsSchema] Defines how many ships of specified length will be on the battlefield.
 	 */
-	constructor( size, shipsConfig ) {
+	constructor( size, shipsSchema ) {
 		/**
 		 * Size of the battlefield.
 		 *
@@ -23,12 +23,20 @@ export default class Battlefield {
 		 */
 		this.size = size;
 
+		this.shipsSchema = shipsSchema;
+
 		/**
 		 * Ships collection.
 		 *
 		 * @type {game.ShipsCollection}
 		 */
-		this.shipsCollection = new ShipsCollection( shipsConfig );
+		this.shipsCollection = new ShipsCollection();
+
+		this.shipsCollection.on( 'add', ( evt, ship ) => {
+			if ( ship.hasPosition() ) {
+				this.moveShip( ship, ship.position, ship.isRotated );
+			}
+		} );
 
 		/**
 		 * Information about items placed on the battlefield.
@@ -41,15 +49,22 @@ export default class Battlefield {
 		this.isLocked = false;
 	}
 
-	_get( position ) {
-		let field = this.get( position );
-
-		if ( !field ) {
-			field = new Field( position );
-			this._fields.set( field.id, field );
+	set( position, type ) {
+		if ( type == 'missed' ) {
+			this.setMissed( position );
+		} else {
+			this.setHit( position );
 		}
+	}
 
-		return field;
+	setMissed( position ) {
+		this._getOrCreate( position ).isMissed = true;
+		this.fire( 'missed', position );
+	}
+
+	setHit( position ) {
+		this._getOrCreate( position ).isHit = true;
+		this.fire( 'hit', position );
 	}
 
 	/**
@@ -63,14 +78,15 @@ export default class Battlefield {
 		return this._fields.get( position.join( 'x' ) );
 	}
 
-	setMissed( position ) {
-		this._get( position ).isMissed = true;
-		this.fire( 'missed', position );
-	}
+	_getOrCreate( position ) {
+		let field = this.get( position );
 
-	setHit( position ) {
-		this._get( position ).isHit = true;
-		this.fire( 'hit', position );
+		if ( !field ) {
+			field = new Field( position );
+			this._fields.set( field.id, field );
+		}
+
+		return field;
 	}
 
 	moveShip( ship, position, isRotated ) {
@@ -95,16 +111,18 @@ export default class Battlefield {
 		ship.coordinates.forEach( ( pos ) => {
 			const field = this.get( pos );
 
-			if ( field.length == 1 ) {
-				this._fields.delete( pos.join( 'x' ) );
-			} else {
-				field.removeShip( ship.id );
+			if ( field && field.getShip( ship.id ) ) {
+				if ( field.length == 1 ) {
+					this._fields.delete( pos.join( 'x' ) );
+				} else {
+					field.removeShip( ship.id );
+				}
 			}
 		} );
 
 		ship.isRotated = isRotated;
 		ship.position = [ x, y ];
-		ship.coordinates.forEach( ( pos ) => this._get( pos ).addShip( ship ) );
+		ship.coordinates.forEach( ( pos ) => this._getOrCreate( pos ).addShip( ship ) );
 
 		this.fire( 'shipMoved', ship );
 	}
@@ -126,6 +144,14 @@ export default class Battlefield {
 
 	[ Symbol.iterator ]() {
 		return this._fields.values();
+	}
+
+	static createWithShips( size, shipsSchema ) {
+		const battlefield = new this( size, shipsSchema );
+
+		battlefield.shipsCollection.add( ShipsCollection.createShipsFromSchema( shipsSchema ) );
+
+		return battlefield;
 	}
 }
 

@@ -8,7 +8,7 @@ describe( 'Battlefield:', () => {
 
 	beforeEach( () => {
 		sandbox = sinon.sandbox.create();
-		battlefield = new Battlefield( 5 );
+		battlefield = new Battlefield( 5, { 2: 2, 3: 2 } );
 	} );
 
 	afterEach( () => {
@@ -16,15 +16,24 @@ describe( 'Battlefield:', () => {
 	} );
 
 	describe( 'constructor()', () => {
-		it( 'should create an instance of Battlefield with some properties', () => {
+		it( 'should create an instance of Battlefield', () => {
 			expect( battlefield ).to.have.property( 'size', 5 );
+			expect( battlefield ).to.have.property( 'isLocked', false );
+			expect( battlefield ).to.have.property( 'shipsSchema' ).to.deep.equal( { 2: 2, 3: 2 } );
 			expect( battlefield ).to.have.property( 'shipsCollection' ).to.instanceof( ShipsCollection );
 			expect( battlefield ).to.have.property( 'shipsCollection' ).to.have.property( 'length', 0 );
 		} );
 
-		it( 'should create an instance of Battlefield initial ships configuration', () => {
-			battlefield = new Battlefield( 5, { 2: 2 } );
-			expect( battlefield ).to.have.property( 'shipsCollection' ).to.have.property( 'length', 2 );
+		it( 'should put ship  added to the shipsCollection on the battlefield when ship has a position', () => {
+			const ship = new Ship( {
+				length: 2,
+				position: [ 1, 1 ]
+			} );
+
+			battlefield.shipsCollection.add( ship );
+
+			expect( battlefield.get( [ 1, 1 ] ).getFirstShip() ).to.equal( ship );
+			expect( battlefield.get( [ 2, 1 ] ).getFirstShip() ).to.equal( ship );
 		} );
 	} );
 
@@ -69,6 +78,26 @@ describe( 'Battlefield:', () => {
 
 			expect( spy.calledOnce ).to.true;
 			expect( spy.firstCall.args[ 1 ] ).to.have.members( [ 1, 1 ] );
+		} );
+	} );
+
+	describe( 'set() / get()', () => {
+		it( 'should call `setMissed` when given type is `missed`', () => {
+			const spy = sandbox.spy( battlefield, 'setMissed' );
+
+			battlefield.set( [ 1, 1 ], 'missed' );
+
+			expect( spy.calledOnce ).to.true;
+			expect( spy.calledWithExactly( [ 1, 1 ] ) );
+		} );
+
+		it( 'should call `setHit` when given type is `hit`', () => {
+			const spy = sandbox.spy( battlefield, 'setHit' );
+
+			battlefield.set( [ 1, 1 ], 'hit' );
+
+			expect( spy.calledOnce ).to.true;
+			expect( spy.calledWithExactly( [ 1, 1 ] ) );
 		} );
 	} );
 
@@ -184,6 +213,19 @@ describe( 'Battlefield:', () => {
 
 			expect( spy.calledOnce ).to.true;
 			expect( spy.firstCall.args[ 1 ] ).to.equal( ship );
+		} );
+
+		it( 'should not move ship when battlefield is locked', () => {
+			battlefield.isLocked = true;
+
+			const ship = new Ship( { length: 2 } );
+			const spy = sinon.spy();
+
+			battlefield.on( 'shipMoved', spy );
+
+			battlefield.moveShip( ship, [ 1, 1 ] );
+
+			expect( spy.notCalled ).to.true;
 		} );
 	} );
 
@@ -307,6 +349,16 @@ describe( 'Battlefield:', () => {
 			}
 
 			expect( index ).to.equal( 4 );
+		} );
+	} );
+
+	describe( 'static createWithShips()', () => {
+		it( 'should create Battleship instance with Ships based on given schema', () => {
+			battlefield = Battlefield.createWithShips( 5, { 2: 2, 3: 2 } );
+
+			expect( battlefield ).to.instanceof( Battlefield );
+			expect( battlefield.shipsSchema ).to.deep.equal( { 2: 2, 3: 2 } );
+			expect( battlefield.shipsCollection.length ).to.equal( 4 );
 		} );
 	} );
 } );
