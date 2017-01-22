@@ -10,31 +10,13 @@ import mix from 'battleships-utils/src/mix.js';
 export default class ShipsCollection {
 	/**
 	 * Creates an instance of ShipsCollection class, initialize with a sets of ships.
-	 *
-	 * @param {Object} [shipsConfig] Initial ships configuration.
 	 */
-	constructor( shipsConfig ) {
+	constructor() {
 		this._items = new Map();
-
-		if ( shipsConfig ) {
-			if ( Array.isArray( shipsConfig ) ) {
-				this.add( ShipsCollection.getShipsFromJSON( shipsConfig ) );
-			} else {
-				this.add( ShipsCollection.getShipsFromConfig( shipsConfig ) );
-			}
-		}
 	}
 
 	get length() {
 		return this._items.size;
-	}
-
-	get shipsConfig() {
-		return Array.from( this ).reduce( ( result, ship ) => {
-			result[ ship.length ] = !result[ ship.length ] ? 1 : result[ ship.length ] + 1;
-
-			return result;
-		}, {} );
 	}
 
 	/**
@@ -72,15 +54,9 @@ export default class ShipsCollection {
 		return this._items.values();
 	}
 
-	/**
-	 * Creates list of Ships instances based on passed configuration.
-	 *
-	 * @param {Object} config Ships configuration.
-	 * @returns {Array<game.Ship>} List of ship instances.
-	 */
-	static getShipsFromConfig( config ) {
-		return Object.keys( config ).reduce( ( result, length ) => {
-			let count = config[ length ];
+	static createShipsFromSchema( schema ) {
+		return Object.keys( schema ).reduce( ( result, length ) => {
+			let count = schema[ length ];
 
 			while ( count-- ) {
 				result.push( new Ship( { length: parseInt( length ) } ) );
@@ -90,7 +66,7 @@ export default class ShipsCollection {
 		}, [] );
 	}
 
-	static getShipsFromJSON( config ) {
+	static createShipsFromJSON( config ) {
 		return config.map( ( data ) => new Ship( data ) );
 	}
 }
