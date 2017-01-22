@@ -1,4 +1,4 @@
-import serializeBattlefield from 'src/_utils/serializebattlefield.js';
+import serializeBattlefield from 'src/dev-tools/serializebattlefield.js';
 import Battlefield from 'src/battlefield.js';
 import Ship from 'src/ship.js';
 
