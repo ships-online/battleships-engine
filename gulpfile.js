@@ -4,7 +4,6 @@ const config = {
 	ROOT_PATH: __dirname
 };
 
-const path = require( 'path' );
 const gulp = require( 'gulp' );
 
 const utils = require( 'battleships-dev-tools/lib/utils.js' );
@@ -16,11 +15,8 @@ const options = utils.parseArgs( process.argv.slice( 3 ) );
 
 gulp.task( 'relink', relinkTask.relink );
 
-// JS code sniffer.
-const jsFiles = [ path.join( config.ROOT_PATH, '**', '*.js' ) ];
-
-gulp.task( 'lint', () => lintTasks.lint( jsFiles ) );
-gulp.task( 'pre-commit', () => lintTasks.lintStaged( jsFiles ) );
+gulp.task( 'lint', lintTasks.lint );
+gulp.task( 'pre-commit', lintTasks.lintStaged );
 
 // JS unit tests.
 gulp.task( 'test', ( done ) => testTasks.test( options, done ) );
