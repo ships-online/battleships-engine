@@ -23,6 +23,8 @@ export default class Battlefield {
 		 */
 		this.size = size;
 
+		this.isLocked = false;
+
 		this.shipsSchema = shipsSchema;
 
 		/**
@@ -45,8 +47,6 @@ export default class Battlefield {
 		 * @type {Map}
 		 */
 		this._fields = new Map();
-
-		this.isLocked = false;
 	}
 
 	setField( position, type ) {
