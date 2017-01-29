@@ -1,31 +1,24 @@
 export default {
 	shoot( position ) {
 		const field = this.getField( position );
-		const result = { position, type: 'missed' };
+		const result = { position };
 
 		if ( !field ) {
 			this.setMissed( position );
+			result.type = 'missed';
+		} else if ( field.isMissed || field.isHit ) {
+			result.type = 'notEmpty';
+		} else {
+			const ship = field.getFirstShip();
 
-			return result;
-		}
-
-		if ( field.isMissed ) {
-			return result;
-		}
-
-		if ( field.isHit ) {
+			ship.setDamage( position );
+			this.setHit( position );
 			result.type = 'hit';
-		}
 
-		const ship = field.getFirstShip();
-
-		this.setHit( position );
-		ship.setDamage( position );
-		result.type = 'hit';
-
-		if ( ship.isSunk ) {
-			this.fire( 'shipSunk', ship );
-			result.sunk = ship;
+			if ( ship.isSunk ) {
+				this.fire( 'shipSunk', ship );
+				result.sunk = ship;
+			}
 		}
 
 		return result;
