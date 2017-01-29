@@ -23,9 +23,9 @@ export default class Battlefield {
 		 */
 		this.size = size;
 
-		this.isLocked = false;
-
 		this.shipsSchema = shipsSchema;
+
+		this.set( 'isLocked', false );
 
 		/**
 		 * Ships collection.
