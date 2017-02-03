@@ -142,6 +142,14 @@ export default class Battlefield {
 		} );
 	}
 
+	clear() {
+		this._fields.clear();
+
+		for ( const ship of this.shipsCollection ) {
+			ship.reset();
+		}
+	}
+
 	[ Symbol.iterator ]() {
 		return this._fields.values();
 	}
