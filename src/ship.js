@@ -136,6 +136,13 @@ export default class Ship  {
 			index++;
 		}
 	}
+
+	reset() {
+		this.position = [ null, null ];
+		this.isRotated = false;
+		this.isCollision = false;
+		this.damages = createFalsyArray( this.length );
+	}
 }
 
 mix( Ship, ObservableMixin );
