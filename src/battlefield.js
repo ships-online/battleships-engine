@@ -142,7 +142,7 @@ export default class Battlefield {
 		} );
 	}
 
-	clear() {
+	reset() {
 		this._fields.clear();
 
 		for ( const ship of this.shipsCollection ) {
