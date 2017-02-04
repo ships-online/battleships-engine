@@ -12,6 +12,10 @@ describe( 'Battlefield shoot interface', () => {
 		battlefield = new Battlefield( 10, { 1: 4, 2: 3, 3: 2, 4: 1 } );
 	} );
 
+	afterEach( () => {
+		battlefield.reset();
+	} );
+
 	it( 'should be as class interface', () => {
 		expect( battlefield.shoot ).to.function;
 	} );
@@ -23,15 +27,6 @@ describe( 'Battlefield shoot interface', () => {
 			expect( battlefield.getField( [ 1, 1 ] ).isMissed ).to.true;
 			expect( battlefield.getField( [ 1, 1 ] ).isHit ).to.false;
 			expect( result ).to.deep.equal( {
-				type: 'missed',
-				position: [ 1, 1 ]
-			} );
-		} );
-
-		it( 'should return data when field is missed', () => {
-			battlefield.setMissed( [ 1, 1 ] );
-
-			expect( battlefield.shoot( [ 1, 1 ] ) ).to.deep.equal( {
 				type: 'missed',
 				position: [ 1, 1 ]
 			} );
@@ -52,14 +47,22 @@ describe( 'Battlefield shoot interface', () => {
 			} );
 		} );
 
-		it( 'should return data when field is hit', () => {
-			const ship = new Ship( { length: 2 } );
-
-			battlefield.moveShip( ship, [ 1, 1 ] );
-			battlefield.setHit( [ 1, 1 ] );
+		it( 'should return data when field is already set as missed', () => {
+			battlefield.setMissed( [ 1, 1 ] );
 
 			expect( battlefield.shoot( [ 1, 1 ] ) ).to.deep.equal( {
-				type: 'hit',
+				type: 'notEmpty',
+				position: [ 1, 1 ]
+			} );
+		} );
+
+		it( 'should return data when field is already set as hit', () => {
+			const ship = new Ship( { length: 2 } );
+
+			battlefield.setHit( [ 1, 1 ], ship );
+
+			expect( battlefield.shoot( [ 1, 1 ] ) ).to.deep.equal( {
+				type: 'notEmpty',
 				position: [ 1, 1 ]
 			} );
 		} );

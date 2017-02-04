@@ -57,16 +57,6 @@ export default class Battlefield {
 		}
 	}
 
-	setMissed( position ) {
-		this._getFieldOrCreate( position ).isMissed = true;
-		this.fire( 'missed', position );
-	}
-
-	setHit( position ) {
-		this._getFieldOrCreate( position ).isHit = true;
-		this.fire( 'hit', position );
-	}
-
 	/**
 	 * Gets items from specified field.
 	 *
@@ -87,6 +77,16 @@ export default class Battlefield {
 		}
 
 		return field;
+	}
+
+	setMissed( position ) {
+		this._getFieldOrCreate( position ).isMissed = true;
+		this.fire( 'missed', position );
+	}
+
+	setHit( position ) {
+		this._getFieldOrCreate( position ).isHit = true;
+		this.fire( 'hit', position );
 	}
 
 	moveShip( ship, position, isRotated ) {

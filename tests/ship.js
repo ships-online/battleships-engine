@@ -218,4 +218,22 @@ describe( 'Ship', () => {
 			expect( ship.damages ).to.have.members( [ true, true, true ] );
 		} );
 	} );
+
+	describe( 'reset()', () => {
+		it( 'should reset ship to the default values', () => {
+			const ship = new Ship( { length: 2 } );
+
+			ship.position = [ 1, 1 ];
+			ship.rotated = true;
+			ship.setDamage( [ 1, 1 ] );
+			ship.isCollision = true;
+
+			ship.reset();
+
+			expect( ship.position ).to.deep.equal( [ null, null ] );
+			expect( ship.damages ).to.deep.equal( [ false, false ] );
+			expect( ship.isRotated ).to.false;
+			expect( ship.isCollision ).to.false;
+		} );
+	} );
 } );
