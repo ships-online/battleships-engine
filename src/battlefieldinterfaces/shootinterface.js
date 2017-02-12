@@ -1,10 +1,21 @@
-export default {
+/**
+ * Injects the shoot API into host Battlefield.
+ *
+ * @interface ShootInterface
+ */
+const ShootInterface = {
+	/**
+	 * Take a shoot.
+	 *
+	 * @param {Array<Number, Number>} position Position on the Battlefield.
+	 * @returns {Object} Shoot summary.
+	 */
 	shoot( position ) {
 		const field = this.getField( position );
 		const result = { position };
 
 		if ( !field ) {
-			this.setMissed( position );
+			this.markAsMissed( position );
 			result.type = 'missed';
 		} else if ( field.isMissed || field.isHit ) {
 			result.type = 'notEmpty';
@@ -12,7 +23,7 @@ export default {
 			const ship = field.getFirstShip();
 
 			ship.setDamage( position );
-			this.setHit( position );
+			this.markAsHit( position );
 			result.type = 'hit';
 
 			if ( ship.isSunk ) {
@@ -24,3 +35,5 @@ export default {
 		return result;
 	}
 };
+
+export default ShootInterface;

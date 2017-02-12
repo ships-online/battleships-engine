@@ -1,27 +1,39 @@
 import Battlefield from './battlefield.js';
-import randomInterface from './battlefieldinterfaces/randominterface.js';
-import collisionInterface from './battlefieldinterfaces/collisioninterface.js';
+import RandomInterface from './battlefieldinterfaces/randominterface.js';
+import CollisionInterface from './battlefieldinterfaces/collisioninterface.js';
 import mix from '@ckeditor/ckeditor5-utils/src/mix.js';
 
 /**
- * Stores information about items placed on the battlefield.
+ * Class that represents Player Battlefield.
  *
- * @memberOf {game}
+ * @extends Battlefield
+ * @implements RandomInterface
+ * @implements CollisionInterface
  */
 export default class PlayerBattlefield extends Battlefield {
 	/**
-	 * Creates instance of Battlefield class.
-	 *
 	 * @inheritDoc
 	 */
 	constructor( size, shipsSchema ) {
 		super( size, shipsSchema );
 
+		/**
+		 * Defines if some of ship placed on the battlefield have a collision.
+		 *
+		 * @observable
+		 * @type {Boolean}
+		 */
 		this.set( 'isCollision', false );
 
 		this.on( 'shipMoved', ( evt, ship ) => this._handleShipMove( ship ) );
 	}
 
+	/**
+	 * Handles ship move and check if has a collision.
+	 *
+	 * @private
+	 * @param {Ship} ship
+	 */
 	_handleShipMove( ship ) {
 		this.verifyExistingCollisions( ship );
 		this.checkShipCollision( ship );
@@ -32,5 +44,5 @@ export default class PlayerBattlefield extends Battlefield {
 	}
 }
 
-mix( Battlefield, randomInterface );
-mix( Battlefield, collisionInterface );
+mix( Battlefield, RandomInterface );
+mix( Battlefield, CollisionInterface );

@@ -81,7 +81,7 @@ export function getPositionAtTheTopLeftOf( position ) {
 /**
  * Get surrounding position at the top left of passed position.
  *
- * @param position
+ * @param {Array<Number>} position Position [ x, y ].
  * @returns {Array<Array>}
  */
 export function getSurroundingPositions( position ) {

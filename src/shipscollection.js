@@ -3,18 +3,24 @@ import EmitterMixin from '@ckeditor/ckeditor5-utils/src/emittermixin.js';
 import mix from '@ckeditor/ckeditor5-utils/src/mix.js';
 
 /**
- * Manages a list of ship.
- *
- * @memberOf game
+ * @mixes EmitterMixin.
  */
 export default class ShipsCollection {
-	/**
-	 * Creates an instance of ShipsCollection class, initialize with a sets of ships.
-	 */
 	constructor() {
+		/**
+		 * Stores Ships.
+		 *
+		 * @private
+		 * @type {Map<Ship.id, Ship>}
+		 */
 		this._items = new Map();
 	}
 
+	/**
+	 * Returns ship length.
+	 *
+	 * @returns {Number}
+	 */
 	get length() {
 		return this._items.size;
 	}
@@ -22,7 +28,7 @@ export default class ShipsCollection {
 	/**
 	 * Adds ships to the collection.
 	 *
-	 * @param {game.Ship|Array<game.Ship>} ship Ship instance ore list of ship instances.
+	 * @param {Ship|Array<Ship>} ship Ship instance ore list of ship instances.
 	 */
 	add( ship ) {
 		if ( Array.isArray( ship ) ) {
@@ -33,10 +39,21 @@ export default class ShipsCollection {
 		}
 	}
 
+	/**
+	 * Returns ship of given id.
+	 *
+	 * @param {String} id Ship id.
+	 * @returns {Ship}
+	 */
 	get( id ) {
 		return this._items.get( id );
 	}
 
+	/**
+	 * Returns reversed array of ships.
+	 *
+	 * @returns {Array.<Ship>} reversed array of Ships.
+	 */
 	getReversed() {
 		return Array.from( this._items.values() ).reverse();
 	}
@@ -50,10 +67,20 @@ export default class ShipsCollection {
 		return Array.from( this._items.values(), ship => ship.toJSON() );
 	}
 
+	/**
+	 * @returns {Iterator.<Ship>}
+	 */
 	[ Symbol.iterator]() {
 		return this._items.values();
 	}
 
+	/**
+	 * Creates array of Ships based on give schema.
+	 *
+	 * @static
+	 * @param schema
+	 * @returns {Array<Ship>}
+	 */
 	static createShipsFromSchema( schema ) {
 		return Object.keys( schema ).reduce( ( result, length ) => {
 			let count = schema[ length ];
@@ -66,6 +93,13 @@ export default class ShipsCollection {
 		}, [] );
 	}
 
+	/**
+	 * Creates array of Ships based on given ships JSON.
+	 *
+	 * @static
+	 * @param {Object} config
+	 * @returns {Array}
+	 */
 	static createShipsFromJSON( config ) {
 		return config.map( ( data ) => new Ship( data ) );
 	}

@@ -48,7 +48,7 @@ describe( 'Battlefield shoot interface', () => {
 		} );
 
 		it( 'should return data when field is already set as missed', () => {
-			battlefield.setMissed( [ 1, 1 ] );
+			battlefield.markAsMissed( [ 1, 1 ] );
 
 			expect( battlefield.shoot( [ 1, 1 ] ) ).to.deep.equal( {
 				type: 'notEmpty',
@@ -59,7 +59,7 @@ describe( 'Battlefield shoot interface', () => {
 		it( 'should return data when field is already set as hit', () => {
 			const ship = new Ship( { length: 2 } );
 
-			battlefield.setHit( [ 1, 1 ], ship );
+			battlefield.markAsHit( [ 1, 1 ], ship );
 
 			expect( battlefield.shoot( [ 1, 1 ] ) ).to.deep.equal( {
 				type: 'notEmpty',

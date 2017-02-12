@@ -1,17 +1,21 @@
 import { getSurroundingPositions } from '../utils/positions.js';
 
-export default {
+/**
+ * Injects the collision checking API into host Battlefield.
+ *
+ * @interface CollisionInterface
+ */
+const CollisionInterface = {
 	/**
-	 * Check if ship has a collision with other ships. For each ship which has a collision set
-	 * {@link game.Ship#isCollision} as `true`. If ship has no collision set {@link game.Ship#isCollision} as `false`.
+	 * Checks if ship has a collision with other ships on the battlefield.
 	 *
-	 * @param {game.Ship} ship Ship instance.
+	 * @param {Ship} ship Ship instance.
 	 * @returns {Boolean} if ship has collision return `true` otherwise return `false`.
 	 */
 	checkShipCollision( ship ) {
 		let isCollision = false;
 
-		for ( const position of ship.coordinates ) {
+		for ( const position of ship.getCoordinates() ) {
 			let field = this.getField( position );
 
 			// If there is more than one ship on this position then there is a collision.
@@ -33,6 +37,9 @@ export default {
 		return isCollision;
 	},
 
+	/**
+	 * Checks if ships marked as collision still have a collision.
+	 */
 	verifyExistingCollisions() {
 		for ( const field of this ) {
 			for ( const ship of field ) {
@@ -45,12 +52,12 @@ export default {
 };
 
 /**
- * Check if ship has collision with other ships at the same field.
+ * Check if ship has collision with other ships on the same field.
  *
  * @private
- * @param {game.Ship} ship Ship instance.
- * @param {Array<{game.Item}>|null} field
- * @returns {boolean}
+ * @param {Ship} ship Ship instance.
+ * @param {Field} field Field instance.
+ * @returns {Boolean}
  */
 function checkShipCollisionOnField( ship, field ) {
 	let isCollision = false;
@@ -63,3 +70,5 @@ function checkShipCollisionOnField( ship, field ) {
 
 	return isCollision;
 }
+
+export default CollisionInterface;

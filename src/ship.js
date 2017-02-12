@@ -3,13 +3,15 @@ import mix from '@ckeditor/ckeditor5-utils/src/mix.js';
 import uid from '@ckeditor/ckeditor5-utils/src/uid.js';
 
 /**
- * Ship.
- *
- * @memberOf game
+ * @mixes ObservableMixin
  */
 export default class Ship  {
 	/**
-	 * Create instance of Ship class.
+	 * @param {Object} data Configuration.
+	 * @param {Number} data.length Ship length.
+	 * @param {String} [data.id] Ship id.
+	 * @param {Boolean} [data.isRotated] Ship orientation.
+	 * @param {Array<Number, Number>} [data.position] Ship position on the battlefield.
 	 */
 	constructor( data ) {
 		/**
@@ -24,94 +26,113 @@ export default class Ship  {
 		 * Ship length.
 		 *
 		 * @readonly
-		 * @member {Number} game.Ship#length
+		 * @type {Number}
 		 */
 		this.length = data.length;
 
 		/**
-		 * Ship orientation.
+		 * Ship orientation (horizontal or vertical).
 		 *
 		 * @observable
 		 * @readonly
-		 * @member {Boolean} game.Ship#isRotated
+		 * @type {Boolean} game.Ship#isRotated
 		 */
 		this.set( 'isRotated', data.isRotated || false );
 
 		/**
-		 * Position of the ship first field on the battlefield. E.g. [ 1, 1 ].
+		 * Position first field of ship on the battlefield.
 		 *
 		 * @observable
-		 * @member {Array} game.Ship#position
+		 * @type {Array<Number, Number>}
 		 */
 		this.set( 'position', data.position || [ null, null ] );
 
 		/**
-		 * Flag defines if ship placement on the battlefield is valid or invalid (ship has a collision with other ship
-		 * or stick out of the battlefield bounds).
+		 * Defines if ship has a collision with other ship on the battlefield.
 		 *
 		 * @observable
-		 * @member {Boolean} game.Ship#isCollision
+		 * @type {Boolean}
 		 */
 		this.set( 'isCollision', false );
 
 		/**
-		 * Store information with field of ship is damaged (hit). Array of damages has the same length as ship length
-		 * and at default every ship is a falsy value (no damage).
+		 * Stores information which field of ship is damaged.
 		 *
-		 * 		[ false, false, false ] // Ship has length 3 and is no damaged.
+		 * 		[ false, false, false ] // Ship has length 3 and has no damages.
 		 * 		[ false, true, false ] // Ship has length 3 and middle field is hit.
 		 * 		[ true, true, true ] // Ship has length 3 and is destroyed.
 		 *
-		 * @member {Array} game.Ship#damages
+		 * @type {Array<Boolean>}
 		 */
 		this.damages = createFalsyArray( data.length );
 	}
 
 	/**
-	 * Return array of coordinates on battlefield.
+	 * Returns array with position of ship fields.
 	 *
-	 * @returns {Array<Array>}
+	 * @returns {Array<Number, Number>}
 	 */
 	get coordinates() {
-		if ( !this.hasPosition() ) {
-			return [];
+		const positions = [];
+
+		for ( let position of this.getCoordinates() ) {
+			positions.push( position );
 		}
 
-		const fields = [ this.position ];
-
-		for ( let i = 1; i < this.length; i++ ) {
-			// Clone previous field.
-			let nextField = fields[ i - 1 ].concat( [] );
-
-			++nextField[ this.isRotated ? 1 : 0 ];
-
-			fields.push( nextField );
-		}
-
-		return fields;
+		return positions;
 	}
 
+	/**
+	 * Returns position of last Ship field.
+	 *
+	 * @returns {Array<Number, Number>}
+	 */
 	get tail() {
 		return this.coordinates[ this.length - 1 ];
 	}
 
+	/**
+	 * Returns `true` when Ship is fully damaged.
+	 *
+	 * @returns {Boolean}
+	 */
 	get isSunk() {
-		return !this.damages.some( ( field ) => !field );
+		return !this.damages.some( field => !field );
 	}
 
+	/**
+	 * Returns iterator that iterates over ship fields and returns its position.
+	 *
+	 * @private
+	 * @returns {Iterable.<Array>}
+	 */
+	*getCoordinates() {
+		const pos = this.position;
+		let step = 0;
+
+		while ( this.hasPosition() && step < this.length ) {
+			yield this.isRotated ? [ pos[ 0 ], pos[ 1 ] + ( step++ ) ] : [ pos[ 0 ] + ( step++ ), pos[ 1 ] ];
+		}
+	}
+
+	/**
+	 * Returns true when Ship is placed on the Battlefield.
+	 *
+	 * @returns {Boolean}
+	 */
 	hasPosition() {
 		return this.position.every( Number.isInteger );
 	}
 
 	/**
-	 * Toggle {#isRotated}
+	 * Change ship orientation.
 	 */
 	rotate() {
 		this.isRotated = !this.isRotated;
 	}
 
 	/**
-	 * Serialize ship to JSON format.
+	 * Returns plain object with ship data.
 	 *
 	 * @returns {Object}
 	 */
@@ -125,10 +146,15 @@ export default class Ship  {
 		};
 	}
 
+	/**
+	 * Marks given field as damaged.
+	 *
+	 * @param {Array<Number, Number>} position
+	 */
 	setDamage( position ) {
 		let index = 0;
 
-		for ( const pos of this.coordinates ) {
+		for ( const pos of this.getCoordinates() ) {
 			if ( pos[ 0 ] === position[ 0 ] && pos[ 1 ] === position[ 1 ] ) {
 				this.damages[ index ] = true;
 			}
@@ -137,6 +163,9 @@ export default class Ship  {
 		}
 	}
 
+	/**
+	 * Reset Ship data to default values.
+	 */
 	reset() {
 		this.position = [ null, null ];
 		this.isRotated = false;

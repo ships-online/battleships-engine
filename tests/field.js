@@ -11,21 +11,21 @@ describe( 'Field', () => {
 		expect( field.id ).to.equal( '1x1' );
 	} );
 
-	describe( 'isHit', () => {
-		it( 'should set and get hit state', () => {
+	describe( 'markAsHit() / isHit', () => {
+		it( 'should mark field as hit and get hit state', () => {
 			expect( field.isHit ).to.false;
 
-			field.isHit = true;
+			field.markAsHit();
 
 			expect( field.isHit ).to.true;
 		} );
 	} );
 
-	describe( 'isMissed', () => {
-		it( 'should set and get missed state', () => {
+	describe( 'markAsMissed() / isMissed', () => {
+		it( 'should mark field as missed and get missed state', () => {
 			expect( field.isMissed ).to.false;
 
-			field.isMissed = true;
+			field.markAsMissed();
 
 			expect( field.isMissed ).to.true;
 		} );

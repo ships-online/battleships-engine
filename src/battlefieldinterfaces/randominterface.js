@@ -1,7 +1,13 @@
 import random from '../utils/random.js';
-import collisionInterface from './collisioninterface.js';
+import CollisionInterface from './collisioninterface.js';
 
-const randomInterface = {
+/**
+ * Injects the randomize API into host Battlefield.
+ *
+ * @interface RandomInterface
+ * @implements CollisionInterface
+ */
+const RandomInterface = {
 	random() {
 		if ( this.isLocked ) {
 			return;
@@ -29,6 +35,6 @@ const randomInterface = {
 	}
 };
 
-Object.assign( randomInterface, collisionInterface );
+Object.assign( RandomInterface, CollisionInterface );
 
-export default randomInterface;
+export default RandomInterface;

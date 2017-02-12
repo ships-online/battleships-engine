@@ -4,16 +4,14 @@ import ObservableMixin from '@ckeditor/ckeditor5-utils/src/observablemixin.js';
 import mix from '@ckeditor/ckeditor5-utils/src/mix.js';
 
 /**
- * Stores information about items placed on the battlefield.
+ * Stores information about items placed on the battlefield and provides API to arrange them.
  *
- * @memberOf {game}
+ * @mixes ObservableMixin
  */
 export default class Battlefield {
 	/**
-	 * Creates instance of Battlefield class.
-	 *
 	 * @param {Number} size Size of the battlefield.
-	 * @param {Object} [shipsSchema] Defines how many ships of specified length will be on the battlefield.
+	 * @param {Object} [shipsSchema] Defines how many ships of specified length can be placed on the battlefield.
 	 */
 	constructor( size, shipsSchema ) {
 		/**
@@ -23,14 +21,25 @@ export default class Battlefield {
 		 */
 		this.size = size;
 
+		/**
+		 * Configuration of ships allowed on the battlefield.
+		 *
+		 * @type {Object}
+		 */
 		this.shipsSchema = shipsSchema;
 
+		/**
+		 * Defines when battlefield API is locked for every action.
+		 *
+		 * @observable
+		 * @type {Boolean}
+		 */
 		this.set( 'isLocked', false );
 
 		/**
 		 * Ships collection.
 		 *
-		 * @type {game.ShipsCollection}
+		 * @type {ShipsCollection}
 		 */
 		this.shipsCollection = new ShipsCollection();
 
@@ -44,30 +53,42 @@ export default class Battlefield {
 		 * Information about items placed on the battlefield.
 		 *
 		 * @protected
-		 * @type {Map}
+		 * @type {Map<String, Field>}
 		 */
 		this._fields = new Map();
 	}
 
-	setField( position, type ) {
+	/**
+	 * Marks field of given position by a marker of given type.
+	 *
+	 * @param {Array<Number, Number>} position Position on the battlefield.
+	 * @param {'missed'|'hit'} type Marker type.
+	 */
+	markAs( position, type ) {
 		if ( type == 'missed' ) {
-			this.setMissed( position );
+			this.markAsMissed( position );
 		} else {
-			this.setHit( position );
+			this.markAsHit( position );
 		}
 	}
 
 	/**
-	 * Gets items from specified field.
+	 * Gets field on given position.
 	 *
-	 * @param {Array<Number>} position Position on the battlefield e.g. [ x, y ].
-	 * @returns {Array<game.Item>} List of items.
-	 * @returns {null} When field does not exist.
+	 * @param {Array<Number, Number>} position Position on the battlefield.
+	 * @returns {Field|undefined}
 	 */
 	getField( position ) {
 		return this._fields.get( position.join( 'x' ) );
 	}
 
+	/**
+	 * Gets field on given position of create new one when position is empty.
+	 *
+	 * @private
+	 * @param {Array<Number, Number>} position Position on the battlefield.
+	 * @returns {Field}
+	 */
 	_getFieldOrCreate( position ) {
 		let field = this.getField( position );
 
@@ -79,16 +100,34 @@ export default class Battlefield {
 		return field;
 	}
 
-	setMissed( position ) {
-		this._getFieldOrCreate( position ).isMissed = true;
+	/**
+	 * Marks field as missed.
+	 *
+	 * @param {Array<Number, Number>} position Position on the battlefield.
+	 */
+	markAsMissed( position ) {
+		this._getFieldOrCreate( position ).markAsMissed();
 		this.fire( 'missed', position );
 	}
 
-	setHit( position ) {
-		this._getFieldOrCreate( position ).isHit = true;
+	/**
+	 * Marks field as hit.
+	 *
+	 * @param {Array<Number, Number>} position Position on the battlefield.
+	 */
+	markAsHit( position ) {
+		this._getFieldOrCreate( position ).markAsHit();
 		this.fire( 'hit', position );
 	}
 
+	/**
+	 * Places given ship on the given position on the battlefield.
+	 * Checks collision of ship. Keeps ship in battlefield bounds.
+	 *
+	 * @param {Ship} ship Ship instance.
+	 * @param {Array<Number, Number>} position Position on the battlefield.
+	 * @param {Boolean} isRotated When `true` then ship will be rotated.
+	 */
 	moveShip( ship, position, isRotated ) {
 		if ( this.isLocked ) {
 			return;
@@ -108,7 +147,7 @@ export default class Battlefield {
 		}
 
 		// Update position of moved ship on the battlefield.
-		ship.coordinates.forEach( ( pos ) => {
+		for ( let pos of ship.getCoordinates() ) {
 			const field = this.getField( pos );
 
 			if ( field && field.getShip( ship.id ) ) {
@@ -118,30 +157,51 @@ export default class Battlefield {
 					field.removeShip( ship.id );
 				}
 			}
-		} );
+		}
 
 		ship.isRotated = isRotated;
 		ship.position = [ x, y ];
-		ship.coordinates.forEach( ( pos ) => this._getFieldOrCreate( pos ).addShip( ship ) );
+
+		for ( let pos of ship.getCoordinates() ) {
+			this._getFieldOrCreate( pos ).addShip( ship );
+		}
 
 		this.fire( 'shipMoved', ship );
 	}
 
+	/**
+	 * Rotate ship.
+	 *
+	 * @param {Ship} ship
+	 */
 	rotateShip( ship ) {
 		this.moveShip( ship, ship.position, !ship.isRotated );
 	}
 
+	/**
+	 * Check if ship does not stick out of the battlefield bounds.
+	 *
+	 * @param {Ship} ship
+	 * @returns {Boolean}
+	 */
 	isShipInBound( ship ) {
 		return ship.position[ 0 ] >= 0 && ship.tail[ 0 ] < this.size &&
 			ship.position[ 1 ] >= 0 && ship.tail[ 1 ] < this.size;
 	}
 
+	/**
+	 * Checks if given ships don't stick out of battleship bounds and have no collision.
+	 *
+	 * @param {Array<Ship>} ships
+	 * @returns {boolean}
+	 */
 	validateShips( ships ) {
-		return ships.every( ( ship ) => {
-			return !ship.isCollision && this.isShipInBound( ship );
-		} );
+		return ships.every( ( ship ) => !ship.isCollision && this.isShipInBound( ship ) );
 	}
 
+	/**
+	 * Reset battlefield to the default state.
+	 */
 	reset() {
 		this._fields.clear();
 
@@ -150,10 +210,21 @@ export default class Battlefield {
 		}
 	}
 
+	/**
+	 * @returns {Iterator.<Field>}
+	 */
 	[ Symbol.iterator ]() {
 		return this._fields.values();
 	}
 
+	/**
+	 * Creates Battlefield instance with collection fo ships created base on provides shipsSchema.
+	 *
+	 * @static
+	 * @param {Number} size Size of the battlefield.
+	 * @param {Object} [shipsSchema] Defines how many ships of specified length can be placed on the battlefield.
+	 * @returns {Battlefield}
+	 */
 	static createWithShips( size, shipsSchema ) {
 		const battlefield = new this( size, shipsSchema );
 

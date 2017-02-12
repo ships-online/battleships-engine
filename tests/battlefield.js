@@ -24,7 +24,7 @@ describe( 'Battlefield', () => {
 			expect( battlefield ).to.have.property( 'shipsCollection' ).to.have.property( 'length', 0 );
 		} );
 
-		it( 'should put ship  added to the shipsCollection on the battlefield when ship has a position', () => {
+		it( 'should put ship added to the shipsCollection on the battlefield when ship has a position', () => {
 			const ship = new Ship( {
 				length: 2,
 				position: [ 1, 1 ]
@@ -37,9 +37,9 @@ describe( 'Battlefield', () => {
 		} );
 	} );
 
-	describe( 'setHit() / get()', () => {
+	describe( 'markAsHit() / get()', () => {
 		it( 'should create field marked as hit', () => {
-			battlefield.setHit( [ 1, 1 ] );
+			battlefield.markAsHit( [ 1, 1 ] );
 
 			const result = battlefield.getField( [ 1, 1 ] );
 
@@ -52,16 +52,16 @@ describe( 'Battlefield', () => {
 			const spy = sinon.spy();
 
 			battlefield.on( 'hit', spy );
-			battlefield.setHit( [ 1, 1 ] );
+			battlefield.markAsHit( [ 1, 1 ] );
 
 			expect( spy.calledOnce ).to.true;
 			expect( spy.firstCall.args[ 1 ] ).to.have.members( [ 1, 1 ] );
 		} );
 	} );
 
-	describe( 'setMissed() / get()', () => {
+	describe( 'markAsMissed() / get()', () => {
 		it( 'should create field marked as missed', () => {
-			battlefield.setMissed( [ 1, 1 ] );
+			battlefield.markAsMissed( [ 1, 1 ] );
 
 			const result = battlefield.getField( [ 1, 1 ] );
 
@@ -74,27 +74,27 @@ describe( 'Battlefield', () => {
 			const spy = sinon.spy();
 
 			battlefield.on( 'missed', spy );
-			battlefield.setMissed( [ 1, 1 ] );
+			battlefield.markAsMissed( [ 1, 1 ] );
 
 			expect( spy.calledOnce ).to.true;
 			expect( spy.firstCall.args[ 1 ] ).to.have.members( [ 1, 1 ] );
 		} );
 	} );
 
-	describe( 'set() / get()', () => {
-		it( 'should call `setMissed` when given type is `missed`', () => {
-			const spy = sandbox.spy( battlefield, 'setMissed' );
+	describe( 'markAs() / get()', () => {
+		it( 'should call `markAsMissed` when given type is `missed`', () => {
+			const spy = sandbox.spy( battlefield, 'markAsMissed' );
 
-			battlefield.setField( [ 1, 1 ], 'missed' );
+			battlefield.markAs( [ 1, 1 ], 'missed' );
 
 			expect( spy.calledOnce ).to.true;
 			expect( spy.calledWithExactly( [ 1, 1 ] ) );
 		} );
 
 		it( 'should call `setHit` when given type is `hit`', () => {
-			const spy = sandbox.spy( battlefield, 'setHit' );
+			const spy = sandbox.spy( battlefield, 'markAsHit' );
 
-			battlefield.setField( [ 1, 1 ], 'hit' );
+			battlefield.markAs( [ 1, 1 ], 'hit' );
 
 			expect( spy.calledOnce ).to.true;
 			expect( spy.calledWithExactly( [ 1, 1 ] ) );

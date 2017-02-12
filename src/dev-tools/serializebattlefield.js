@@ -1,12 +1,11 @@
 /**
  * Serializes battlefield to JSON format.
- * It is useful to dump battlefield on browser console e.g.:
+ * It is useful to dump battlefield on console e.g.:
  *
  * 		const battlefield = new Battlefield();
  * 		console.table( serializeBattlefield( battlefield ) );
  *
- * @memberOf utils.test
- * @param {game.Battlefield} battlefield Battlefield instance.
+ * @param {Battlefield} battlefield Battlefield instance.
  * @returns {Object} Serialized battlefield.
  */
 export default function serializeBattlefield( battlefield ) {

@@ -71,6 +71,30 @@ describe( 'Ship', () => {
 		} );
 	} );
 
+	describe( 'coordinates', () => {
+		it( 'should return array of coordinates on the battlefield when ship is not rotated', () => {
+			ship.position = [ 1, 1 ];
+			ship.isRotated = false;
+
+			expect( ship.coordinates ).to.have.length( 3 );
+			expect( ship.coordinates ).to.deep.equal( [ [ 1, 1 ], [ 2, 1 ], [ 3, 1 ] ] );
+		} );
+
+		it( 'should return coordinates iterator when ship is rotated', () => {
+			ship.position = [ 1, 1 ];
+			ship.isRotated = true;
+
+			expect( ship.coordinates ).to.have.length( 3 );
+			expect( ship.coordinates ).to.deep.equal( [ [ 1, 1 ], [ 1, 2 ], [ 1, 3 ] ] );
+		} );
+
+		it( 'should return empty array if ship is not placed on the battlefield', () => {
+			ship.position = [ null, null ];
+
+			expect( ship.coordinates ).to.have.length( 0 );
+		} );
+	} );
+
 	describe( 'tail', () => {
 		it( 'should return position of ship tail #1', () => {
 			ship = new Ship( { length: 4 } );
@@ -95,38 +119,6 @@ describe( 'Ship', () => {
 			ship.position = [ 1, 1 ];
 
 			expect( ship.tail ).to.deep.equal( [ 1, 1 ] );
-		} );
-	} );
-
-	describe( 'coordinates', () => {
-		it( 'should return array of coordinates when ship is not rotated', () => {
-			ship.position = [ 1, 1 ];
-			ship.isRotated = true;
-
-			const result = ship.coordinates;
-
-			expect( result ).to.have.length( 3 );
-			expect( result[ 0 ] ).to.have.members( [ 1, 1 ] );
-			expect( result[ 1 ] ).to.have.members( [ 2, 1 ] );
-			expect( result[ 2 ] ).to.have.members( [ 3, 1 ] );
-		} );
-
-		it( 'should return array of coordinates on the battlefield when ship is rotated', () => {
-			ship.position = [ 1, 1 ];
-			ship.isRotated = false;
-
-			const result = ship.coordinates;
-
-			expect( result ).to.have.length( 3 );
-			expect( result[ 0 ] ).to.have.members( [ 1, 1 ] );
-			expect( result[ 1 ] ).to.have.members( [ 1, 2 ] );
-			expect( result[ 2 ] ).to.have.members( [ 1, 3 ] );
-		} );
-
-		it( 'should return empty array if ship is not placed on the battlefield', () => {
-			ship.position = [ null, null ];
-
-			expect( ship.coordinates ).to.have.length( 0 );
 		} );
 	} );
 
@@ -203,19 +195,19 @@ describe( 'Ship', () => {
 			ship.position = [ 1, 1 ];
 			ship.isRotated = false;
 
-			expect( ship.damages ).to.have.members( [ false, false, false ] );
+			expect( ship.damages ).to.deep.equal( [ false, false, false ] );
 
 			ship.setDamage( [ 2, 1 ] );
 
-			expect( ship.damages ).to.have.members( [ false, true, false ] );
+			expect( ship.damages ).to.deep.equal( [ false, true, false ] );
 
 			ship.setDamage( [ 3, 1 ] );
 
-			expect( ship.damages ).to.have.members( [ false, true, true ] );
+			expect( ship.damages ).to.deep.equal( [ false, true, true ] );
 
 			ship.setDamage( [ 1, 1 ] );
 
-			expect( ship.damages ).to.have.members( [ true, true, true ] );
+			expect( ship.damages ).to.deep.equal( [ true, true, true ] );
 		} );
 	} );
 
