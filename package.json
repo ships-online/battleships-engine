@@ -10,11 +10,15 @@
     "battleships",
     "game"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:ships-online/battleships-engine.git"
+  },
   "author": "Oskar Wróbel <kontakt@oskarwrobel.pl>",
   "license": "ISC",
   "devDependencies": {
     "gulp": "^3.9.1",
-    "battleships-dev-tools": "../battleships-dev-tools",
+    "battleships-dev-tools": "git@github.com:ships-online/battleships-dev-tools.git",
     "guppy-pre-commit": "^0.4.0"
   },
   "dependencies": {
