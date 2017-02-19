@@ -1,6 +1,6 @@
 /**
  * Serializes battlefield to JSON format.
- * It is useful to dump battlefield on console e.g.:
+ * It is useful to print battlefield on browser or system console e.g.:
  *
  * 		const battlefield = new Battlefield();
  * 		console.table( serializeBattlefield( battlefield ) );

@@ -40,7 +40,7 @@ export default class Ship  {
 		this.set( 'isRotated', data.isRotated || false );
 
 		/**
-		 * Position first field of ship on the battlefield.
+		 * Ship position on the battlefield.
 		 *
 		 * @observable
 		 * @type {Array<Number, Number>}

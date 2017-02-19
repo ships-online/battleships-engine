@@ -18,7 +18,7 @@ export default class PlayerBattlefield extends Battlefield {
 		super( size, shipsSchema );
 
 		/**
-		 * Defines if some of ship placed on the battlefield have a collision.
+		 * Defines if any of ships placed on the battlefield have a collision.
 		 *
 		 * @observable
 		 * @type {Boolean}

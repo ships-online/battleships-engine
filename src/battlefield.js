@@ -83,7 +83,7 @@ export default class Battlefield {
 	}
 
 	/**
-	 * Gets field on given position of create new one when position is empty.
+	 * Gets field on given position or create new one when position is empty.
 	 *
 	 * @private
 	 * @param {Array<Number, Number>} position Position on the battlefield.
@@ -170,7 +170,7 @@ export default class Battlefield {
 	}
 
 	/**
-	 * Rotate ship.
+	 * Rotates ship.
 	 *
 	 * @param {Ship} ship
 	 */
@@ -179,7 +179,7 @@ export default class Battlefield {
 	}
 
 	/**
-	 * Check if ship does not stick out of the battlefield bounds.
+	 * Checks if ship does not stick out of the battlefield bounds.
 	 *
 	 * @param {Ship} ship
 	 * @returns {Boolean}
@@ -190,7 +190,7 @@ export default class Battlefield {
 	}
 
 	/**
-	 * Checks if given ships don't stick out of battleship bounds and have no collision.
+	 * Checks if given ships don't stick out of battleship bounds and don't have no collision.
 	 *
 	 * @param {Array<Ship>} ships
 	 * @returns {boolean}
@@ -200,7 +200,7 @@ export default class Battlefield {
 	}
 
 	/**
-	 * Reset battlefield to the default state.
+	 * Resets battlefield to the default state.
 	 */
 	reset() {
 		this._fields.clear();
