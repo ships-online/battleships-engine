@@ -18,5 +18,4 @@ gulp.task( 'relink', relinkTask.relink );
 gulp.task( 'lint', lintTasks.lint );
 gulp.task( 'pre-commit', lintTasks.lintStaged );
 
-// JS unit tests.
 gulp.task( 'test', ( done ) => testTasks.test( options, done ) );
