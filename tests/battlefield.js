@@ -316,6 +316,16 @@ describe( 'Battlefield', () => {
 				expect( ship.isCollision ).to.false;
 			}
 		} );
+
+		it( 'should fire reset event', () => {
+			const spy = sinon.spy();
+
+			battlefield.on( 'reset', spy );
+
+			battlefield.reset();
+
+			sinon.assert.calledOnce( spy );
+		} );
 	} );
 
 	describe( 'iterator', () => {
