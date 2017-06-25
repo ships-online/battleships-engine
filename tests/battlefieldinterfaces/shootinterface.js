@@ -1,7 +1,7 @@
-import Battlefield from 'src/battlefield.js';
-import shootInterface from 'src/battlefieldinterfaces/shootinterface.js';
-import Ship from 'src/ship.js';
-import mix from '@ckeditor/ckeditor5-utils/src/mix.js';
+import Battlefield from '../../src/battlefield.js';
+import shootInterface from '../../src/battlefieldinterfaces/shootinterface';
+import Ship from '../../src/ship';
+import mix from '@ckeditor/ckeditor5-utils/src/mix';
 
 describe( 'Battlefield shoot interface', () => {
 	let battlefield;

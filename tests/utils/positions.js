@@ -8,7 +8,7 @@ import {
 	getPositionAtTheBottomLeftOf,
 	getPositionAtTheLeftOf,
 	getSurroundingPositions
-} from 'src/utils/positions.js';
+} from '../../src/utils/positions';
 
 describe( 'positions', () => {
 	describe( 'getPositionAtTheTopLeftOf', () => {

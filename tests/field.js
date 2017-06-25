@@ -1,4 +1,4 @@
-import Field from 'src/field.js';
+import Field from '../src/field';
 
 describe( 'Field', () => {
 	let field;

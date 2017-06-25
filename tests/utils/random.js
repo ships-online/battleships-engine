@@ -1,4 +1,4 @@
-import random from 'src/utils/random.js';
+import random from '../../src/utils/random';
 
 describe( 'random', () => {
 	it( 'should generate random number in given range', () => {

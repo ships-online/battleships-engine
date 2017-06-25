@@ -1,6 +1,6 @@
-import serializeBattlefield from 'src/dev-tools/serializebattlefield.js';
-import Battlefield from 'src/battlefield.js';
-import Ship from 'src/ship.js';
+import serializeBattlefield from '../../src/dev-tools/serializebattlefield';
+import Battlefield from '../../src/battlefield';
+import Ship from '../../src/ship';
 
 describe( 'serializeBattlefield', () => {
 	it( 'should return data of empty battlefield', () => {

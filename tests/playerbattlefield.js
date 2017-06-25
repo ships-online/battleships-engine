@@ -1,6 +1,6 @@
-import PlayerBattlefield from 'src/playerbattlefield.js';
-import Battlefield from 'src/battlefield.js';
-import Ship from 'src/ship.js';
+import PlayerBattlefield from '../src/playerbattlefield';
+import Battlefield from '../src/battlefield';
+import Ship from '../src/ship';
 
 describe( 'PlayerBattlefield', () => {
 	let playerBattlefield;
