@@ -202,6 +202,8 @@ export default class Battlefield {
 		for ( const ship of this.shipsCollection ) {
 			ship.reset();
 		}
+
+		this.fire( 'reset' );
 	}
 
 	/**
