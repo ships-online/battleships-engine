@@ -12,11 +12,11 @@ describe( 'Battlefield random interface', () => {
 	} );
 
 	it( 'should be as class interface', () => {
-		expect( battlefield.random ).to.function;
+		expect( battlefield.random ).to.be.a( 'function' );
 	} );
 
 	it( 'should implement collision interface', () => {
-		expect( battlefield.checkCollision ).to.function;
+		expect( battlefield.checkShipCollision ).to.be.a( 'function' );
 	} );
 
 	describe( 'random', () => {

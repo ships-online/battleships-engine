@@ -14,7 +14,7 @@ describe( 'Battlefield collision interface', () => {
 
 	describe( 'checkShipCollision', () => {
 		it( 'should be as class interface', () => {
-			expect( battlefield.checkShipCollision ).to.function;
+			expect( battlefield.checkShipCollision ).to.be.a( 'function' );
 		} );
 
 		it( 'should return `false` and mark ship as no collision when ship has no contact with other ships #1', () => {

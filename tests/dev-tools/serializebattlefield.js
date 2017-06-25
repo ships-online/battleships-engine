@@ -8,11 +8,11 @@ describe( 'serializeBattlefield', () => {
 
 		const result = serializeBattlefield( battlefield );
 
-		expect( result ).to.have.property( '0' ).to.object;
+		expect( result ).to.have.property( '0' ).to.be.a( 'object' );
 		expect( result[ '0' ] ).to.have.property( '0' ).to.equal( '' );
 		expect( result[ '0' ] ).to.have.property( '1' ).to.equal( '' );
 
-		expect( result ).to.have.property( '1' ).to.object;
+		expect( result ).to.have.property( '1' ).to.be.a( 'object' );
 		expect( result[ '1' ] ).to.have.property( '0' ).to.equal( '' );
 		expect( result[ '1' ] ).to.have.property( '1' ).to.equal( '' );
 	} );
@@ -27,11 +27,11 @@ describe( 'serializeBattlefield', () => {
 
 		const result = serializeBattlefield( battlefield );
 
-		expect( result ).to.have.property( '0' ).to.object;
+		expect( result ).to.have.property( '0' ).to.be.a( 'object' );
 		expect( result[ '0' ] ).to.have.property( '0' ).to.equal( '' );
 		expect( result[ '0' ] ).to.have.property( '1' ).to.equal( '2' );
 
-		expect( result ).to.have.property( '1' ).to.object;
+		expect( result ).to.have.property( '1' ).to.be.a( 'object' );
 		expect( result[ '1' ] ).to.have.property( '0' ).to.equal( '1' );
 		expect( result[ '1' ] ).to.have.property( '1' ).to.equal( '1,2' );
 	} );

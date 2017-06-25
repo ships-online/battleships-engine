@@ -17,7 +17,7 @@ describe( 'Battlefield shoot interface', () => {
 	} );
 
 	it( 'should be as class interface', () => {
-		expect( battlefield.shoot ).to.function;
+		expect( battlefield.shoot ).to.be.a( 'function' );
 	} );
 
 	describe( 'shoot', () => {

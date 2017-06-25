@@ -5,7 +5,7 @@ describe( 'random', () => {
 		for ( let i = 0; i < 100; i++ ) {
 			const result = random( 1, 3 );
 
-			expect( result ).to.number;
+			expect( result ).to.be.a( 'number' );
 			expect( result ).to.within( 1, 3 );
 		}
 	} );
