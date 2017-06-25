@@ -1,7 +1,7 @@
-import Field from './field.js';
-import ShipsCollection from './shipscollection.js';
-import ObservableMixin from '@ckeditor/ckeditor5-utils/src/observablemixin.js';
-import mix from '@ckeditor/ckeditor5-utils/src/mix.js';
+import Field from './field';
+import ShipsCollection from './shipscollection';
+import ObservableMixin from '@ckeditor/ckeditor5-utils/src/observablemixin';
+import mix from '@ckeditor/ckeditor5-utils/src/mix';
 
 /**
  * Stores information about items placed on the battlefield and provides API to arrange them.
@@ -73,6 +73,26 @@ export default class Battlefield {
 	}
 
 	/**
+	 * Marks field as missed.
+	 *
+	 * @param {Array<Number, Number>} position Position on the battlefield.
+	 */
+	markAsMissed( position ) {
+		this._getFieldOrCreate( position ).markAsMissed();
+		this.fire( 'missed', position );
+	}
+
+	/**
+	 * Marks field as hit.
+	 *
+	 * @param {Array<Number, Number>} position Position on the battlefield.
+	 */
+	markAsHit( position ) {
+		this._getFieldOrCreate( position ).markAsHit();
+		this.fire( 'hit', position );
+	}
+
+	/**
 	 * Gets field on given position.
 	 *
 	 * @param {Array<Number, Number>} position Position on the battlefield.
@@ -98,26 +118,6 @@ export default class Battlefield {
 		}
 
 		return field;
-	}
-
-	/**
-	 * Marks field as missed.
-	 *
-	 * @param {Array<Number, Number>} position Position on the battlefield.
-	 */
-	markAsMissed( position ) {
-		this._getFieldOrCreate( position ).markAsMissed();
-		this.fire( 'missed', position );
-	}
-
-	/**
-	 * Marks field as hit.
-	 *
-	 * @param {Array<Number, Number>} position Position on the battlefield.
-	 */
-	markAsHit( position ) {
-		this._getFieldOrCreate( position ).markAsHit();
-		this.fire( 'hit', position );
 	}
 
 	/**
@@ -147,7 +147,7 @@ export default class Battlefield {
 		}
 
 		// Update position of moved ship on the battlefield.
-		for ( let pos of ship.getCoordinates() ) {
+		for ( const pos of ship.getCoordinates() ) {
 			const field = this.getField( pos );
 
 			if ( field && field.getShip( ship.id ) ) {
@@ -179,24 +179,18 @@ export default class Battlefield {
 	}
 
 	/**
-	 * Checks if ship does not stick out of the battlefield bounds.
-	 *
-	 * @param {Ship} ship
-	 * @returns {Boolean}
-	 */
-	isShipInBound( ship ) {
-		return ship.position[ 0 ] >= 0 && ship.tail[ 0 ] < this.size &&
-			ship.position[ 1 ] >= 0 && ship.tail[ 1 ] < this.size;
-	}
-
-	/**
-	 * Checks if given ships don't stick out of battleship bounds and don't have no collision.
+	 * Checks if given ships don't stick out of battleship bounds and don't have collision.
 	 *
 	 * @param {Array<Ship>} ships
 	 * @returns {boolean}
 	 */
 	validateShips( ships ) {
-		return ships.every( ( ship ) => !ship.isCollision && this.isShipInBound( ship ) );
+		return ships.every( ( ship ) => {
+			const isInBounds = ship.position[ 0 ] >= 0 && ship.tail[ 0 ] < this.size &&
+				ship.position[ 1 ] >= 0 && ship.tail[ 1 ] < this.size;
+
+			return !ship.isCollision && isInBounds;
+		} );
 	}
 
 	/**

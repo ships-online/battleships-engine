@@ -1,6 +1,6 @@
-import Battlefield from './battlefield.js';
-import ShootInterface from './battlefieldinterfaces/shootinterface.js';
-import mix from '@ckeditor/ckeditor5-utils/src/mix.js';
+import Battlefield from './battlefield';
+import ShootInterface from './battlefieldinterfaces/shootinterface';
+import mix from '@ckeditor/ckeditor5-utils/src/mix';
 
 /**
  * Class that represents Opponent Battlefield.

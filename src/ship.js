@@ -103,7 +103,6 @@ export default class Ship  {
 	/**
 	 * Returns iterator that iterates over ship fields and returns its position.
 	 *
-	 * @private
 	 * @returns {Iterable.<Array>}
 	 */
 	*getCoordinates() {

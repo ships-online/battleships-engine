@@ -1,7 +1,7 @@
-import Battlefield from './battlefield.js';
-import RandomInterface from './battlefieldinterfaces/randominterface.js';
-import CollisionInterface from './battlefieldinterfaces/collisioninterface.js';
-import mix from '@ckeditor/ckeditor5-utils/src/mix.js';
+import Battlefield from './battlefield';
+import RandomInterface from './battlefieldinterfaces/randominterface';
+import CollisionInterface from './battlefieldinterfaces/collisioninterface';
+import mix from '@ckeditor/ckeditor5-utils/src/mix';
 
 /**
  * Class that represents Player Battlefield.
@@ -18,8 +18,9 @@ export default class PlayerBattlefield extends Battlefield {
 		super( size, shipsSchema );
 
 		/**
-		 * Defines if any of ships placed on the battlefield have a collision.
+		 * Defines if any of ships placed on the battlefield has a collision.
 		 *
+		 * @readonly
 		 * @observable
 		 * @type {Boolean}
 		 */

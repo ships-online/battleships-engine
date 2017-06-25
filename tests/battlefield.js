@@ -263,44 +263,8 @@ describe( 'Battlefield', () => {
 		} );
 	} );
 
-	describe( 'isShipInBound()', () => {
-		it( 'it should return true when given ship is in bound #1', () => {
-			const ship = new Ship( { length: 4 } );
-
-			ship.position = [ 1, 1 ];
-
-			expect( battlefield.isShipInBound( ship ) ).to.true;
-		} );
-
-		it( 'it should return true when given ship is in bound #2', () => {
-			const ship = new Ship( { length: 4 } );
-
-			ship.position = [ 1, 1 ];
-			ship.rotate();
-
-			expect( battlefield.isShipInBound( ship ) ).to.true;
-		} );
-
-		it( 'it should return true when given ship is in bound #3', () => {
-			const ship = new Ship( { length: 4 } );
-
-			ship.position = [ 2, 1 ];
-
-			expect( battlefield.isShipInBound( ship ) ).to.false;
-		} );
-
-		it( 'it should return true when given ship is in bound #4', () => {
-			const ship = new Ship( { length: 4 } );
-
-			ship.position = [ 1, 2 ];
-			ship.rotate();
-
-			expect( battlefield.isShipInBound( ship ) ).to.false;
-		} );
-	} );
-
 	describe( 'validateShips()', () => {
-		it( 'should return true when ships are in battlefield bounds and do not have a collision', () => {
+		it( 'should return true when ships are inside battlefield bounds and do not have a collision', () => {
 			const ship1 = new Ship( { length: 4 } );
 			const ship2 = new Ship( { length: 4 } );
 
@@ -310,7 +274,7 @@ describe( 'Battlefield', () => {
 			expect( battlefield.validateShips( [ ship1, ship2 ] ) ).to.true;
 		} );
 
-		it( 'should return false when ships are not battlefield bounds and do not have a collision', () => {
+		it( 'should return false when ships are not inside battlefield bounds and do not have a collision', () => {
 			const ship1 = new Ship( { length: 4 } );
 			const ship2 = new Ship( { length: 4 } );
 
@@ -320,7 +284,7 @@ describe( 'Battlefield', () => {
 			expect( battlefield.validateShips( [ ship1, ship2 ] ) ).to.false;
 		} );
 
-		it( 'should return false when ships are not battlefield bounds and do have a collision', () => {
+		it( 'should return false when ships are not inside battlefield bounds and do have a collision', () => {
 			const ship1 = new Ship( { length: 4 } );
 			const ship2 = new Ship( { length: 4 } );
 
