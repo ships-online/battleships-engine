@@ -51,7 +51,8 @@ describe( 'Battlefield shoot interface', () => {
 			battlefield.markAsMissed( [ 1, 1 ] );
 
 			expect( battlefield.shoot( [ 1, 1 ] ) ).to.deep.equal( {
-				type: 'notEmpty',
+				type: 'missed',
+				notEmpty: true,
 				position: [ 1, 1 ]
 			} );
 		} );
@@ -62,7 +63,8 @@ describe( 'Battlefield shoot interface', () => {
 			battlefield.markAsHit( [ 1, 1 ], ship );
 
 			expect( battlefield.shoot( [ 1, 1 ] ) ).to.deep.equal( {
-				type: 'notEmpty',
+				type: 'hit',
+				notEmpty: true,
 				position: [ 1, 1 ]
 			} );
 		} );

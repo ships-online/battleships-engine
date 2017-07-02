@@ -18,7 +18,8 @@ const ShootInterface = {
 			this.markAsMissed( position );
 			result.type = 'missed';
 		} else if ( field.isMissed || field.isHit ) {
-			result.type = 'notEmpty';
+			result.type = field.isMissed ? 'missed' : 'hit';
+			result.notEmpty = true;
 		} else {
 			const ship = field.getFirstShip();
 
