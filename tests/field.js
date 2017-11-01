@@ -79,7 +79,7 @@ describe( 'Field', () => {
 
 			let index = 0;
 
-			for ( let ship of field ) {
+			for ( const ship of field ) {
 				expect( ship ).to.have.property( 'id', `s${ ++index }` );
 			}
 

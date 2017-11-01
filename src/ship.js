@@ -5,7 +5,7 @@ import uid from '@ckeditor/ckeditor5-utils/src/uid.js';
 /**
  * @mixes ObservableMixin
  */
-export default class Ship  {
+export default class Ship {
 	/**
 	 * @param {Object} data Configuration.
 	 * @param {Number} data.length Ship length.
@@ -75,7 +75,7 @@ export default class Ship  {
 	get coordinates() {
 		const positions = [];
 
-		for ( let position of this.getCoordinates() ) {
+		for ( const position of this.getCoordinates() ) {
 			positions.push( position );
 		}
 
@@ -105,7 +105,7 @@ export default class Ship  {
 	 *
 	 * @returns {Iterable.<Array>}
 	 */
-	*getCoordinates() {
+	* getCoordinates() {
 		const pos = this.position;
 		let step = 0;
 

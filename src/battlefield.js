@@ -162,7 +162,7 @@ export default class Battlefield {
 		ship.isRotated = isRotated;
 		ship.position = [ x, y ];
 
-		for ( let pos of ship.getCoordinates() ) {
+		for ( const pos of ship.getCoordinates() ) {
 			this._getFieldOrCreate( pos ).addShip( ship );
 		}
 
@@ -185,7 +185,7 @@ export default class Battlefield {
 	 * @returns {boolean}
 	 */
 	validateShips( ships ) {
-		return ships.every( ( ship ) => {
+		return ships.every( ship => {
 			const isInBounds = ship.position[ 0 ] >= 0 && ship.tail[ 0 ] < this.size &&
 				ship.position[ 1 ] >= 0 && ship.tail[ 1 ] < this.size;
 

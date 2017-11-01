@@ -12,7 +12,7 @@ export default function serializeBattlefield( battlefield ) {
 	const result = {};
 
 	for ( let y = 0; y < battlefield.size; y++ ) {
-		let row = {};
+		const row = {};
 
 		for ( let x = 0; x < battlefield.size; x++ ) {
 			const field = battlefield.getField( [ x, y ] );

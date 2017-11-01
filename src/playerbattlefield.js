@@ -39,7 +39,7 @@ export default class PlayerBattlefield extends Battlefield {
 		this.verifyExistingCollisions( ship );
 		this.checkShipCollision( ship );
 
-		this.isCollision = Array.from( this ).some( ( field ) => {
+		this.isCollision = Array.from( this ).some( field => {
 			return Array.from( field ).some( ship => ship.isCollision );
 		} );
 	}

@@ -3,8 +3,9 @@
   "version": "0.0.1",
   "description": "The engine of Battleships game.",
   "scripts": {
-    "lint": "./node_modules/.bin/gulp lint",
-    "test": "./node_modules/.bin/gulp test -c"
+    "test": "gulp test -c",
+    "lint": "eslint --quiet '**/*.js'",
+    "precommit": "lint-staged"
   },
   "keywords": [
     "battleships",
@@ -16,12 +17,23 @@
   },
   "author": "Oskar Wróbel <kontakt@oskarwrobel.pl>",
   "license": "ISC",
-  "devDependencies": {
-    "gulp": "^3.9.1",
-    "battleships-dev-tools": "https://github.com/ships-online/battleships-dev-tools.git",
-    "guppy-pre-commit": "^0.4.0"
-  },
   "dependencies": {
-    "@ckeditor/ckeditor5-utils": "^0.9.1"
-  }
+    "@ckeditor/ckeditor5-utils": "^1.0.0-alpha.1"
+  },
+  "devDependencies": {
+    "battleships-dev-tools": "https://github.com/ships-online/battleships-dev-tools.git",
+    "eslint": "^4.10.0",
+    "eslint-config-ckeditor5": "^1.0.6",
+    "gulp": "^3.9.1",
+    "husky": "^0.14.3",
+    "lint-staged": "^4.3.0"
+  },
+  "lint-staged": {
+    "**/*.js": [
+      "eslint --quiet"
+    ]
+  },
+  "eslintIgnore": [
+    "coverage/**"
+  ]
 }

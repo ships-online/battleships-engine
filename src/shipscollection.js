@@ -32,7 +32,7 @@ export default class ShipsCollection {
 	 */
 	add( ship ) {
 		if ( Array.isArray( ship ) ) {
-			ship.forEach( ( shipItem ) => this.add( shipItem ) );
+			ship.forEach( shipItem => this.add( shipItem ) );
 		} else {
 			this._items.set( ship.id, ship );
 			this.fire( 'add', ship );
@@ -101,7 +101,7 @@ export default class ShipsCollection {
 	 * @returns {Array}
 	 */
 	static createShipsFromJSON( config ) {
-		return config.map( ( data ) => new Ship( data ) );
+		return config.map( data => new Ship( data ) );
 	}
 }
 
