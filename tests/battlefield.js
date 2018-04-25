@@ -37,6 +37,15 @@ describe( 'Battlefield', () => {
 		} );
 	} );
 
+	describe( 'settings', () => {
+		it( 'should return object with a game settings', () => {
+			expect( battlefield.settings ).to.deep.equal( {
+				size: 5,
+				shipsSchema: { 2: 2, 3: 2 }
+			} );
+		} );
+	} );
+
 	describe( 'markAsHit() / get()', () => {
 		it( 'should create field marked as hit', () => {
 			battlefield.markAsHit( [ 1, 1 ] );
@@ -346,16 +355,6 @@ describe( 'Battlefield', () => {
 			}
 
 			expect( index ).to.equal( 4 );
-		} );
-	} );
-
-	describe( 'static createWithShips()', () => {
-		it( 'should create Battleship instance with Ships based on given schema', () => {
-			battlefield = Battlefield.createWithShips( 5, { 2: 2, 3: 2 } );
-
-			expect( battlefield ).to.instanceof( Battlefield );
-			expect( battlefield.shipsSchema ).to.deep.equal( { 2: 2, 3: 2 } );
-			expect( battlefield.shipsCollection.length ).to.equal( 4 );
 		} );
 	} );
 } );

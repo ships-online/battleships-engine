@@ -11,7 +11,7 @@ import mix from '@ckeditor/ckeditor5-utils/src/mix';
 export default class Battlefield {
 	/**
 	 * @param {Number} size Size of the battlefield.
-	 * @param {Object} [shipsSchema] Defines how many ships of specified length can be placed on the battlefield.
+	 * @param {Object} shipsSchema Defines how many ships of specific length will be in the game.
 	 */
 	constructor( size, shipsSchema ) {
 		/**
@@ -29,7 +29,7 @@ export default class Battlefield {
 		this.shipsSchema = shipsSchema;
 
 		/**
-		 * Defines when battlefield API is locked for every action.
+		 * Defines when battlefield API is locked for all actions.
 		 *
 		 * @observable
 		 * @type {Boolean}
@@ -56,6 +56,13 @@ export default class Battlefield {
 		 * @type {Map<String, Field>}
 		 */
 		this._fields = new Map();
+	}
+
+	get settings() {
+		return {
+			size: this.size,
+			shipsSchema: this.shipsSchema
+		};
 	}
 
 	/**
@@ -211,22 +218,6 @@ export default class Battlefield {
 	 */
 	[ Symbol.iterator ]() {
 		return this._fields.values();
-	}
-
-	/**
-	 * Creates Battlefield instance with collection fo ships created base on provides shipsSchema.
-	 *
-	 * @static
-	 * @param {Number} size Size of the battlefield.
-	 * @param {Object} [shipsSchema] Defines how many ships of specified length can be placed on the battlefield.
-	 * @returns {Battlefield}
-	 */
-	static createWithShips( size, shipsSchema ) {
-		const battlefield = new this( size, shipsSchema );
-
-		battlefield.shipsCollection.add( ShipsCollection.createShipsFromSchema( shipsSchema ) );
-
-		return battlefield;
 	}
 }
 
