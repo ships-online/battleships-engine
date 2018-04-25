@@ -1,4 +1,5 @@
 import Battlefield from '../../src/battlefield';
+import ShipsCollection from '../../src/shipscollection';
 import randomInterface from '../../src/battlefieldinterfaces/randominterface';
 import mix from '@ckeditor/ckeditor5-utils/src/mix';
 
@@ -8,7 +9,8 @@ describe( 'Battlefield random interface', () => {
 	beforeEach( () => {
 		mix( Battlefield, randomInterface );
 
-		battlefield = Battlefield.createWithShips( 10, { 1: 4, 2: 3, 3: 2, 4: 1 } );
+		battlefield = new Battlefield( 10, { 1: 4, 2: 3, 3: 2, 4: 1 } );
+		battlefield.shipsCollection.add( ShipsCollection.createShipsFromSchema( battlefield.shipsSchema ) )
 	} );
 
 	it( 'should be as class interface', () => {
