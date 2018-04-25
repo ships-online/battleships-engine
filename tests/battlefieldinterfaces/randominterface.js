@@ -10,7 +10,7 @@ describe( 'Battlefield random interface', () => {
 		mix( Battlefield, randomInterface );
 
 		battlefield = new Battlefield( 10, { 1: 4, 2: 3, 3: 2, 4: 1 } );
-		battlefield.shipsCollection.add( ShipsCollection.createShipsFromSchema( battlefield.shipsSchema ) )
+		battlefield.shipsCollection.add( ShipsCollection.createShipsFromSchema( battlefield.shipsSchema ) );
 	} );
 
 	it( 'should be as class interface', () => {
