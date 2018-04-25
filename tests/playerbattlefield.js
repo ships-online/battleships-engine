@@ -6,11 +6,15 @@ describe( 'PlayerBattlefield', () => {
 	let playerBattlefield;
 
 	beforeEach( () => {
-		playerBattlefield = new PlayerBattlefield( 5 );
+		playerBattlefield = new PlayerBattlefield( 5, { 2: 1, 4: 1 } );
 	} );
 
 	it( 'should extend Battlefield', () => {
 		expect( playerBattlefield ).to.instanceof( Battlefield );
+	} );
+
+	it( 'should create ships based on schema', () => {
+		expect( Array.from( playerBattlefield.shipsCollection, ship => ship.length ) ).to.have.members( [ 2, 4 ] );
 	} );
 
 	it( 'should check collision after move', () => {

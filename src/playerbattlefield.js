@@ -1,4 +1,5 @@
 import Battlefield from './battlefield';
+import ShipsCollection from './shipscollection';
 import RandomInterface from './battlefieldinterfaces/randominterface';
 import CollisionInterface from './battlefieldinterfaces/collisioninterface';
 import mix from '@ckeditor/ckeditor5-utils/src/mix';
@@ -27,6 +28,8 @@ export default class PlayerBattlefield extends Battlefield {
 		this.set( 'isCollision', false );
 
 		this.on( 'shipMoved', ( evt, ship ) => this._handleShipMove( ship ) );
+
+		this.shipsCollection.add( ShipsCollection.createShipsFromSchema( this.shipsSchema ) );
 	}
 
 	/**
