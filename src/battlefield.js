@@ -247,16 +247,31 @@ export default class Battlefield {
 	/**
 	 * Checks if given ships don't stick out of battleship bounds and don't have collision.
 	 *
-	 * @param {Array<Ship>} ships
-	 * @returns {boolean}
+	 * @param {Array<Object>} shipsJSON
+	 * @returns {Boolean}
 	 */
-	validateShips( ships ) {
-		return ships.every( ship => {
-			const isInBounds = ship.position[ 0 ] >= 0 && ship.tail[ 0 ] < this.size &&
-				ship.position[ 1 ] >= 0 && ship.tail[ 1 ] < this.size;
+	validateShips( shipsJSON ) {
+		const ships = ShipsCollection.createShipsFromJSON( shipsJSON );
+		const battlefield = new this.constructor( this.size, {} );
 
-			return !ship.isCollision && isInBounds;
+		const result = ships.every( ship => {
+			const isInBounds = ship.position[ 0 ] >= 0 &&
+				ship.tail[ 0 ] < this.size &&
+				ship.position[ 1 ] >= 0 &&
+				ship.tail[ 1 ] < this.size;
+
+			if ( !isInBounds ) {
+				return false;
+			}
+
+			battlefield.moveShip( ship, ship.position, ship.isRotated );
+
+			return !ship.isCollision;
 		} );
+
+		battlefield.destroy();
+
+		return result;
 	}
 
 	/**
@@ -270,6 +285,14 @@ export default class Battlefield {
 		}
 
 		this.fire( 'reset' );
+	}
+
+	/**
+	 * Clears all listeners.
+	 */
+	destroy() {
+		this.stopListening();
+		this.shipsCollection.stopListening();
 	}
 
 	/**

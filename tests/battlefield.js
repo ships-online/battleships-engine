@@ -13,6 +13,7 @@ describe( 'Battlefield', () => {
 
 	afterEach( () => {
 		sandbox.restore();
+		battlefield.destroy();
 	} );
 
 	describe( 'constructor()', () => {
@@ -58,7 +59,7 @@ describe( 'Battlefield', () => {
 		} );
 
 		it( 'should fire `hit` event', () => {
-			const spy = sinon.spy();
+			const spy = sandbox.spy();
 
 			battlefield.on( 'hit', spy );
 			battlefield.markAsHit( [ 1, 1 ] );
@@ -80,7 +81,7 @@ describe( 'Battlefield', () => {
 		} );
 
 		it( 'should fire `missed` event', () => {
-			const spy = sinon.spy();
+			const spy = sandbox.spy();
 
 			battlefield.on( 'missed', spy );
 			battlefield.markAsMissed( [ 1, 1 ] );
@@ -445,13 +446,25 @@ describe( 'Battlefield', () => {
 		} );
 
 		it( 'should fire reset event', () => {
-			const spy = sinon.spy();
+			const spy = sandbox.spy();
 
 			battlefield.on( 'reset', spy );
 
 			battlefield.reset();
 
 			sinon.assert.calledOnce( spy );
+		} );
+	} );
+
+	describe( 'destroy()', () => {
+		it( 'should clear event emitters', () => {
+			const spy1 = sandbox.spy( battlefield, 'stopListening' );
+			const spy2 = sandbox.spy( battlefield.shipsCollection, 'stopListening' );
+
+			battlefield.destroy();
+
+			sinon.assert.called( spy1 );
+			sinon.assert.called( spy2 );
 		} );
 	} );
 
