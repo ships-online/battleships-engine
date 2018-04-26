@@ -186,7 +186,6 @@ describe( 'Ship', () => {
 			expect( result ).to.have.property( 'length', 3 );
 			expect( result ).to.have.property( 'isRotated', true );
 			expect( result ).to.have.property( 'position' ).to.deep.equal( [ 1, 1 ] );
-			expect( result ).to.have.property( 'tail' ).to.deep.equal( [ 1, 3 ] );
 		} );
 	} );
 

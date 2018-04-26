@@ -140,7 +140,6 @@ export default class Ship {
 			id: this.id,
 			length: this.length,
 			position: this.position,
-			tail: this.tail,
 			isRotated: this.isRotated
 		};
 	}
