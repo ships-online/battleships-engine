@@ -2,6 +2,7 @@ import Battlefield from '../src/battlefield';
 import ShipsCollection from '../src/shipscollection';
 import Ship from '../src/ship';
 import Field from '../src/field';
+import Collection from '@ckeditor/ckeditor5-utils/src/collection';
 
 describe( 'Battlefield', () => {
 	let battlefield, sandbox;
@@ -22,7 +23,9 @@ describe( 'Battlefield', () => {
 			expect( battlefield ).to.have.property( 'isLocked', false );
 			expect( battlefield ).to.have.property( 'shipsSchema' ).to.deep.equal( { 2: 2, 3: 2 } );
 			expect( battlefield ).to.have.property( 'shipsCollection' ).to.instanceof( ShipsCollection );
-			expect( battlefield ).to.have.property( 'shipsCollection' ).to.have.property( 'length', 0 );
+			expect( battlefield ).to.have.property( 'shipsCollection' ).to.length( 0 );
+			expect( battlefield ).to.have.property( '_fields' ).to.instanceof( Collection );
+			expect( battlefield ).to.have.property( '_fields' ).to.length( 0 );
 		} );
 
 		it( 'should put ship added to the shipsCollection on the battlefield when ship has a position', () => {
@@ -35,6 +38,22 @@ describe( 'Battlefield', () => {
 
 			expect( battlefield.getField( [ 1, 1 ] ).getFirstShip() ).to.equal( ship );
 			expect( battlefield.getField( [ 2, 1 ] ).getFirstShip() ).to.equal( ship );
+		} );
+
+		it( 'should delegate add and remove events from #_fields collection', () => {
+			const addSpy = sandbox.spy();
+			const removeSpy = sandbox.spy();
+
+			battlefield.on( 'add', addSpy );
+			battlefield.on( 'remove', removeSpy );
+
+			battlefield._fields.fire( 'add' );
+
+			sinon.assert.calledOnce( addSpy );
+
+			battlefield._fields.fire( 'remove' );
+
+			sinon.assert.calledOnce( removeSpy );
 		} );
 	} );
 
@@ -57,16 +76,6 @@ describe( 'Battlefield', () => {
 			expect( result.length ).to.equal( 0 );
 			expect( result.isHit ).to.true;
 		} );
-
-		it( 'should fire `hit` event', () => {
-			const spy = sandbox.spy();
-
-			battlefield.on( 'hit', spy );
-			battlefield.markAsHit( [ 1, 1 ] );
-
-			expect( spy.calledOnce ).to.true;
-			expect( spy.firstCall.args[ 1 ] ).to.have.members( [ 1, 1 ] );
-		} );
 	} );
 
 	describe( 'markAsMissed() / getField()', () => {
@@ -78,16 +87,6 @@ describe( 'Battlefield', () => {
 			expect( result ).to.instanceof( Field );
 			expect( result.length ).to.equal( 0 );
 			expect( result.isMissed ).to.true;
-		} );
-
-		it( 'should fire `missed` event', () => {
-			const spy = sandbox.spy();
-
-			battlefield.on( 'missed', spy );
-			battlefield.markAsMissed( [ 1, 1 ] );
-
-			expect( spy.calledOnce ).to.true;
-			expect( spy.firstCall.args[ 1 ] ).to.have.members( [ 1, 1 ] );
 		} );
 	} );
 
@@ -112,8 +111,8 @@ describe( 'Battlefield', () => {
 	} );
 
 	describe( 'getField()', () => {
-		it( 'should return `undefined` when field is empty', () => {
-			expect( battlefield.getField( [ 1, 1 ] ) ).to.undefined;
+		it( 'should return `null` when field is empty', () => {
+			expect( battlefield.getField( [ 1, 1 ] ) ).to.null;
 		} );
 	} );
 
@@ -147,8 +146,8 @@ describe( 'Battlefield', () => {
 			expect( ship.coordinates ).to.deep.equal( [ [ 3, 3 ], [ 4, 3 ] ] );
 
 			// Previous position should be empty.
-			expect( battlefield.getField( [ 1, 1 ] ) ).to.undefined;
-			expect( battlefield.getField( [ 2, 1 ] ) ).to.undefined;
+			expect( battlefield.getField( [ 1, 1 ] ) ).to.null;
+			expect( battlefield.getField( [ 2, 1 ] ) ).to.null;
 
 			// Ship should be on the next position.
 			expect( battlefield.getField( [ 3, 3 ] ) ).to.have.length( 1 );

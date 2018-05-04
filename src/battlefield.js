@@ -1,5 +1,6 @@
 import Field from './field';
 import ShipsCollection from './shipscollection';
+import Collection from '@ckeditor/ckeditor5-utils/src/collection';
 import { getSurroundingPositions } from './utils/positions.js';
 import ObservableMixin from '@ckeditor/ckeditor5-utils/src/observablemixin';
 import mix from '@ckeditor/ckeditor5-utils/src/mix';
@@ -59,12 +60,13 @@ export default class Battlefield {
 		} );
 
 		/**
-		 * Information about items placed on the battlefield.
+		 * Collection of fields that contains information about items placed on the battlefield.
 		 *
 		 * @protected
-		 * @type {Map<String, Field>}
+		 * @type {Collection<Field>}
 		 */
-		this._fields = new Map();
+		this._fields = new Collection();
+		this._fields.delegate( 'add', 'remove' ).to( this );
 	}
 
 	get settings() {
@@ -95,7 +97,6 @@ export default class Battlefield {
 	 */
 	markAsMissed( position ) {
 		this._getFieldOrCreate( position ).markAsMissed();
-		this.fire( 'missed', position );
 	}
 
 	/**
@@ -105,7 +106,6 @@ export default class Battlefield {
 	 */
 	markAsHit( position ) {
 		this._getFieldOrCreate( position ).markAsHit();
-		this.fire( 'hit', position );
 	}
 
 	/**
@@ -130,7 +130,7 @@ export default class Battlefield {
 
 		if ( !field ) {
 			field = new Field( position );
-			this._fields.set( field.id, field );
+			this._fields.add( field );
 		}
 
 		return field;
@@ -168,7 +168,7 @@ export default class Battlefield {
 
 			if ( field && field.getShip( ship.id ) ) {
 				if ( field.length == 1 ) {
-					this._fields.delete( pos.join( 'x' ) );
+					this._fields.remove( pos.join( 'x' ) );
 				} else {
 					field.removeShip( ship.id );
 				}
@@ -299,7 +299,7 @@ export default class Battlefield {
 	 * @returns {Iterator.<Field>}
 	 */
 	[ Symbol.iterator ]() {
-		return this._fields.values();
+		return Array.from( this._fields )[ Symbol.iterator ]();
 	}
 }
 
