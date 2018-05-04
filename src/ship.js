@@ -18,7 +18,7 @@ export default class Ship {
 		 * Ship id.
 		 *
 		 * @readonly
-		 * @member {Number} game.Ship#id
+		 * @member {String} game.Ship#id
 		 */
 		this.id = data.id || uid();
 
