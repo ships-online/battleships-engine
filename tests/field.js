@@ -11,6 +11,12 @@ describe( 'Field', () => {
 		expect( field.id ).to.equal( '1x1' );
 	} );
 
+	describe( 'position', () => {
+		it( 'should return position on the battlefield', () => {
+			expect( field.position ).to.deep.equal( [ 1, 1 ] );
+		} );
+	} );
+
 	describe( 'markAsHit() / isHit', () => {
 		it( 'should mark field as hit and get hit state', () => {
 			expect( field.isHit ).to.false;

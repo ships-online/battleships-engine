@@ -77,6 +77,15 @@ export default class Field {
 	}
 
 	/**
+	 * Returns position on the battlefield.
+	 *
+	 * @return {Array<Number,Number>}
+	 */
+	get position() {
+		return this.id.split( 'x' ).map( item => parseInt( item, 10 ) );
+	}
+
+	/**
 	 * Adds ship to the field.
 	 *
 	 * @param {Ship} ship Ship instance.
