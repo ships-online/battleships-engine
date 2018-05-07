@@ -33,7 +33,7 @@ export default class ShipsCollection extends Collection {
 	 * @returns {Array<Object>}
 	 */
 	toJSON() {
-		return Array.from( this._items.values(), ship => ship.toJSON() );
+		return Array.from( this, ship => ship.toJSON() );
 	}
 
 	/**
