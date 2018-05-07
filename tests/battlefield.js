@@ -424,15 +424,15 @@ describe( 'Battlefield', () => {
 
 	describe( 'reset()', () => {
 		it( 'should reset battlefield and ship collection to the default values', () => {
-			battlefield.shipsCollection.add( new Ship( { id: 1, length: 2 } ) );
-			battlefield.shipsCollection.add( new Ship( { id: 2, length: 2 } ) );
-			battlefield.shipsCollection.add( new Ship( { id: 3, length: 2 } ) );
-			battlefield.shipsCollection.add( new Ship( { id: 4, length: 2 } ) );
+			battlefield.shipsCollection.add( new Ship( { id: '1', length: 2 } ) );
+			battlefield.shipsCollection.add( new Ship( { id: '2', length: 2 } ) );
+			battlefield.shipsCollection.add( new Ship( { id: '3', length: 2 } ) );
+			battlefield.shipsCollection.add( new Ship( { id: '4', length: 2 } ) );
 
-			battlefield.moveShip( battlefield.shipsCollection.get( 1 ), [ 1, 1 ] );
-			battlefield.moveShip( battlefield.shipsCollection.get( 2 ), [ 2, 1 ] );
-			battlefield.moveShip( battlefield.shipsCollection.get( 3 ), [ 3, 1 ] );
-			battlefield.moveShip( battlefield.shipsCollection.get( 4 ), [ 4, 1 ] );
+			battlefield.moveShip( battlefield.shipsCollection.get( '1' ), [ 1, 1 ] );
+			battlefield.moveShip( battlefield.shipsCollection.get( '2' ), [ 2, 1 ] );
+			battlefield.moveShip( battlefield.shipsCollection.get( '3' ), [ 3, 1 ] );
+			battlefield.moveShip( battlefield.shipsCollection.get( '4' ), [ 4, 1 ] );
 
 			battlefield.reset();
 
@@ -442,16 +442,6 @@ describe( 'Battlefield', () => {
 				expect( ship.position ).to.deep.equal( [ null, null ] );
 				expect( ship.isCollision ).to.false;
 			}
-		} );
-
-		it( 'should fire reset event', () => {
-			const spy = sandbox.spy();
-
-			battlefield.on( 'reset', spy );
-
-			battlefield.reset();
-
-			sinon.assert.calledOnce( spy );
 		} );
 	} );
 
