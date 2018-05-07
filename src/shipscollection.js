@@ -1,30 +1,10 @@
 import Ship from './ship.js';
-import EmitterMixin from '@ckeditor/ckeditor5-utils/src/emittermixin.js';
-import mix from '@ckeditor/ckeditor5-utils/src/mix.js';
+import Collection from '@ckeditor/ckeditor5-utils/src/collection.js';
 
 /**
- * @mixes EmitterMixin.
+ * @extends Collection.
  */
-export default class ShipsCollection {
-	constructor() {
-		/**
-		 * Stores Ships.
-		 *
-		 * @private
-		 * @type {Map<Ship.id, Ship>}
-		 */
-		this._items = new Map();
-	}
-
-	/**
-	 * Returns ship length.
-	 *
-	 * @returns {Number}
-	 */
-	get length() {
-		return this._items.size;
-	}
-
+export default class ShipsCollection extends Collection {
 	/**
 	 * Adds ships to the collection.
 	 *
@@ -32,21 +12,10 @@ export default class ShipsCollection {
 	 */
 	add( ship ) {
 		if ( Array.isArray( ship ) ) {
-			ship.forEach( shipItem => this.add( shipItem ) );
+			ship.forEach( shipItem => super.add( shipItem ) );
 		} else {
-			this._items.set( ship.id, ship );
-			this.fire( 'add', ship );
+			super.add( ship );
 		}
-	}
-
-	/**
-	 * Returns ship of given id.
-	 *
-	 * @param {String} id Ship id.
-	 * @returns {Ship}
-	 */
-	get( id ) {
-		return this._items.get( id );
 	}
 
 	/**
@@ -65,13 +34,6 @@ export default class ShipsCollection {
 	 */
 	toJSON() {
 		return Array.from( this._items.values(), ship => ship.toJSON() );
-	}
-
-	/**
-	 * @returns {Iterator.<Ship>}
-	 */
-	[ Symbol.iterator]() {
-		return this._items.values();
 	}
 
 	/**
@@ -104,5 +66,3 @@ export default class ShipsCollection {
 		return config.map( data => new Ship( data ) );
 	}
 }
-
-mix( ShipsCollection, EmitterMixin );

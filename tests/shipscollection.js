@@ -1,4 +1,5 @@
 import ShipsCollection from '../src/shipscollection';
+import Collection from '@ckeditor/ckeditor5-utils/src/collection';
 import Ship from '../src/ship';
 
 describe( 'ShipsCollection', () => {
@@ -14,37 +15,41 @@ describe( 'ShipsCollection', () => {
 	} );
 
 	describe( 'constructor()', () => {
+		it( 'should extend Collection', () => {
+			expect( shipsCollection ).to.instanceof( Collection );
+		} );
+
 		it( 'should create empty shipsCollection', () => {
 			expect( shipsCollection ).to.have.property( 'length', 0 );
 		} );
 	} );
 
-	describe( 'add() / get()', () => {
-		it( 'should add ship instance to the collection and get it by id', () => {
-			const ship = new Ship( { length: 2, id: 1 } );
+	describe( 'add()', () => {
+		it( 'should add ship instance to the collection', () => {
+			const ship = new Ship( { length: 2, id: '1' } );
 
 			shipsCollection.add( ship );
 
 			expect( shipsCollection.length ).to.equal( 1 );
-			expect( shipsCollection.get( 1 ) ).to.equal( ship );
+			expect( shipsCollection.get( '1' ) ).to.equal( ship );
 		} );
 
-		it( 'should add many ships to the collection and get in by id', () => {
-			const ship1 = new Ship( { length: 2, id: 1 } );
-			const ship2 = new Ship( { length: 2, id: 2 } );
+		it( 'should add many ships to the collection', () => {
+			const ship1 = new Ship( { length: 2, id: '1' } );
+			const ship2 = new Ship( { length: 2, id: '2' } );
 
 			shipsCollection.add( [ ship1, ship2 ] );
 
 			expect( shipsCollection.length ).to.equal( 2 );
-			expect( shipsCollection.get( 1 ) ).to.equal( ship1 );
-			expect( shipsCollection.get( 2 ) ).to.equal( ship2 );
+			expect( shipsCollection.get( '1' ) ).to.equal( ship1 );
+			expect( shipsCollection.get( '2' ) ).to.equal( ship2 );
 		} );
 	} );
 
 	describe( 'getReversed()', () => {
 		it( 'should get list of ships in reversed order', () => {
-			const ship1 = new Ship( { length: 2, id: 1 } );
-			const ship2 = new Ship( { length: 2, id: 2 } );
+			const ship1 = new Ship( { length: 2, id: '1' } );
+			const ship2 = new Ship( { length: 2, id: '2' } );
 
 			shipsCollection.add( [ ship1, ship2 ] );
 
@@ -57,9 +62,9 @@ describe( 'ShipsCollection', () => {
 
 	describe( 'toJSON()', () => {
 		it( 'should return serialized ships collection', () => {
-			const ship1 = new Ship( { length: 3, id: 1 } );
-			const ship2 = new Ship( { length: 3, id: 2 } );
-			const ship3 = new Ship( { length: 3, id: 3 } );
+			const ship1 = new Ship( { length: 3, id: '1' } );
+			const ship2 = new Ship( { length: 3, id: '2' } );
+			const ship3 = new Ship( { length: 3, id: '3' } );
 
 			sandbox.stub( ship1, 'toJSON' ).returns( { a: 'b' } );
 			sandbox.stub( ship2, 'toJSON' ).returns( { c: 'd' } );
@@ -73,24 +78,6 @@ describe( 'ShipsCollection', () => {
 			expect( result[ 0 ] ).to.be.deep.equal( { a: 'b' } );
 			expect( result[ 1 ] ).to.be.deep.equal( { c: 'd' } );
 			expect( result[ 2 ] ).to.be.deep.equal( { e: 'f' } );
-		} );
-	} );
-
-	describe( 'iterator', () => {
-		it( 'should iterate trough collection', () => {
-			const ship1 = new Ship( { length: 3, id: 1 } );
-			const ship2 = new Ship( { length: 3, id: 2 } );
-			const ship3 = new Ship( { length: 3, id: 3 } );
-
-			let index = 0;
-			shipsCollection.add( [ ship1, ship2, ship3 ] );
-
-			for ( const item of shipsCollection ) {
-				expect( item ).to.instanceof( Ship );
-				index++;
-			}
-
-			expect( index ).to.equal( 3 );
 		} );
 	} );
 
