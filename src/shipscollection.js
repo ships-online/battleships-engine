@@ -19,15 +19,6 @@ export default class ShipsCollection extends Collection {
 	}
 
 	/**
-	 * Returns reversed array of ships.
-	 *
-	 * @returns {Array.<Ship>} reversed array of Ships.
-	 */
-	getReversed() {
-		return Array.from( this._items.values() ).reverse();
-	}
-
-	/**
 	 * Serializes collection to JSON.
 	 *
 	 * @returns {Array<Object>}

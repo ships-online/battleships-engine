@@ -46,20 +46,6 @@ describe( 'ShipsCollection', () => {
 		} );
 	} );
 
-	describe( 'getReversed()', () => {
-		it( 'should get list of ships in reversed order', () => {
-			const ship1 = new Ship( { length: 2, id: '1' } );
-			const ship2 = new Ship( { length: 2, id: '2' } );
-
-			shipsCollection.add( [ ship1, ship2 ] );
-
-			const result = shipsCollection.getReversed();
-
-			expect( result[ 0 ] ).to.equal( ship2 );
-			expect( result[ 1 ] ).to.equal( ship1 );
-		} );
-	} );
-
 	describe( 'toJSON()', () => {
 		it( 'should return serialized ships collection', () => {
 			const ship1 = new Ship( { length: 3, id: '1' } );
