@@ -391,6 +391,10 @@ describe( 'Battlefield', () => {
 	} );
 
 	describe( 'validateShips()', () => {
+		it( 'should return false when there is no ships to validate', () => {
+			expect( battlefield.validateShips( [] ) ).to.false;
+		} );
+
 		it( 'should return true when ships are inside battlefield bounds and do not have a collision', () => {
 			const ship1 = new Ship( { length: 4 } );
 			const ship2 = new Ship( { length: 4 } );

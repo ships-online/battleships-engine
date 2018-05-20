@@ -252,6 +252,11 @@ export default class Battlefield {
 	 */
 	validateShips( shipsJSON ) {
 		const ships = ShipsCollection.createShipsFromJSON( shipsJSON );
+
+		if ( !ships.length ) {
+			return false;
+		}
+
 		const battlefield = new this.constructor( this.size, {} );
 
 		const result = ships.every( ship => {
