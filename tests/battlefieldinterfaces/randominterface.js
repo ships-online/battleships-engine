@@ -40,5 +40,14 @@ describe( 'Battlefield random interface', () => {
 				expect( ship.position ).to.deep.equal( [ null, null ] );
 			}
 		} );
+
+		it( 'should not get into infinite loop when random interface do not find place for a ship.', () => {
+			battlefield = new Battlefield( 1, { 1: 2 } );
+			battlefield.shipsCollection.add( ShipsCollection.createShipsFromSchema( battlefield.shipsSchema ) );
+
+			battlefield.random();
+
+			expect( Array.from( battlefield.shipsCollection, ship => ship.isCollision ) ).to.have.members( [ true, true ] );
+		} );
 	} );
 } );

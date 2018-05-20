@@ -17,8 +17,9 @@ const RandomInterface = {
 
 		this._fields.clear();
 
-		for ( const ship of this.shipsCollection.getReversed() ) {
+		for ( const ship of Array.from( this.shipsCollection ).reverse() ) {
 			let done = false;
+			let attempts = 0;
 
 			while ( !done ) {
 				const isRotated = !!random( 0, 1 );
@@ -27,7 +28,13 @@ const RandomInterface = {
 
 				this.moveShip( ship, [ x, y ], isRotated );
 				this.verifyExistingCollisions();
-				done = !this.checkShipCollision( ship );
+
+				if ( attempts++ < 100 ) {
+					done = !this.checkShipCollision( ship );
+				} else {
+					this.checkShipCollision( ship );
+					done = true;
+				}
 			}
 		}
 	}
