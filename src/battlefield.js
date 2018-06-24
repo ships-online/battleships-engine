@@ -34,7 +34,7 @@ export default class Battlefield {
 		 * Defines when battlefield API is locked for all actions.
 		 *
 		 * @observable
-		 * @type {Boolean}
+		 * @member {Boolean} #isLocked
 		 */
 		this.set( 'isLocked', false );
 
@@ -43,7 +43,7 @@ export default class Battlefield {
 		 *
 		 * @readonly
 		 * @observable
-		 * @type {Boolean}
+		 * @member {Boolean} #isCollision
 		 */
 		this.set( 'isCollision', false );
 

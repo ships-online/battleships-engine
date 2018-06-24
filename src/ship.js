@@ -35,7 +35,7 @@ export default class Ship {
 		 *
 		 * @observable
 		 * @readonly
-		 * @type {Boolean} game.Ship#isRotated
+		 * @member {Boolean} #isRotated
 		 */
 		this.set( 'isRotated', data.isRotated || false );
 
@@ -43,7 +43,7 @@ export default class Ship {
 		 * Ship position on the battlefield.
 		 *
 		 * @observable
-		 * @type {Array<Number, Number>}
+		 * @member {Array<Number, Number>} #position
 		 */
 		this.set( 'position', data.position || [ null, null ] );
 
@@ -51,7 +51,7 @@ export default class Ship {
 		 * Defines if ship has a collision with other ship on the battlefield.
 		 *
 		 * @observable
-		 * @type {Boolean}
+		 * @member {Boolean} #isCollision
 		 */
 		this.set( 'isCollision', false );
 
