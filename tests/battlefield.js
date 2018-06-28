@@ -427,16 +427,15 @@ describe( 'Battlefield', () => {
 	} );
 
 	describe( 'reset()', () => {
-		it( 'should reset battlefield and ship collection to the default values', () => {
+		it( 'should remove all markers and takes off ships from the battlefield', () => {
 			battlefield.shipsCollection.add( new Ship( { id: '1', length: 2 } ) );
 			battlefield.shipsCollection.add( new Ship( { id: '2', length: 2 } ) );
-			battlefield.shipsCollection.add( new Ship( { id: '3', length: 2 } ) );
-			battlefield.shipsCollection.add( new Ship( { id: '4', length: 2 } ) );
 
 			battlefield.moveShip( battlefield.shipsCollection.get( '1' ), [ 1, 1 ] );
 			battlefield.moveShip( battlefield.shipsCollection.get( '2' ), [ 2, 1 ] );
-			battlefield.moveShip( battlefield.shipsCollection.get( '3' ), [ 3, 1 ] );
-			battlefield.moveShip( battlefield.shipsCollection.get( '4' ), [ 4, 1 ] );
+
+			battlefield.markAsMissed( [ 3, 3 ] );
+			battlefield.markAsHit( [ 3, 4 ] );
 
 			battlefield.reset();
 
@@ -446,6 +445,24 @@ describe( 'Battlefield', () => {
 				expect( ship.position ).to.deep.equal( [ null, null ] );
 				expect( ship.isCollision ).to.false;
 			}
+		} );
+	} );
+
+	describe( 'clear()', () => {
+		it( 'should remove all markers and ships', () => {
+			battlefield.shipsCollection.add( new Ship( { id: '1', length: 2 } ) );
+			battlefield.shipsCollection.add( new Ship( { id: '2', length: 2 } ) );
+
+			battlefield.moveShip( battlefield.shipsCollection.get( '1' ), [ 1, 1 ] );
+			battlefield.moveShip( battlefield.shipsCollection.get( '2' ), [ 2, 1 ] );
+
+			battlefield.markAsMissed( [ 3, 3 ] );
+			battlefield.markAsHit( [ 3, 4 ] );
+
+			battlefield.clear();
+
+			expect( Array.from( battlefield ) ).to.deep.equal( [] );
+			expect( battlefield.shipsCollection ).to.length( 0 );
 		} );
 	} );
 

@@ -280,7 +280,7 @@ export default class Battlefield {
 	}
 
 	/**
-	 * Resets battlefield to the default state.
+	 * Removes all markers and takes off all ships from the battlefield.
 	 */
 	reset() {
 		this._fields.clear();
@@ -288,6 +288,14 @@ export default class Battlefield {
 		for ( const ship of this.shipsCollection ) {
 			ship.reset();
 		}
+	}
+
+	/**
+	 * Removes all markers and ships.
+	 */
+	clear() {
+		this.shipsCollection.clear();
+		this._fields.clear();
 	}
 
 	/**
