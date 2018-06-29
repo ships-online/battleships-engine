@@ -1,13 +1,13 @@
 import Battlefield from '../../src/battlefield.js';
-import shootInterface from '../../src/battlefieldinterfaces/shootinterface';
+import shotInterface from '../../src/battlefieldinterfaces/shotinterface';
 import Ship from '../../src/ship';
 import mix from '@ckeditor/ckeditor5-utils/src/mix';
 
-describe( 'Battlefield shoot interface', () => {
+describe( 'Battlefield shot interface', () => {
 	let battlefield;
 
 	beforeEach( () => {
-		mix( Battlefield, shootInterface );
+		mix( Battlefield, shotInterface );
 
 		battlefield = new Battlefield( 10, { 1: 4, 2: 3, 3: 2, 4: 1 } );
 	} );
@@ -17,12 +17,12 @@ describe( 'Battlefield shoot interface', () => {
 	} );
 
 	it( 'should be as class interface', () => {
-		expect( battlefield.shoot ).to.be.a( 'function' );
+		expect( battlefield.shot ).to.be.a( 'function' );
 	} );
 
-	describe( 'shoot', () => {
+	describe( 'shot', () => {
 		it( 'should mark field as missed and return data when field is empty', () => {
-			const result = battlefield.shoot( [ 1, 1 ] );
+			const result = battlefield.shot( [ 1, 1 ] );
 
 			expect( battlefield.getField( [ 1, 1 ] ).isMissed ).to.true;
 			expect( battlefield.getField( [ 1, 1 ] ).isHit ).to.false;
@@ -37,7 +37,7 @@ describe( 'Battlefield shoot interface', () => {
 
 			battlefield.moveShip( ship, [ 1, 1 ] );
 
-			const result = battlefield.shoot( [ 1, 1 ] );
+			const result = battlefield.shot( [ 1, 1 ] );
 
 			expect( battlefield.getField( [ 1, 1 ] ).isMissed ).to.false;
 			expect( battlefield.getField( [ 1, 1 ] ).isHit ).to.true;
@@ -50,7 +50,7 @@ describe( 'Battlefield shoot interface', () => {
 		it( 'should return data when field is already set as missed', () => {
 			battlefield.markAsMissed( [ 1, 1 ] );
 
-			expect( battlefield.shoot( [ 1, 1 ] ) ).to.deep.equal( {
+			expect( battlefield.shot( [ 1, 1 ] ) ).to.deep.equal( {
 				type: 'missed',
 				notEmpty: true,
 				position: [ 1, 1 ]
@@ -62,7 +62,7 @@ describe( 'Battlefield shoot interface', () => {
 
 			battlefield.markAsHit( [ 1, 1 ], ship );
 
-			expect( battlefield.shoot( [ 1, 1 ] ) ).to.deep.equal( {
+			expect( battlefield.shot( [ 1, 1 ] ) ).to.deep.equal( {
 				type: 'hit',
 				notEmpty: true,
 				position: [ 1, 1 ]
@@ -74,7 +74,7 @@ describe( 'Battlefield shoot interface', () => {
 
 			battlefield.moveShip( ship, [ 1, 1 ] );
 
-			battlefield.shoot( [ 2, 1 ] );
+			battlefield.shot( [ 2, 1 ] );
 
 			expect( ship.damages ).to.have.members( [ false, true ] );
 		} );
@@ -86,8 +86,8 @@ describe( 'Battlefield shoot interface', () => {
 			battlefield.moveShip( ship, [ 1, 1 ] );
 			battlefield.on( 'shipSunk', spy );
 
-			battlefield.shoot( [ 1, 1 ] );
-			battlefield.shoot( [ 2, 1 ] );
+			battlefield.shot( [ 1, 1 ] );
+			battlefield.shot( [ 2, 1 ] );
 
 			expect( spy.calledOnce ).to.true;
 			expect( spy.firstCall.args[ 1 ] ).to.equal( ship );

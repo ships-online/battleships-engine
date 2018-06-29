@@ -1,14 +1,14 @@
 import Battlefield from './battlefield';
-import ShootInterface from './battlefieldinterfaces/shootinterface';
+import ShotInterface from './battlefieldinterfaces/shotinterface';
 import mix from '@ckeditor/ckeditor5-utils/src/mix';
 
 /**
  * Class that represents Opponent Battlefield.
  *
  * @extends Battlefield
- * @implements ShootInterface
+ * @implements ShotInterface
  */
 export default class OpponentBattlefield extends Battlefield {
 }
 
-mix( OpponentBattlefield, ShootInterface );
+mix( OpponentBattlefield, ShotInterface );

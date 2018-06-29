@@ -19,7 +19,7 @@ export default class Field {
 		 * Field might have 3 states:
 		 * * `true` - field is marked as hit
 		 * * `false` - field is marked as missed
-		 * * `undefined` - no shoot yet
+		 * * `undefined` - no shot yet
 		 *
 		 * @private
 		 * @type {Boolean|undefined}
