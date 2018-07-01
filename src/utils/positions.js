@@ -4,7 +4,7 @@
  * @param {Array<Number>} position Position [ x, y ].
  * @returns {Array<Number>} Position [ x, y ].
  */
-export function getPositionAtTheTopOf( position ) {
+export function getPositionAtTheTop( position ) {
 	return [ position[ 0 ], position[ 1 ] - 1 ];
 }
 
@@ -14,7 +14,7 @@ export function getPositionAtTheTopOf( position ) {
  * @param {Array<Number>} position Position [ x, y ].
  * @returns {Array<Number>} Position [ x, y ].
  */
-export function getPositionAtTheRightOf( position ) {
+export function getPositionAtTheRight( position ) {
 	return [ position[ 0 ] + 1, position[ 1 ] ];
 }
 
@@ -24,7 +24,7 @@ export function getPositionAtTheRightOf( position ) {
  * @param {Array<Number>} position Position [ x, y ].
  * @returns {Array<Number>} Position [ x, y ].
  */
-export function getPositionAtTheBottomOf( position ) {
+export function getPositionAtTheBottom( position ) {
 	return [ position[ 0 ], position[ 1 ] + 1 ];
 }
 
@@ -34,7 +34,7 @@ export function getPositionAtTheBottomOf( position ) {
  * @param {Array<Number>} position Position [ x, y ].
  * @returns {Array<Number>} Position [ x, y ].
  */
-export function getPositionAtTheLeftOf( position ) {
+export function getPositionAtTheLeft( position ) {
 	return [ position[ 0 ] - 1, position[ 1 ] ];
 }
 
@@ -44,8 +44,8 @@ export function getPositionAtTheLeftOf( position ) {
  * @param {Array<Number>} position Position [ x, y ].
  * @returns {Array<Number>} Position [ x, y ].
  */
-export function getPositionAtTheTopRightOf( position ) {
-	return getPositionAtTheRightOf( getPositionAtTheTopOf( position ) );
+export function getPositionAtTheTopRight( position ) {
+	return getPositionAtTheRight( getPositionAtTheTop( position ) );
 }
 
 /**
@@ -54,8 +54,8 @@ export function getPositionAtTheTopRightOf( position ) {
  * @param {Array<Number>} position Position [ x, y ].
  * @returns {Array<Number>} Position [ x, y ].
  */
-export function getPositionAtTheBottomRightOf( position ) {
-	return getPositionAtTheRightOf( getPositionAtTheBottomOf( position ) );
+export function getPositionAtTheBottomRight( position ) {
+	return getPositionAtTheRight( getPositionAtTheBottom( position ) );
 }
 
 /**
@@ -64,8 +64,8 @@ export function getPositionAtTheBottomRightOf( position ) {
  * @param {Array<Number>} position Position [ x, y ].
  * @returns {Array<Number>} Position [ x, y ].
  */
-export function getPositionAtTheBottomLeftOf( position ) {
-	return getPositionAtTheLeftOf( getPositionAtTheBottomOf( position ) );
+export function getPositionAtTheBottomLeft( position ) {
+	return getPositionAtTheLeft( getPositionAtTheBottom( position ) );
 }
 
 /**
@@ -74,8 +74,8 @@ export function getPositionAtTheBottomLeftOf( position ) {
  * @param {Array<Number>} position Position [ x, y ].
  * @returns {Array<Number>} Position [ x, y ].
  */
-export function getPositionAtTheTopLeftOf( position ) {
-	return getPositionAtTheLeftOf( getPositionAtTheTopOf( position ) );
+export function getPositionAtTheTopLeft( position ) {
+	return getPositionAtTheLeft( getPositionAtTheTop( position ) );
 }
 
 /**
@@ -86,14 +86,14 @@ export function getPositionAtTheTopLeftOf( position ) {
  */
 export function getSurroundingPositions( position ) {
 	return [
-		getPositionAtTheTopOf( position ),
-		getPositionAtTheTopRightOf( position ),
-		getPositionAtTheRightOf( position ),
-		getPositionAtTheBottomRightOf( position ),
-		getPositionAtTheBottomOf( position ),
-		getPositionAtTheBottomLeftOf( position ),
-		getPositionAtTheLeftOf( position ),
-		getPositionAtTheTopLeftOf( position )
+		getPositionAtTheTop( position ),
+		getPositionAtTheTopRight( position ),
+		getPositionAtTheRight( position ),
+		getPositionAtTheBottomRight( position ),
+		getPositionAtTheBottom( position ),
+		getPositionAtTheBottomLeft( position ),
+		getPositionAtTheLeft( position ),
+		getPositionAtTheTopLeft( position )
 	];
 }
 
@@ -104,7 +104,7 @@ export function getSurroundingPositions( position ) {
  * @returns {Array<Array>}
  */
 export function getSurroundingHorizontal( position ) {
-	return [ getPositionAtTheLeftOf( position ), getPositionAtTheRightOf( position ) ];
+	return [ getPositionAtTheLeft( position ), getPositionAtTheRight( position ) ];
 }
 
 /**
@@ -114,5 +114,5 @@ export function getSurroundingHorizontal( position ) {
  * @returns {Array<Array>}
  */
 export function getSurroundingVertical( position ) {
-	return [ getPositionAtTheTopOf( position ), getPositionAtTheBottomOf( position ) ];
+	return [ getPositionAtTheTop( position ), getPositionAtTheBottom( position ) ];
 }
