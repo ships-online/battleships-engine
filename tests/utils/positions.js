@@ -7,63 +7,77 @@ import {
 	getPositionAtTheBottomOf,
 	getPositionAtTheBottomLeftOf,
 	getPositionAtTheLeftOf,
-	getSurroundingPositions
+	getSurroundingPositions,
+	getSurroundingHorizontal,
+	getSurroundingVertical
 } from '../../src/utils/positions';
 
 describe( 'positions', () => {
-	describe( 'getPositionAtTheTopLeftOf', () => {
+	describe( 'getPositionAtTheTopLeftOf()', () => {
 		it( 'should return position at the top left of given position', () => {
 			expect( getPositionAtTheTopLeftOf( [ 1, 1 ] ) ).to.deep.equal( [ 0, 0 ] );
 		} );
 	} );
 
-	describe( 'getPositionAtTheTopOf', () => {
+	describe( 'getPositionAtTheTopOf()', () => {
 		it( 'should return position at the top of given position', () => {
 			expect( getPositionAtTheTopOf( [ 1, 1 ] ) ).to.deep.equal( [ 1, 0 ] );
 		} );
 	} );
 
-	describe( 'getPositionAtTheTopRightOf', () => {
+	describe( 'getPositionAtTheTopRightOf()', () => {
 		it( 'should return position at the top right of given position', () => {
 			expect( getPositionAtTheTopRightOf( [ 1, 1 ] ) ).to.deep.equal( [ 2, 0 ] );
 		} );
 	} );
 
-	describe( 'getPositionAtTheRightOf', () => {
+	describe( 'getPositionAtTheRightOf()', () => {
 		it( 'should return position at the right of given position', () => {
 			expect( getPositionAtTheRightOf( [ 1, 1 ] ) ).to.deep.equal( [ 2, 1 ] );
 		} );
 	} );
 
-	describe( 'getPositionAtTheBottomRightOf', () => {
+	describe( 'getPositionAtTheBottomRightOf()', () => {
 		it( 'should return position at the bottom right of given position', () => {
 			expect( getPositionAtTheBottomRightOf( [ 1, 1 ] ) ).to.deep.equal( [ 2, 2 ] );
 		} );
 	} );
 
-	describe( 'getPositionAtTheBottomOf', () => {
+	describe( 'getPositionAtTheBottomOf()', () => {
 		it( 'should return position at the bottom of given position', () => {
 			expect( getPositionAtTheBottomOf( [ 1, 1 ] ) ).to.deep.equal( [ 1, 2 ] );
 		} );
 	} );
 
-	describe( 'getPositionAtTheBottomLeftOf', () => {
+	describe( 'getPositionAtTheBottomLeftOf()', () => {
 		it( 'should return position at the bottom left of given position', () => {
 			expect( getPositionAtTheBottomLeftOf( [ 1, 1 ] ) ).to.deep.equal( [ 0, 2 ] );
 		} );
 	} );
 
-	describe( 'getPositionAtTheLeftOf', () => {
+	describe( 'getPositionAtTheLeftOf()', () => {
 		it( 'should return position at the bottom left of given position', () => {
 			expect( getPositionAtTheLeftOf( [ 1, 1 ] ) ).to.deep.equal( [ 0, 1 ] );
 		} );
 	} );
 
-	describe( 'getSurroundingPositions', () => {
+	describe( 'getSurroundingPositions()', () => {
 		it( 'should return surrounding position of given position', () => {
 			expect( getSurroundingPositions( [ 1, 1 ] ) ).to.deep.equal( [
 				[ 1, 0 ], [ 2, 0 ], [ 2, 1 ], [ 2, 2 ], [ 1, 2 ], [ 0, 2 ], [ 0, 1 ], [ 0, 0 ]
 			] );
+		} );
+	} );
+
+	describe( 'getSurroundingHorizontal()', () => {
+		it( 'should return surrounding position in the horizontal axis', () => {
+			expect( getSurroundingHorizontal( [ 1, 1 ] ) ).to.deep.equal( [ [ 0, 1 ], [ 2, 1 ] ] );
+		} );
+	} );
+
+	describe( 'getSurroundingVertical()', () => {
+		it( 'should return surrounding position in the vertical axis', () => {
+			expect( getSurroundingVertical( [ 1, 1 ] ) ).to.deep.equal( [ [ 1, 0 ], [ 1, 2 ] ] );
 		} );
 	} );
 } );

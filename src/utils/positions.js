@@ -96,3 +96,23 @@ export function getSurroundingPositions( position ) {
 		getPositionAtTheTopLeftOf( position )
 	];
 }
+
+/**
+ * Returns positions surrounding given position in the horizontal axis.
+ *
+ * @param {Array<Array>} position Position [ x, y ].
+ * @returns {Array<Array>}
+ */
+export function getSurroundingHorizontal( position ) {
+	return [ getPositionAtTheLeftOf( position ), getPositionAtTheRightOf( position ) ];
+}
+
+/**
+ * Returns positions surrounding given position in the vertical axis.
+ *
+ * @param {Array<Array>} position Position [ x, y ].
+ * @returns {Array<Array>}
+ */
+export function getSurroundingVertical( position ) {
+	return [ getPositionAtTheTopOf( position ), getPositionAtTheBottomOf( position ) ];
+}
