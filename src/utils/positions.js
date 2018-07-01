@@ -1,5 +1,5 @@
 /**
- * Get position at the top of passed position.
+ * Returns position at the top of given position.
  *
  * @param {Array<Number>} position Position [ x, y ].
  * @returns {Array<Number>} Position [ x, y ].
@@ -9,7 +9,7 @@ export function getPositionAtTheTopOf( position ) {
 }
 
 /**
- * Get position at the right of passed position.
+ * Returns position at the right of given position.
  *
  * @param {Array<Number>} position Position [ x, y ].
  * @returns {Array<Number>} Position [ x, y ].
@@ -19,7 +19,7 @@ export function getPositionAtTheRightOf( position ) {
 }
 
 /**
- * Get position at the bottom of passed position.
+ * Returns position at the bottom of given position.
  *
  * @param {Array<Number>} position Position [ x, y ].
  * @returns {Array<Number>} Position [ x, y ].
@@ -29,7 +29,7 @@ export function getPositionAtTheBottomOf( position ) {
 }
 
 /**
- * Get position at the left of passed position.
+ * Returns position at the left of given position.
  *
  * @param {Array<Number>} position Position [ x, y ].
  * @returns {Array<Number>} Position [ x, y ].
@@ -39,7 +39,7 @@ export function getPositionAtTheLeftOf( position ) {
 }
 
 /**
- * Get position at the top right of passed position.
+ * Returns position at the top right of given position.
  *
  * @param {Array<Number>} position Position [ x, y ].
  * @returns {Array<Number>} Position [ x, y ].
@@ -49,7 +49,7 @@ export function getPositionAtTheTopRightOf( position ) {
 }
 
 /**
- * Get position at the bottom right of passed position.
+ * Returns position at the bottom right of given position.
  *
  * @param {Array<Number>} position Position [ x, y ].
  * @returns {Array<Number>} Position [ x, y ].
@@ -59,7 +59,7 @@ export function getPositionAtTheBottomRightOf( position ) {
 }
 
 /**
- * Get position at the bottom left of passed position.
+ * Returns position at the bottom left of given position.
  *
  * @param {Array<Number>} position Position [ x, y ].
  * @returns {Array<Number>} Position [ x, y ].
@@ -69,7 +69,7 @@ export function getPositionAtTheBottomLeftOf( position ) {
 }
 
 /**
- * Get position at the top left of passed position.
+ * Returns position at the top left of given position.
  *
  * @param {Array<Number>} position Position [ x, y ].
  * @returns {Array<Number>} Position [ x, y ].
@@ -79,7 +79,7 @@ export function getPositionAtTheTopLeftOf( position ) {
 }
 
 /**
- * Get surrounding position at the top left of passed position.
+ * Returns surrounding position at the top left of given position.
  *
  * @param {Array<Number>} position Position [ x, y ].
  * @returns {Array<Array>}
