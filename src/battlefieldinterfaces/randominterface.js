@@ -1,4 +1,4 @@
-import random from '../utils/random.js';
+import random from '@ckeditor/ckeditor5-utils/src/lib/lodash/random';
 
 /**
  * Injects the randomize API into host Battlefield.
