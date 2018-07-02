@@ -163,7 +163,7 @@ export default class Battlefield {
 		}
 
 		// Update position of moved ship on the battlefield.
-		for ( const pos of ship.getCoordinates() ) {
+		for ( const pos of ship.getPositions() ) {
 			const field = this.getField( pos );
 
 			if ( field && field.getShip( ship.id ) ) {
@@ -178,7 +178,7 @@ export default class Battlefield {
 		ship.isRotated = isRotated;
 		ship.position = [ x, y ];
 
-		for ( const pos of ship.getCoordinates() ) {
+		for ( const pos of ship.getPositions() ) {
 			this._getFieldOrCreate( pos ).addShip( ship );
 		}
 
@@ -209,7 +209,7 @@ export default class Battlefield {
 	checkShipCollision( ship ) {
 		let isCollision = false;
 
-		for ( const position of ship.getCoordinates() ) {
+		for ( const position of ship.getPositions() ) {
 			let field = this.getField( position );
 
 			// If there is more than one ship on this position then there is a collision.

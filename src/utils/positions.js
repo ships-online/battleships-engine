@@ -129,7 +129,7 @@ export function getSurroundingVertical( position ) {
  * @returns {Array.<Array>}
  */
 export function getPositionsAroundTheShip( ship, max ) {
-	const shipPositions = Array.from( ship.getCoordinates() );
+	const shipPositions = Array.from( ship.getPositions() );
 	let positions = [];
 
 	for ( const position of shipPositions ) {

@@ -75,7 +75,7 @@ export default class Ship {
 	get coordinates() {
 		const positions = [];
 
-		for ( const position of this.getCoordinates() ) {
+		for ( const position of this.getPositions() ) {
 			positions.push( position );
 		}
 
@@ -105,7 +105,7 @@ export default class Ship {
 	 *
 	 * @returns {Iterable.<Array>}
 	 */
-	* getCoordinates() {
+	* getPositions() {
 		const pos = this.position;
 		let step = 0;
 
@@ -152,7 +152,7 @@ export default class Ship {
 	setDamage( position ) {
 		let index = 0;
 
-		for ( const pos of this.getCoordinates() ) {
+		for ( const pos of this.getPositions() ) {
 			if ( pos[ 0 ] === position[ 0 ] && pos[ 1 ] === position[ 1 ] ) {
 				this.damages[ index ] = true;
 			}
