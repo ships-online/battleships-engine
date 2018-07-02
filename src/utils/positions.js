@@ -1,3 +1,7 @@
+import inRange from '@ckeditor/ckeditor5-utils/src/lib/lodash/inRange';
+import uniqWith from '@ckeditor/ckeditor5-utils/src/lib/lodash/uniqWith';
+import isEqual from '@ckeditor/ckeditor5-utils/src/lib/lodash/isEqual';
+
 /**
  * Returns position at the top of given position.
  *
@@ -79,10 +83,10 @@ export function getPositionAtTheTopLeft( position ) {
 }
 
 /**
- * Returns surrounding position at the top left of given position.
+ * Returns surrounding position.
  *
  * @param {Array<Number>} position Position [ x, y ].
- * @returns {Array<Array>}
+ * @returns {Array<Array>} Array of positions [ x, y ].
  */
 export function getSurroundingPositions( position ) {
 	return [
@@ -101,7 +105,7 @@ export function getSurroundingPositions( position ) {
  * Returns positions surrounding given position in the horizontal axis.
  *
  * @param {Array<Array>} position Position [ x, y ].
- * @returns {Array<Array>}
+ * @returns {Array<Array>} Array of positions [ x, y ].
  */
 export function getSurroundingHorizontal( position ) {
 	return [ getPositionAtTheLeft( position ), getPositionAtTheRight( position ) ];
@@ -111,8 +115,42 @@ export function getSurroundingHorizontal( position ) {
  * Returns positions surrounding given position in the vertical axis.
  *
  * @param {Array<Array>} position Position [ x, y ].
- * @returns {Array<Array>}
+ * @returns {Array<Array>} Array of positions [ x, y ].
  */
 export function getSurroundingVertical( position ) {
 	return [ getPositionAtTheTop( position ), getPositionAtTheBottom( position ) ];
+}
+
+/**
+ * Returns positions surrounding the given ship.
+ *
+ * @param {Ship} ship
+ * @param {Number} max Position with value greater than max will be not included.
+ * @returns {Array.<Array>}
+ */
+export function getPositionsAroundTheShip( ship, max ) {
+	const shipPositions = Array.from( ship.getCoordinates() );
+	let positions = [];
+
+	for ( const position of shipPositions ) {
+		positions = positions.concat( getSurroundingPositions( position ) );
+	}
+
+	return uniqWith( positions, isEqual )
+		.filter( position => {
+			return !shipPositions.some( shipPos => isEqual( position, shipPos ) ) && isPositionInBounds( position, max );
+		} );
+}
+
+/**
+ * Checks if position is in bounds (from 0 to max).
+ *
+ * @param {Array<Number>} position Position [ x, y ].
+ * @param {Number} max Position with value greater than max will be out of the bound.
+ * @returns {Boolean}
+ */
+export function isPositionInBounds( position, max ) {
+	const [ x, y ] = position;
+
+	return inRange( x, 0, max ) && inRange( y, 0, max );
 }
