@@ -1,3 +1,4 @@
+import fill from '@ckeditor/ckeditor5-utils/src/lib/lodash/fill';
 import ObservableMixin from '@ckeditor/ckeditor5-utils/src/observablemixin.js';
 import mix from '@ckeditor/ckeditor5-utils/src/mix.js';
 import uid from '@ckeditor/ckeditor5-utils/src/uid.js';
@@ -177,9 +178,7 @@ mix( Ship, ObservableMixin );
 function createFalsyArray( length ) {
 	const arr = [];
 
-	for ( let i = 0; i < length; i++ ) {
-		arr[ i ] = false;
-	}
+	arr.length = length;
 
-	return arr;
+	return fill( arr, false );
 }

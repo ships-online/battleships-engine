@@ -1,7 +1,7 @@
 import Field from './field';
 import ShipsCollection from './shipscollection';
 import Collection from '@ckeditor/ckeditor5-utils/src/collection';
-import { getSurroundingPositions } from './utils/positions.js';
+import { getSurroundingPositions, isPositionInBounds } from './utils/positions.js';
 import ObservableMixin from '@ckeditor/ckeditor5-utils/src/observablemixin';
 import mix from '@ckeditor/ckeditor5-utils/src/mix';
 
@@ -260,12 +260,10 @@ export default class Battlefield {
 		const battlefield = new this.constructor( this.size, {} );
 
 		const result = ships.every( ship => {
-			const isInBounds = ship.position[ 0 ] >= 0 &&
-				ship.tail[ 0 ] < this.size &&
-				ship.position[ 1 ] >= 0 &&
-				ship.tail[ 1 ] < this.size;
+			const isHeadInBounds = isPositionInBounds( ship.position, this.size );
+			const isTailInBounds = isPositionInBounds( ship.tail, this.size );
 
-			if ( !isInBounds ) {
+			if ( !isHeadInBounds || !isTailInBounds ) {
 				return false;
 			}
 
