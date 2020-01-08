@@ -8,7 +8,7 @@ export default class ShipsCollection extends Collection {
 	/**
 	 * Adds ships to the collection.
 	 *
-	 * @param {Ship|Array<Ship>} ship Ship instance ore list of ship instances.
+	 * @param {Ship|Array.<Ship>} ship Ship instance ore list of ship instances.
 	 */
 	add( ship ) {
 		if ( Array.isArray( ship ) ) {

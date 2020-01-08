@@ -1,5 +1,5 @@
 /**
- * Injects the shot API into host Battlefield.
+ * Injects the shot API into Battlefield.
  *
  * @interface ShotInterface
  */
@@ -7,8 +7,8 @@ const ShotInterface = {
 	/**
 	 * Take a shot.
 	 *
-	 * @param {Array<Number, Number>} position Position on the Battlefield.
-	 * @returns {Object} Shot summary.
+	 * @param {Array<Number,Number>} position Position on the Battlefield.
+	 * @returns {Object} Shot result.
 	 */
 	shot( position ) {
 		const field = this.getField( position );
