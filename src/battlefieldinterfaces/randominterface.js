@@ -1,18 +1,16 @@
-import random from '@ckeditor/ckeditor5-utils/src/lib/lodash/random';
+import { random } from 'lodash-es';
 
 /**
  * Injects the randomize API into host Battlefield.
- *
- * @interface RandomInterface
  */
-const RandomInterface = {
+export default class BattlefieldRandom {
 	random() {
 		if ( this.isLocked ) {
 			return;
 		}
 
 		for ( const ship of this.shipsCollection ) {
-			ship.position = [ null, null ];
+			ship.position = null;
 		}
 
 		this._fields.clear();
@@ -26,7 +24,7 @@ const RandomInterface = {
 				const x = random( 0, this.size - 1 );
 				const y = random( 0, this.size - 1 );
 
-				this.moveShip( ship, [ x, y ], isRotated );
+				this.moveShip( ship, new Position( x, y ), isRotated );
 				this.verifyExistingCollisions();
 
 				if ( attempts++ < 100 ) {
@@ -39,5 +37,3 @@ const RandomInterface = {
 		}
 	}
 };
-
-export default RandomInterface;

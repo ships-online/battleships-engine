@@ -1,51 +1,43 @@
+import Position from './position';
 import Field from './field';
-import ShipsCollection from './shipscollection';
-import Collection from '@ckeditor/ckeditor5-utils/src/collection';
-import { getSurroundingPositions, isPositionInBounds } from './utils/positions.js';
-import ObservableMixin from '@ckeditor/ckeditor5-utils/src/observablemixin';
-import mix from '@ckeditor/ckeditor5-utils/src/mix';
+import Ship from './ship';
+import Observable, { ObservableInterface } from 'js-utils/src/observable';
+import mix from 'js-utils/src/mix';
+
+type ShipsSchema = { [ key: number ]: number };
 
 /**
  * Stores information about items placed on the battlefield and provides API to arrange them.
- *
- * @mixes ObservableMixin
  */
-export default class Battlefield {
+export default class Battlefield implements ObservableInterface {
 	/**
-	 * @param {Number} size Size of the battlefield.
-	 * @param {Object} shipsSchema Defines how many ships of specific length will be in the game.
+	 * The size of the battlefield.
 	 */
-	constructor( size, shipsSchema ) {
-		/**
-		 * Size of the battlefield.
-		 *
-		 * @type {Number}
-		 */
+	readonly size: number;
+
+	/**
+	 * Definition of ships that can be placed on the battlefield.
+	 */
+	readonly shipsSchema: ShipsSchema;
+
+	/**
+	 * Defines when battlefield API is locked for all actions.
+	 */
+	isLocked: boolean = false;
+
+	/**
+	 * Defines if any of ships placed on the battlefield has a collision.
+	 */
+	hasCollision: boolean = false;
+
+	/**
+	 * @param size Size of the battlefield.
+	 * @param shipsSchema Defines how many ships of specific length will be in the game.
+	 */
+	constructor( size: number, shipsSchema: ShipsSchema ) {
 		this.size = size;
-
-		/**
-		 * Configuration of ships allowed on the battlefield.
-		 *
-		 * @type {Object}
-		 */
 		this.shipsSchema = shipsSchema;
-
-		/**
-		 * Defines when battlefield API is locked for all actions.
-		 *
-		 * @observable
-		 * @member {Boolean} #isLocked
-		 */
-		this.set( 'isLocked', false );
-
-		/**
-		 * Defines if any of ships placed on the battlefield has a collision.
-		 *
-		 * @readonly
-		 * @observable
-		 * @member {Boolean} #isCollision
-		 */
-		this.set( 'isCollision', false );
+		this.createObservable( 'isLocked', 'hasCollision' );
 
 		/**
 		 * Ships collection.
@@ -312,7 +304,7 @@ export default class Battlefield {
 	}
 }
 
-mix( Battlefield, ObservableMixin );
+mix( Battlefield, Observable );
 
 /**
  * Check if ship has collision with other ships on the same field.
