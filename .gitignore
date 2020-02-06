@@ -1,12 +1,5 @@
-# These files will be ignored by Git and linting tools:
-#	gulp jslint
-#
-# Be sure to append /** to folders to have everything inside them ignored.
-
-# All "dot directories".
-.*/**
-
+node_modules
+dist
+coverage
 .idea
-.npm-debug.log
-node_modules/**
-coverage/**
+.DS_Store
