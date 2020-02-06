@@ -182,7 +182,7 @@ class Battlefield {
 		const ships: Ship[] = [];
 
 		for ( const shipLength of Object.keys( schema ) ) {
-			for ( let i = schema[ shipLength ]; i <= 0; i-- ) {
+			for ( let i = schema[ shipLength ]; i > 0; i-- ) {
 				ships.push( new Ship( { length: parseInt( shipLength ) } ) );
 			}
 		}

@@ -332,4 +332,39 @@ describe( 'Battlefield', () => {
 			sinon.assert.called( spy );
 		} );
 	} );
+
+	describe( 'static createShipsFromSchema()', () => {
+		it( 'should create ships based on provided schema', () => {
+			const ships = Battlefield.createShipsFromSchema( { 2: 2, 3: 2 } );
+
+			expect( ships ).to.have.length( 4 );
+			expect( ships[ 0 ] ).to.have.property( 'length', 2 );
+			expect( ships[ 1 ] ).to.have.property( 'length', 2 );
+			expect( ships[ 2 ] ).to.have.property( 'length', 3 );
+			expect( ships[ 3 ] ).to.have.property( 'length', 3 );
+		} );
+	} );
+
+	describe( 'static createShipsFromJSON()', () => {
+		it( 'should create ships based on provided JSON', () => {
+			const result = Battlefield.createShipsFromJSON( [
+				{
+					id: '1',
+					length: 2,
+					isRotated: false
+				},
+				{
+					id: '2',
+					length: 3,
+					isRotated: true
+				}
+			] );
+
+			expect( result ).to.have.length( 2 );
+			expect( result[ 0 ] ).to.instanceof( Ship );
+			expect( result[ 0 ] ).to.have.property( 'id', '1' );
+			expect( result[ 1 ] ).to.instanceof( Ship );
+			expect( result[ 1 ] ).to.have.property( 'id', '2' );
+		} );
+	} );
 } );
