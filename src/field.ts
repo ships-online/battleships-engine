@@ -1,5 +1,5 @@
 import Position from './position';
-import Ship from './position';
+import Ship from './ship';
 
 /**
  * Class that represents  single field on the battlefield.
@@ -8,7 +8,7 @@ export default class Field {
 	/**
 	 * The position of the field.
 	 */
-	position: Position;
+	readonly position: Position;
 
 	/**
 	 * Field state.
@@ -30,13 +30,6 @@ export default class Field {
 	 */
 	constructor( position: Position ) {
 		this.position = position;
-	}
-
-	/**
-	 * Field id.
-	 */
-	get id(): string {
-		return `${ this.position.x }x${ this.position.y }`;
 	}
 
 	/**
@@ -93,6 +86,10 @@ export default class Field {
 		return this._ships.has( ship );
 	}
 
+	getShips(): IterableIterator<Ship> {
+		return this._ships.values();
+	}
+
 	/**
 	 * Returns first ship on the field.
 	 *
@@ -109,9 +106,5 @@ export default class Field {
 	 */
 	removeShip( ship: Ship ): void {
 		this._ships.delete( ship );
-	}
-
-	[ Symbol.iterator ]() {
-		return this._ships.values();
 	}
 }
