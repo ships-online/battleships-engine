@@ -27,6 +27,16 @@ describe( 'Position', () => {
 		} );
 	} );
 
+	describe( 'fromJSON()', () => {
+		it( 'should create position instance based on JSON data', () => {
+			const position = Position.fromJSON( [ 1, 2 ] );
+
+			expect( position ).to.instanceof( Position );
+			expect( position ).to.have.property( 'x', 1 );
+			expect( position ).to.have.property( 'y', 2 );
+		} );
+	} );
+
 	describe( 'isEqual()', () => {
 		it( 'should return true when positions are the same', () => {
 			const positionA = new Position( 1, 2 );

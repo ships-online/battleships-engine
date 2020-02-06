@@ -1,3 +1,5 @@
+export type PositionJSON = [ number, number ];
+
 export default class Position {
 	readonly x: number;
 	readonly y: number;
@@ -7,12 +9,16 @@ export default class Position {
 		this.y = y;
 	}
 
-	toString(): string {
-		return this.x + 'x' + this.y;
+	static fromJSON( json: PositionJSON ): Position {
+		return new Position( json[ 0 ], json[ 1 ] );
 	}
 
-	toJSON(): [ number, number ] {
+	toJSON(): PositionJSON {
 		return [ this.x, this.y ];
+	}
+
+	toString(): string {
+		return this.x + 'x' + this.y;
 	}
 
 	isEqual( position: Position ): boolean {
