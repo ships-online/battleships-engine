@@ -1,6 +1,6 @@
-import Battlefield from '../../src/battlefield';
+import Battlefield from '../../src/battlefields/battlefield';
 import ShipsCollection from '../../src/shipscollection';
-import randomInterface from '../../src/battlefieldinterfaces/randominterface';
+import randomInterface from '../../src/battlefields/interfaces/randominterface';
 import mix from '@ckeditor/ckeditor5-utils/src/mix';
 
 describe( 'Battlefield random interface', () => {

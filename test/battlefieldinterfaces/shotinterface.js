@@ -1,5 +1,5 @@
 import Battlefield from '../../src/battlefield.js';
-import shotInterface from '../../src/battlefieldinterfaces/shotinterface';
+import shotInterface from '../../src/battlefields/interfaces/shotinterface';
 import Ship from '../../src/ship';
 import mix from '@ckeditor/ckeditor5-utils/src/mix';
 

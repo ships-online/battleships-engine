@@ -1,4 +1,4 @@
-import Battlefield from '../src/battlefield';
+import Battlefield from '../src/battlefields/battlefield';
 import ShipsCollection from '../src/shipscollection';
 import Ship from '../src/ship';
 import Field from '../src/field';

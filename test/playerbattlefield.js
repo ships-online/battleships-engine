@@ -1,5 +1,5 @@
-import PlayerBattlefield from '../src/playerbattlefield';
-import Battlefield from '../src/battlefield';
+import PlayerBattlefield from '../src/battlefields/playerbattlefield';
+import Battlefield from '../src/battlefields/battlefield';
 import Ship from '../src/ship';
 
 describe( 'PlayerBattlefield', () => {

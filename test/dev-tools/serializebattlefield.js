@@ -1,5 +1,5 @@
 import serializeBattlefield from '../../src/dev-tools/serializebattlefield';
-import Battlefield from '../../src/battlefield';
+import Battlefield from '../../src/battlefields/battlefield';
 import Ship from '../../src/ship';
 
 describe( 'serializeBattlefield', () => {
