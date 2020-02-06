@@ -1,17 +1,18 @@
 export default class Position {
-	/**
-	 * X axis position.
-	 */
 	readonly x: number;
-
-	/**
-	 * Y axis position.
-	 */
 	readonly y: number;
 
 	constructor( x: number, y: number ) {
 		this.x = x;
 		this.y = y;
+	}
+
+	toString(): string {
+		return this.x + 'x' + this.y;
+	}
+
+	toJSON(): [ number, number ] {
+		return [ this.x, this.y ];
 	}
 
 	isEqual( position: Position ): boolean {
@@ -48,5 +49,18 @@ export default class Position {
 
 	getShiftedTopLeft(): Position {
 		return new Position( this.x - 1, this.y - 1 );
+	}
+
+	getSurroundingPositions(): Position[] {
+		return [
+			this.getShiftedTop(),
+			this.getShiftedTopRight(),
+			this.getShiftedRight(),
+			this.getShiftedBottomRight(),
+			this.getShiftedBottom(),
+			this.getShiftedBottomLeft(),
+			this.getShiftedLeft(),
+			this.getShiftedTopLeft(),
+		];
 	}
 }
