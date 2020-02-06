@@ -167,7 +167,7 @@ describe( 'Ship', () => {
 
 			expect( () => {
 				ship.hit( new Position( 5, 5 ) );
-			} ).to.throw( 'Ship has no field on this position.' );
+			} ).to.throw( Error, 'Ship has no field on this position.' );
 		} );
 	} );
 
