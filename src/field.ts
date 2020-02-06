@@ -1,4 +1,4 @@
-import Position from './position';
+import Position, { PositionJSON } from './position';
 import Ship from './ship';
 
 /**
@@ -28,8 +28,12 @@ export default class Field {
 	/**
 	 * @param position Position on the battlefield.
 	 */
-	constructor( position: Position ) {
-		this.position = position;
+	constructor( position: Position | PositionJSON ) {
+		if ( position instanceof Position ) {
+			this.position = position;
+		} else {
+			this.position = Position.fromJSON( position );
+		}
 	}
 
 	/**

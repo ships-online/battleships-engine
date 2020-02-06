@@ -11,8 +11,17 @@ describe( 'Field', () => {
 		field = new Field( position );
 	} );
 
-	it( 'should create instance', () => {
-		expect( field.position ).to.equal( position );
+	describe( 'constructor()', () => {
+		it( 'should create instance using position', () => {
+			expect( field.position ).to.equal( position );
+		} );
+
+		it( 'should create instance using position JSON', () => {
+			const field = new Field( [ 1, 2 ] );
+
+			expect( field.position ).to.instanceof( Position );
+			expect( field.position.toJSON() ).to.deep.equal( [ 1, 2 ] );
+		} );
 	} );
 
 	describe( 'hit marker', () => {
