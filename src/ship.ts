@@ -1,15 +1,12 @@
-import {fill, isArrayLikeObject} from 'lodash-es';
-import Position from './position';
-import Observable, { ObservableInterface } from 'js-utils/src/observable';
-import mix from 'js-utils/src/mix';
+import Position, { PositionJSON } from './position';
 import uid from 'js-utils/src/uid';
 
-type ShipData = { id?: string, isRotated?: boolean, length: number, position: Position | undefined };
+export type ShipConfig = { id?: string; isRotated?: boolean; position?: Position | PositionJSON; length: number };
 
 /**
  * Single ship implementation.
  */
-export default class Ship implements ObservableInterface {
+export default class Ship {
 	/**
 	 * The id if the ship.
 	 */
@@ -21,20 +18,20 @@ export default class Ship implements ObservableInterface {
 	position: Position;
 
 	/**
-	 * The orientation of the ship (horizontal or vertical).
-	 */
-	isRotated: boolean;
-
-	/**
 	 * The length of the ship.
 	 * In other words it's a number of fields that ship covers on the battlefield.
 	 */
 	length: number;
 
 	/**
+	 * The orientation of the ship (horizontal or vertical).
+	 */
+	isRotated = false;
+
+	/**
 	 * Defines if ship has a collision with other ship on the battlefield.
 	 */
-	hasCollision: boolean;
+	hasCollision = false;
 
 	/**
 	 * Stores information about which field of ship has been hit.
@@ -45,27 +42,27 @@ export default class Ship implements ObservableInterface {
 	 */
 	hitFields: boolean[];
 
-	/**
-	 * Number of fields
-	 */
-	/**
-	 * @param {Object} data Configuration.
-	 * @param {Number} data.length Ship length.
-	 * @param {String} [data.id] Ship id.
-	 * @param {Boolean} [data.isRotated] Ship orientation.
-	 * @param {Array<Number, Number>} [data.position] Ship position on the battlefield.
-	 */
-	constructor( { id= uid(), isRotated= false, position, length }: ShipData ) {
+	constructor( { id = uid(), isRotated = false, position, length }: ShipConfig ) {
 		this.id = id;
 		this.length = length;
+		this.isRotated = isRotated;
 		this.hitFields = createFalsyArray( length );
-		this.createObservables( 'isRotated', 'position', 'hasCollision' );
+
+		if ( position instanceof Position ) {
+			this.position = position;
+		} else if ( position ) {
+			this.position = Position.fromJSON( position );
+		}
 	}
 
 	/**
 	 * Returns an array with positions of all ship fields.
 	 */
 	get coordinates(): Position[] {
+		if ( !this.position ) {
+			return [];
+		}
+
 		const positions: Position[] = [ this.position ];
 		let lastPosition = this.position;
 		let length = this.length;
@@ -100,25 +97,11 @@ export default class Ship implements ObservableInterface {
 	}
 
 	/**
-	 * Returns plain object with ship data.
-	 *
-	 * @returns {Object}
-	 */
-	toJSON(): object {
-		return {
-			id: this.id,
-			position: this.position,
-			isRotated: this.isRotated,
-			length: this.length
-		};
-	}
-
-	/**
 	 * Marks field on a given position as hit.
 	 *
 	 * @param position
 	 */
-	hit( position: Position ) {
+	hit( position: Position ): void {
 		const coordinates = this.coordinates;
 
 		for ( let i = 0; i < this.length; i++ ) {
@@ -128,25 +111,37 @@ export default class Ship implements ObservableInterface {
 				return;
 			}
 		}
+
+		throw new Error( 'Ship has no field on this position.' );
 	}
 
 	/**
 	 * Reset Ship data to default values.
 	 */
-	reset() {
+	reset(): void {
 		this.position = undefined;
 		this.isRotated = false;
 		this.hasCollision = false;
 		this.hitFields = this.hitFields.map( () => false );
 	}
-}
 
-mix( Ship, Observable );
+	/**
+	 * Returns plain object with ship data.
+	 */
+	toJSON(): ShipConfig {
+		return {
+			id: this.id,
+			isRotated: this.isRotated,
+			length: this.length,
+			position: this.position.toJSON()
+		};
+	}
+}
 
 function createFalsyArray( length: number ): boolean[] {
 	const arr: boolean[] = [];
 
-	while( length-- ) {
+	while ( length-- ) {
 		arr.push( false );
 	}
 
