@@ -18,7 +18,7 @@
   "author": "Oskar Wróbel <kontakt@oskarwrobel.pl>",
   "license": "ISC",
   "dependencies": {
-    "js-utils": "git@github.com:oskarwrobel/js-utils.git",
+    "js-utils": "https://github.com/oskarwrobel/js-utils.git",
     "lodash": "^4.17.15"
   },
   "devDependencies": {
