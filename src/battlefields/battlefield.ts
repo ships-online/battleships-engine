@@ -1,10 +1,10 @@
-import EmitterMixin, { EmitterInterface } from 'js-utils/src/emittermixin';
+import Emitter from 'js-utils/src/emitter';
 import mix from 'js-utils/src/mix';
 import Position from '../position';
 import Field from '../field';
 import Ship, { ShipConfig } from '../ship';
 
-interface Battlefield extends EmitterInterface {}
+interface Battlefield extends Emitter {}
 export type ShipsSchema = { [ key: string ]: number };
 
 /**
@@ -198,6 +198,6 @@ class Battlefield {
 	}
 }
 
-mix( Battlefield, EmitterMixin );
+mix( Battlefield, Emitter );
 
 export default Battlefield;
