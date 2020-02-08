@@ -12,6 +12,10 @@ describe( 'PlayerBattlefield', () => {
 		battlefield = new PlayerBattlefield( 5, { 2: 1, 4: 1 } );
 	} );
 
+	afterEach( () => {
+		battlefield.destroy();
+	} );
+
 	it( 'should extend Battlefield', () => {
 		expect( battlefield ).to.instanceof( Battlefield );
 	} );
