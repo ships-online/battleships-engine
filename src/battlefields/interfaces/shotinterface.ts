@@ -2,15 +2,13 @@ import Position from '../../position';
 import Battlefield from '../battlefield';
 import Ship from '../../ship';
 
-export interface ShotInterface extends Battlefield {
-	shot( position: Position ): ShootResult;
-}
+interface ShotInterface extends Battlefield {}
 type ShootResult = { position: Position; type: 'missed' | 'hit'; sunkenShip?: Ship };
 
 /**
  * Injects the shot API into Battlefield.
  */
-const ShotMixin = {
+class ShotInterface {
 	/**
 	 * @param position Position on the Battlefield.
 	 * @returns Shot result.
@@ -44,6 +42,6 @@ const ShotMixin = {
 
 		return result;
 	}
-};
+}
 
-export default ShotMixin;
+export default ShotInterface;

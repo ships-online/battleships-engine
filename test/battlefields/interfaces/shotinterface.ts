@@ -1,15 +1,15 @@
 import { expect } from 'chai';
 
 import Battlefield from '../../../src/battlefields/battlefield';
-import ShotMixin, { ShotInterface } from '../../../src/battlefields/mixins/shotmixin';
+import ShotInterface from '../../../src/battlefields/interfaces/shotinterface';
 import Ship from '../../../src/ship';
 import Position from '../../../src/position';
 import mix from 'js-utils/src/mix';
 
-describe( 'CollisionMixin', () => {
+describe( 'ShotInterface', () => {
 	class ShotBattlefield extends Battlefield {}
-	interface ShotBattlefield extends Battlefield, ShotInterface {}
-	mix( ShotBattlefield, ShotMixin );
+	interface ShotBattlefield extends ShotInterface {}
+	mix( Battlefield, ShotInterface );
 
 	let battlefield: ShotBattlefield;
 
