@@ -11,8 +11,7 @@ export type SerializedBattlefield = { [ key: string ]: SerializedRow };
  * 		const battlefield = new Battlefield();
  * 		console.table( serializeBattlefield( battlefield ) );
  *
- * @param battlefield Battlefield instance.
- * @returns Serialized battlefield.
+ * @param battlefield Battlefield to serialize.
  */
 export default function serializeBattlefield( battlefield: Battlefield ): SerializedBattlefield {
 	const result: SerializedBattlefield = {};

@@ -2,7 +2,7 @@ import Position, { PositionJSON } from './position';
 import Ship from './ship';
 
 /**
- * Class that represents  single field on the battlefield.
+ * Class that represents single field on the battlefield.
  */
 export default class Field {
 	/**
@@ -26,7 +26,7 @@ export default class Field {
 	private _ships: Set<Ship> = new Set();
 
 	/**
-	 * @param position Position on the battlefield.
+	 * @param position The position on the battlefield.
 	 */
 	constructor( position: Position | PositionJSON ) {
 		if ( position instanceof Position ) {
@@ -44,7 +44,7 @@ export default class Field {
 	}
 
 	/**
-	 * Defines if field is marked as hit.
+	 * Checks if field is marked as hit.
 	 */
 	get isHit(): boolean {
 		return this._state === true;
@@ -58,21 +58,21 @@ export default class Field {
 	}
 
 	/**
-	 * Defines if field is marked as missed.
+	 * Checks if field is marked as missed.
 	 */
 	get isMissed(): boolean {
 		return this._state === false;
 	}
 
 	/**
-	 * Returns number of ships in on the field.
+	 * Returns number of ships that covers this field.
 	 */
 	get length(): number {
 		return this._ships.size;
 	}
 
 	/**
-	 * Stores ship that covers this field.
+	 * Adds ship that covers this field.
 	 *
 	 * @param ship Ship instance.
 	 */
@@ -83,30 +83,30 @@ export default class Field {
 	/**
 	 * Checks if a given ship covers this field.
 	 *
-	 * @param ship Ship instance.
-	 * @returns Ship instance.
+	 * @param ship The ship to check.
 	 */
 	hasShip( ship: Ship ): boolean {
 		return this._ships.has( ship );
 	}
 
+	/**
+	 * Returns a list of all ships that covers this field.
+	 */
 	getShips(): IterableIterator<Ship> {
 		return this._ships.values();
 	}
 
 	/**
-	 * Returns first ship on the field.
-	 *
-	 * @returns Ship instance.
+	 * Returns the first ship on the field.
 	 */
 	getFirstShip(): Ship {
-		return Array.from( this._ships )[ 0 ];
+		return Array.from( this.getShips() )[ 0 ];
 	}
 
 	/**
 	 * Remove ship from the field.
 	 *
-	 * @param ship Ship id.
+	 * @param ship Ship to remove.
 	 */
 	removeShip( ship: Ship ): void {
 		this._ships.delete( ship );

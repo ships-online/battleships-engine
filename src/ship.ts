@@ -4,7 +4,7 @@ import uid from 'js-utils/src/uid';
 export type ShipConfig = { id?: string; isRotated?: boolean; position?: Position | PositionJSON; length: number };
 
 /**
- * Single ship implementation.
+ * Class that represents single ship.
  */
 export default class Ship {
 	/**
@@ -13,7 +13,7 @@ export default class Ship {
 	id: string;
 
 	/**
-	 * The position on the battlefield of the ship head field.
+	 * The position of the ship head on the battlefield .
 	 */
 	position: Position;
 
@@ -56,7 +56,7 @@ export default class Ship {
 	}
 
 	/**
-	 * Returns an array with positions of all ship fields.
+	 * Returns an list of positions of all ship fields.
 	 */
 	get coordinates(): Position[] {
 		if ( !this.position ) {

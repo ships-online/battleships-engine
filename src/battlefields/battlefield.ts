@@ -38,13 +38,16 @@ class Battlefield {
 
 	/**
 	 * @param size Size of the battlefield.
-	 * @param shipsSchema Defines how many ships of specific length will be in the game.
+	 * @param shipsSchema Defines how many ships of specific length are allowed to be placed on the battlefield.
 	 */
 	constructor( size: number, shipsSchema: ShipsSchema ) {
 		this.size = size;
 		this.shipsSchema = shipsSchema;
 	}
 
+	/**
+	 * Returns battlefield settings.
+	 */
 	get settings(): object {
 		return {
 			size: this.size,
@@ -52,6 +55,11 @@ class Battlefield {
 		};
 	}
 
+	/**
+	 * Create an empty field.
+	 *
+	 * @param position
+	 */
 	createField( position: Position ): Field {
 		if ( this.hasField( position ) ) {
 			throw new Error( 'Field already exists.' );
@@ -64,14 +72,29 @@ class Battlefield {
 		return field;
 	}
 
+	/**
+	 * Checks if field is already created.
+	 *
+	 * @param position
+	 */
 	hasField( position: Position ): boolean {
 		return this._fields.has( position.toString() );
 	}
 
+	/**
+	 * Returns a field of the given position.
+	 *
+	 * @param position
+	 */
 	getField( position: Position ): Field {
 		return this._fields.get( position.toString() );
 	}
 
+	/**
+	 * Removes a field on the given position.
+	 *
+	 * @param position
+	 */
 	removeField( position: Position ): void {
 		if ( !this.hasField( position ) ) {
 			throw new Error( 'Cannot remove not existing field.' );
@@ -80,6 +103,11 @@ class Battlefield {
 		this._fields.delete( position.toString() );
 	}
 
+	/**
+	 * Adds ship to the battlefield.
+	 *
+	 * @param ship
+	 */
 	addShip( ship: Ship ): void {
 		if ( this._ships.has( ship ) ) {
 			throw new Error( 'Ship already added to the battlefield.' );
@@ -92,6 +120,11 @@ class Battlefield {
 		}
 	}
 
+	/**
+	 * Removes ship from the battlefield.
+	 *
+	 * @param ship
+	 */
 	removeShip( ship: Ship ): void {
 		if ( !this._ships.has( ship ) ) {
 			throw new Error( 'Cannot remove not existing ship.' );
@@ -100,17 +133,20 @@ class Battlefield {
 		this._ships.delete( ship );
 	}
 
+	/**
+	 * Returns all ships on added to the battlefield.
+	 */
 	getShips(): IterableIterator<Ship> {
 		return this._ships.values();
 	}
 
 	/**
 	 * Places given ship on the given position on the battlefield.
-	 * Checks collision of ship. Keeps ship in battlefield bounds.
+	 * Keeps ship in battlefield bounds.
 	 *
-	 * @param ship Ship instance.
-	 * @param position Position on the battlefield.
-	 * @param isRotated When `true` then ship will be rotated.
+	 * @param ship Ship to place.
+	 * @param position Target position.
+	 * @param isRotated Ship orientation.
 	 */
 	moveShip( ship: Ship, position: Position, isRotated?: boolean ): void {
 		if ( this.isLocked ) {
@@ -160,7 +196,7 @@ class Battlefield {
 	}
 
 	/**
-	 * Rotates ship.
+	 * Changes ship orientation.
 	 *
 	 * @param ship
 	 */
@@ -169,14 +205,14 @@ class Battlefield {
 	}
 
 	/**
-	 * Clears all listeners.
+	 * Destroys the class instance.
 	 */
 	destroy(): void {
 		this.stopListening();
 	}
 
 	/**
-	 * Creates array of Ships based on a give schema.
+	 * Creates a list of Ships based on the give schema.
 	 */
 	static createShipsFromSchema( schema: ShipsSchema ): Ship[] {
 		const ships: Ship[] = [];
@@ -191,7 +227,7 @@ class Battlefield {
 	}
 
 	/**
-	 * Creates array of Ships based on given ships JSON.
+	 * Creates a list of Ships based on the given ships JSON.
 	 */
 	static createShipsFromJSON( config: ShipConfig[] ): Ship[] {
 		return config.map( data => new Ship( data ) );

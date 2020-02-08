@@ -1,7 +1,17 @@
 export type PositionJSON = [ number, number ];
 
+/**
+ * Class that represents position on the battlefield.
+ */
 export default class Position {
+	/**
+	 * X axis position.
+	 */
 	readonly x: number;
+
+	/**
+	 * Y axis position.
+	 */
 	readonly y: number;
 
 	constructor( x: number, y: number ) {
@@ -9,18 +19,34 @@ export default class Position {
 		this.y = y;
 	}
 
+	/**
+	 * Creates a position instance using given JSON data.
+	 *
+	 * @param json Serialized position.
+	 */
 	static fromJSON( json: PositionJSON ): Position {
 		return new Position( json[ 0 ], json[ 1 ] );
 	}
 
+	/**
+	 * Serializes position to JSON format.
+	 */
 	toJSON(): PositionJSON {
 		return [ this.x, this.y ];
 	}
 
+	/**
+	 * Serializes position to string.
+	 */
 	toString(): string {
 		return this.x + 'x' + this.y;
 	}
 
+	/**
+	 * Checks if position is equal to given position.
+	 *
+	 * @param position The position to check.
+	 */
 	isEqual( position: Position ): boolean {
 		return this.x === position.x && this.y === position.y;
 	}
