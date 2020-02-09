@@ -12,5 +12,10 @@ module.exports = {
 	],
 	'transformIgnorePatterns': [
 		'node_modules/(?!(js-utils|battleships-)/)'
-	]
+	],
+	globals: {
+		'ts-jest': {
+			isolatedModules: true
+		}
+	}
 };
