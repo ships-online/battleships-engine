@@ -11,6 +11,6 @@ module.exports = {
 		'**/test/**/*.ts'
 	],
 	'transformIgnorePatterns': [
-		'node_modules/(?!(js-utils|battleships-*)/)'
+		'node_modules/(?!(js-utils|battleships-)/)'
 	]
 };
