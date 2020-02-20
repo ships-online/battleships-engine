@@ -54,6 +54,52 @@ describe( 'Position', () => {
 		} );
 	} );
 
+	describe( 'getShiftedBy()', () => {
+		it( 'should return position shifted by [ 3, 4 ]', () => {
+			const shifted = position.getShiftedBy( new Position( 3, 4 ) );
+
+			expect( shifted.toJSON() ).to.deep.equal( [ 4, 5 ] );
+		} );
+
+		it( 'should return position shifted by [ -3, -4 ]', () => {
+			const position = new Position( 5, 5 );
+			const shifted = position.getShiftedBy( new Position( -3, -4 ) );
+
+			expect( shifted.toJSON() ).to.deep.equal( [ 2, 1 ] );
+		} );
+	} );
+
+	describe( 'getPositionRelativeTo()', () => {
+		it( 'should return position relative to given position', () => {
+			const relative = position.getRelativeTo( new Position( 3, 4 ) );
+
+			expect( relative.toJSON() ).to.deep.equal( [ -2, -3 ] );
+		} );
+
+		it( 'should return position shifted by [ -3, -4 ]', () => {
+			const position = new Position( 5, 5 );
+			const relative = position.getRelativeTo( new Position( 3, 4 ) );
+
+			expect( relative.toJSON() ).to.deep.equal( [ 2, 1 ] );
+		} );
+	} );
+
+	describe( 'getClamped()', () => {
+		it( 'should get position clamped to the given bounds', () => {
+			const position = new Position( 1, 7 );
+			const clamped = position.getClamped( 3, 6 );
+
+			expect( clamped.toJSON() ).to.deep.equal( [ 3, 6 ] );
+		} );
+
+		it( 'should get position clamped to the given bounds (only one axis sticks out)', () => {
+			const position = new Position( 1, 7 );
+			const clamped = position.getClamped( 0, 6 );
+
+			expect( clamped.toJSON() ).to.deep.equal( [ 1, 6 ] );
+		} );
+	} );
+
 	describe( 'getShiftedTop()', () => {
 		it( 'should return position at the top side of the given position', () => {
 			expect( position.getShiftedTop().toString() ).to.equal( '1x0' );

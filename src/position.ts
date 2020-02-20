@@ -1,3 +1,5 @@
+import { clamp } from 'lodash';
+
 export type PositionJSON = [ number, number ];
 
 /**
@@ -49,6 +51,18 @@ export default class Position {
 	 */
 	isEqual( position: Position ): boolean {
 		return this.x === position.x && this.y === position.y;
+	}
+
+	getShiftedBy( position: Position ): Position {
+		return new Position( this.x + position.x, this.y + position.y );
+	}
+
+	getRelativeTo( position: Position ): Position {
+		return new Position( this.x - position.x, this.y - position.y );
+	}
+
+	getClamped( lower: number, upper: number ): Position {
+		return new Position( clamp( this.x, lower, upper ), clamp( this.y, lower, upper ) );
 	}
 
 	getShiftedTop(): Position {
