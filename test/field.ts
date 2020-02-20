@@ -12,35 +12,57 @@ describe( 'Field', () => {
 	} );
 
 	describe( 'constructor()', () => {
-		it( 'should create instance using position', () => {
+		it( 'should create instance', () => {
 			expect( field.position ).to.equal( position );
-		} );
-
-		it( 'should create instance using position JSON', () => {
-			const field = new Field( [ 1, 2 ] );
-
-			expect( field.position ).to.instanceof( Position );
-			expect( field.position.toJSON() ).to.deep.equal( [ 1, 2 ] );
 		} );
 	} );
 
-	describe( 'hit marker', () => {
+	describe( 'isUnmarked', () => {
+		it( 'should return true when field is not marked as missed or hit', () => {
+			field.status = 'unmarked';
+			expect( field.isUnmarked ).to.true;
+
+			field.status = 'hit';
+			expect( field.isUnmarked ).to.false;
+
+			field.status = 'missed';
+			expect( field.isUnmarked ).to.false;
+		} );
+	} );
+
+	describe( 'markAsHit()', () => {
 		it( 'should mark field as hit', () => {
-			expect( field.isHit ).to.false;
+			expect( field.isUnmarked ).to.true;
 
 			field.markAsHit();
 
-			expect( field.isHit ).to.true;
+			expect( field.status ).to.equal( 'hit' );
+		} );
+
+		it( 'should throw when try to mark already marked field', () => {
+			field.markAsHit();
+
+			expect( () => {
+				field.markAsHit();
+			} ).to.throw( Error, 'Cannot mark already marked field.' );
 		} );
 	} );
 
-	describe( 'missed marker', () => {
+	describe( 'markAsMissed()', () => {
 		it( 'should mark field as missed', () => {
-			expect( field.isMissed ).to.false;
+			expect( field.isUnmarked ).to.true;
 
 			field.markAsMissed();
 
-			expect( field.isMissed ).to.true;
+			expect( field.status ).to.equal( 'missed' );
+		} );
+
+		it( 'should throw when try to mark already marked field', () => {
+			field.markAsMissed();
+
+			expect( () => {
+				field.markAsMissed();
+			} ).to.throw( Error, 'Cannot mark already marked field.' );
 		} );
 	} );
 
@@ -86,7 +108,7 @@ describe( 'Field', () => {
 			field.addShip( ship1 );
 			field.addShip( ship2 );
 
-			expect( Array.from( field.getShips() ) ).to.have.members( [ ship1, ship2 ] );
+			expect( field.getShips() ).to.have.members( [ ship1, ship2 ] );
 		} );
 	} );
 

@@ -1,4 +1,4 @@
-import Position, { PositionJSON } from './position';
+import Position from './position';
 import Ship from './ship';
 
 /**
@@ -6,19 +6,14 @@ import Ship from './ship';
  */
 export default class Field {
 	/**
+	 * The status of the field.
+	 */
+	status: 'hit' | 'missed' | 'unmarked' = 'unmarked';
+
+	/**
 	 * The position of the field.
 	 */
 	readonly position: Position;
-
-	/**
-	 * Field state.
-	 *
-	 * Field can have 3 states:
-	 * * `true` - field is marked as hit
-	 * * `false` - field is marked as missed
-	 * * `undefined` - field is not marked yet
-	 */
-	private _state: boolean | undefined;
 
 	/**
 	 * List of all ships that cover this field.
@@ -28,40 +23,37 @@ export default class Field {
 	/**
 	 * @param position The position on the battlefield.
 	 */
-	constructor( position: Position | PositionJSON ) {
-		if ( position instanceof Position ) {
-			this.position = position;
-		} else {
-			this.position = Position.fromJSON( position );
-		}
+	constructor( position: Position ) {
+		this.position = position;
 	}
 
 	/**
 	 * Marks field as hit.
 	 */
 	markAsHit(): void {
-		this._state = true;
-	}
+		if ( !this.isUnmarked ) {
+			throw new Error( 'Cannot mark already marked field.' );
+		}
 
-	/**
-	 * Checks if field is marked as hit.
-	 */
-	get isHit(): boolean {
-		return this._state === true;
+		this.status = 'hit';
 	}
 
 	/**
 	 * Marks field as missed.
 	 */
 	markAsMissed(): void {
-		this._state = false;
+		if ( !this.isUnmarked ) {
+			throw new Error( 'Cannot mark already marked field.' );
+		}
+
+		this.status = 'missed';
 	}
 
 	/**
 	 * Checks if field is marked as missed.
 	 */
-	get isMissed(): boolean {
-		return this._state === false;
+	get isUnmarked(): boolean {
+		return this.status === 'unmarked';
 	}
 
 	/**
@@ -90,25 +82,25 @@ export default class Field {
 	}
 
 	/**
-	 * Returns a list of all ships that covers this field.
-	 */
-	getShips(): IterableIterator<Ship> {
-		return this._ships.values();
-	}
-
-	/**
-	 * Returns the first ship on the field.
-	 */
-	getFirstShip(): Ship {
-		return Array.from( this.getShips() )[ 0 ];
-	}
-
-	/**
 	 * Remove ship from the field.
 	 *
 	 * @param ship Ship to remove.
 	 */
 	removeShip( ship: Ship ): void {
 		this._ships.delete( ship );
+	}
+
+	/**
+	 * Returns a list of all ships that covers this field.
+	 */
+	getShips(): Ship[] {
+		return Array.from( this._ships.values() );
+	}
+
+	/**
+	 * Returns the first ship on the field.
+	 */
+	getFirstShip(): Ship {
+		return this.getShips().shift();
 	}
 }
