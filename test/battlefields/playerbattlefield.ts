@@ -28,10 +28,6 @@ describe( 'PlayerBattlefield', () => {
 		expect( battlefield.random ).to.be.a( 'function' );
 	} );
 
-	it( 'should create ships based on schema', () => {
-		expect( Array.from( battlefield.getShips(), ship => ship.length ) ).to.have.members( [ 2, 4 ] );
-	} );
-
 	it( 'should check collision after move', () => {
 		const ship1 = new Ship( { length: 2 } );
 		const ship2 = new Ship( { length: 2 } );
