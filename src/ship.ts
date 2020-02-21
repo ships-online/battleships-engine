@@ -1,7 +1,8 @@
 import Position, { PositionJSON } from './position';
 import uid from 'js-utils/src/uid';
 
-export type ShipConfig = { id?: string; isRotated?: boolean; position?: Position | PositionJSON; length: number };
+export type ShipConfig = { id?: string; isRotated?: boolean; length: number; position?: Position };
+export type ShipJSON = { id: string; isRotated?: boolean; length: number; position?: PositionJSON; hasCollision?: boolean };
 
 /**
  * Class that represents single ship.
@@ -45,14 +46,9 @@ export default class Ship {
 	constructor( { id = uid(), isRotated = false, position, length }: ShipConfig ) {
 		this.id = id;
 		this.length = length;
+		this.position = position;
 		this.isRotated = isRotated;
 		this.hitFields = createFalsyArray( length );
-
-		if ( position instanceof Position ) {
-			this.position = position;
-		} else if ( position ) {
-			this.position = Position.fromJSON( position );
-		}
 	}
 
 	/**
@@ -128,13 +124,33 @@ export default class Ship {
 	/**
 	 * Returns plain object with ship data.
 	 */
-	toJSON(): ShipConfig {
-		return {
+	toJSON(): ShipJSON {
+		const json: ShipJSON = {
 			id: this.id,
 			isRotated: this.isRotated,
 			length: this.length,
-			position: this.position.toJSON()
+			hasCollision: this.hasCollision
 		};
+
+		if ( this.position ) {
+			json.position = this.position.toJSON();
+		}
+
+		return json;
+	}
+
+	static fromJSON( data: ShipJSON ): Ship {
+		const config: ShipConfig = {
+			id: data.id,
+			length: data.length,
+			isRotated: data.isRotated
+		};
+
+		if ( data.position ) {
+			config.position = Position.fromJSON( data.position );
+		}
+
+		return new Ship( config );
 	}
 }
 

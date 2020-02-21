@@ -16,7 +16,7 @@ class CollisionInterface {
 		let hasCollision = false;
 
 		// Check the given ship and all ships that already had a collision.
-		const shipsToCheck = [ ship, ...Array.from( this.getShips() ).filter( ship => ship.hasCollision ) ];
+		const shipsToCheck = [ ship, ...this.getShips().filter( ship => ship.hasCollision ) ];
 
 		for ( ship of shipsToCheck ) {
 			if ( this._checkShipCollision( ship ) ) {
@@ -52,8 +52,8 @@ class CollisionInterface {
 
 		// Then check if the given ship has a collision with ships on collected positions.
 		for ( const position of positionsToCheck.values() ) {
-			if ( this.hasField( position ) ) {
-				for ( const shipOnField of this.getField( position ).getShips() ) {
+			if ( this._hasField( position ) ) {
+				for ( const shipOnField of this._getField( position ).getShips() ) {
 					if ( shipOnField !== ship ) {
 						shipOnField.hasCollision = true;
 						hasCollision = true;

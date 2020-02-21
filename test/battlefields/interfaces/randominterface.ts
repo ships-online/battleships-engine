@@ -13,10 +13,6 @@ describe( 'RandomInterface', () => {
 
 	beforeEach( () => {
 		battlefield = new RandomBattlefield( 10, { 1: 4, 2: 3, 3: 2, 4: 1 } );
-
-		for ( const ship of RandomBattlefield.createShipsFromSchema( battlefield.shipsSchema ) ) {
-			battlefield.addShip( ship );
-		}
 	} );
 
 	afterEach( () => {
@@ -31,7 +27,7 @@ describe( 'RandomInterface', () => {
 		expect( battlefield.checkCollision ).to.be.a( 'function' );
 	} );
 
-	describe( 'random', () => {
+	describe( 'random()', () => {
 		it( 'should arrange ships on battlefield with no collision', () => {
 			for ( const ship of battlefield.getShips() ) {
 				expect( ship.position ).to.undefined;
@@ -58,10 +54,6 @@ describe( 'RandomInterface', () => {
 
 		it( 'should not get into infinite loop when random interface is not able to arrange ships', () => {
 			battlefield = new RandomBattlefield( 1, { 1: 2 } );
-
-			for ( const ship of RandomBattlefield.createShipsFromSchema( battlefield.shipsSchema ) ) {
-				battlefield.addShip( ship );
-			}
 
 			battlefield.random();
 

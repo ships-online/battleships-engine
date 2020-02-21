@@ -1,5 +1,7 @@
-import Position from './position';
+import Position, { PositionJSON } from './position';
 import Ship from './ship';
+
+export type FieldJSON = { position: PositionJSON; status: 'hit' | 'missed' }
 
 /**
  * Class that represents single field on the battlefield.
@@ -102,5 +104,20 @@ export default class Field {
 	 */
 	getFirstShip(): Ship {
 		return this.getShips().shift();
+	}
+
+	/**
+	 * Returns field as a pure object.
+	 * Information about ships is not included.
+	 */
+	toJSON(): FieldJSON {
+		if ( this.isUnmarked ) {
+			throw new Error( 'Cannot serialize unmarked field. There should be no need to do that.' );
+		}
+
+		return {
+			status: this.status as 'hit' | 'missed',
+			position: this.position.toJSON()
+		};
 	}
 }

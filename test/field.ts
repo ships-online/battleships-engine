@@ -146,4 +146,36 @@ describe( 'Field', () => {
 			expect( field ).to.length( 1 );
 		} );
 	} );
+
+	describe( 'toJSON()', () => {
+		it( 'should return field marked as hit', () => {
+			const field = new Field( new Position( 1, 1 ) );
+
+			field.markAsHit();
+
+			expect( field.toJSON() ).to.deep.equal( {
+				position: [ 1, 1 ],
+				status: 'hit'
+			} );
+		} );
+
+		it( 'should return field marked as missed', () => {
+			const field = new Field( new Position( 1, 1 ) );
+
+			field.markAsMissed();
+
+			expect( field.toJSON() ).to.deep.equal( {
+				position: [ 1, 1 ],
+				status: 'missed'
+			} );
+		} );
+
+		it( 'should throw when try to use unmarked field', () => {
+			const field = new Field( new Position( 1, 1 ) );
+
+			expect( () => {
+				field.toJSON();
+			} ).to.throw( Error, /^Cannot serialize unmarked field./ );
+		} );
+	} );
 } );

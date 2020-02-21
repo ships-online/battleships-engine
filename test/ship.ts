@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
 
-import Ship from '../src/ship';
+import Ship, { ShipJSON } from '../src/ship';
 import Position from '../src/position';
 
 describe( 'Ship', () => {
@@ -28,8 +28,6 @@ describe( 'Ship', () => {
 			expect( ship ).to.have.property( 'isRotated', true );
 			expect( ship ).to.have.property( 'hasCollision', false );
 			expect( ship ).to.have.property( 'hitFields' ).to.deep.equal( [ false, false, false ] );
-
-			expect( ship ).to.have.property( 'position' ).to.instanceof( Position );
 			expect( ship.position.toJSON() ).to.deep.equal( [ 1, 1 ] );
 		} );
 
@@ -43,13 +41,6 @@ describe( 'Ship', () => {
 			expect( ship ).to.have.property( 'hitFields' ).to.deep.equal( [ false, false, false ] );
 
 			expect( ship.position ).to.undefined;
-		} );
-
-		it( 'should create an instance of Ship with position given as a JSON', () => {
-			ship = new Ship( { length: 3, position: [ 1, 2 ] } );
-
-			expect( ship.position ).to.instanceof( Position );
-			expect( ship.position.toJSON() ).to.deep.equal( [ 1, 2 ] );
 		} );
 	} );
 
@@ -173,7 +164,7 @@ describe( 'Ship', () => {
 
 	describe( 'reset()', () => {
 		it( 'should reset ship to the default values', () => {
-			const ship = new Ship( { length: 2, position: [ 1, 1 ] } );
+			const ship = new Ship( { length: 2, position: new Position( 1, 1 ) } );
 
 			ship.isRotated = true;
 			ship.hit( new Position( 1, 1 ) );
@@ -189,20 +180,71 @@ describe( 'Ship', () => {
 	} );
 
 	describe( 'toJSON()', () => {
-		it( 'should return ship in JSON format', () => {
+		it( 'should return ship in JSON format - with a position', () => {
 			ship = new Ship( {
 				id: 'some-id',
 				length: 3,
 				isRotated: true,
-				position: [ 1, 1 ]
+				position: new Position( 1, 1 ),
 			} );
 
-			const json = ship.toJSON();
+			expect( ship.toJSON() ).to.deep.equal( {
+				id: 'some-id',
+				length: 3,
+				isRotated: true,
+				position: [ 1, 1 ],
+				hasCollision: false
+			} );
+		} );
 
-			expect( json ).to.have.property( 'id', 'some-id' );
-			expect( json ).to.have.property( 'length', 3 );
-			expect( json ).to.have.property( 'isRotated', true );
-			expect( json ).to.have.property( 'position' ).to.deep.equal( [ 1, 1 ] );
+		it( 'should return ship in JSON format - without a position', () => {
+			ship = new Ship( {
+				id: 'some-id',
+				length: 3,
+				isRotated: true
+			} );
+
+			expect( ship.toJSON() ).to.deep.equal( {
+				id: 'some-id',
+				length: 3,
+				isRotated: true,
+				hasCollision: false
+			} );
+		} );
+	} );
+
+	describe( 'fromJSON()', () => {
+		it( 'should create ship from JSON - without a position', () => {
+			const json: ShipJSON = {
+				id: 'some-id',
+				length: 2,
+				isRotated: true
+			};
+
+			const ship = Ship.fromJSON( json );
+
+			expect( ship ).to.have.property( 'id', 'some-id' );
+			expect( ship ).to.have.property( 'length', 2 );
+			expect( ship ).to.have.property( 'isRotated', true );
+			expect( ship ).to.have.property( 'position', undefined );
+		} );
+
+		it( 'should create ship from JSON - with a position', () => {
+			const json: ShipJSON = {
+				id: 'some-id',
+				length: 2,
+				isRotated: true,
+				position: [ 1, 1 ]
+			};
+
+			const ship = Ship.fromJSON( json );
+
+			expect( ship ).to.have.property( 'id', 'some-id' );
+			expect( ship ).to.have.property( 'length', 2 );
+			expect( ship ).to.have.property( 'isRotated', true );
+
+			expect( ship.position ).to.instanceof( Position );
+			expect( ship.position.toJSON() ).to.deep.equal( [ 1, 1 ] );
 		} );
 	} );
 } );

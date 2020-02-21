@@ -16,29 +16,27 @@ class ShotInterface {
 	shot( position: Position ): ShootResult {
 		const result: ShootResult = { position, type: 'missed' };
 
-		if ( !this.hasField( position ) ) {
-			this.createField( position ).markAsMissed();
+		if ( !this._hasField( position ) ) {
+			this.markAsMissed( position );
 
 			return result;
 		}
 
-		const field = this.getField( position );
+		const field = this._getField( position );
 
-		if ( field.isMissed ) {
-			result.type = 'missed';
-		} else if ( field.isHit ) {
-			result.type = 'hit';
-		} else {
+		if ( field.isUnmarked ) {
 			const ship = field.getFirstShip();
 
 			ship.hit( position );
-			field.markAsHit();
+			this.markAsHit( position );
 			result.type = 'hit';
 
 			if ( ship.hasSunk ) {
 				result.sunkenShip = ship;
 			}
 		}
+
+		result.type = field.status as 'missed' | 'hit';
 
 		return result;
 	}

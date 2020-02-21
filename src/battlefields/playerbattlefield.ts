@@ -9,9 +9,10 @@ interface PlayerBattlefield extends Battlefield, RandomInterface {}
  * Class that represents Player Battlefield.
  */
 class PlayerBattlefield extends Battlefield {
-	constructor( size: number, shipsSchema: ShipsSchema ) {
-		super( size, shipsSchema );
+	constructor( size: number, shipsSchema: ShipsSchema, initialShips?: Ship[] ) {
+		super( size, shipsSchema, initialShips );
 
+		this.set( 'hasCollision', false );
 		this.on( 'shipMoved', ( evt, ship: Ship ) => this.checkCollision( ship ) );
 	}
 }

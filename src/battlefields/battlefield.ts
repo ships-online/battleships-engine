@@ -1,10 +1,11 @@
-import Emitter from 'js-utils/src/emitter';
-import mix from 'js-utils/src/mix';
 import Position from '../position';
 import Field from '../field';
-import Ship, { ShipConfig } from '../ship';
+import Ship, { ShipJSON } from '../ship';
+import { clamp } from 'lodash';
+import Observable from 'js-utils/src/observable';
+import mix from 'js-utils/src/mix';
 
-interface Battlefield extends Emitter {}
+interface Battlefield extends Observable {}
 export type ShipsSchema = { [ key: string ]: number };
 
 /**
@@ -29,7 +30,7 @@ class Battlefield {
 	/**
 	 * List of ships on the battlefield.
 	 */
-	protected _ships: Set<Ship> = new Set();
+	protected _ships: Map<string, Ship> = new Map();
 
 	/**
 	 * List of fields on the battlefield.
@@ -39,10 +40,17 @@ class Battlefield {
 	/**
 	 * @param size Size of the battlefield.
 	 * @param shipsSchema Defines how many ships of specific length are allowed to be placed on the battlefield.
+	 * @param [initialShips]
 	 */
-	constructor( size: number, shipsSchema: ShipsSchema ) {
+	constructor( size: number, shipsSchema: ShipsSchema, initialShips?: Ship[] ) {
 		this.size = size;
 		this.shipsSchema = shipsSchema;
+
+		const ships = initialShips || Battlefield.createShipsFromSchema( shipsSchema );
+
+		for ( const ship of ships ) {
+			this._addShip( ship );
+		}
 	}
 
 	/**
@@ -60,11 +68,7 @@ class Battlefield {
 	 *
 	 * @param position
 	 */
-	createField( position: Position ): Field {
-		if ( this.hasField( position ) ) {
-			throw new Error( 'Field already exists.' );
-		}
-
+	protected _createField( position: Position ): Field {
 		const field = new Field( position );
 
 		this._fields.set( position.toString(), field );
@@ -77,7 +81,7 @@ class Battlefield {
 	 *
 	 * @param position
 	 */
-	hasField( position: Position ): boolean {
+	protected _hasField( position: Position ): boolean {
 		return this._fields.has( position.toString() );
 	}
 
@@ -86,7 +90,7 @@ class Battlefield {
 	 *
 	 * @param position
 	 */
-	getField( position: Position ): Field {
+	protected _getField( position: Position ): Field {
 		return this._fields.get( position.toString() );
 	}
 
@@ -95,12 +99,43 @@ class Battlefield {
 	 *
 	 * @param position
 	 */
-	removeField( position: Position ): void {
-		if ( !this.hasField( position ) ) {
-			throw new Error( 'Cannot remove not existing field.' );
+	protected _removeField( position: Position ): void {
+		this._fields.delete( position.toString() );
+	}
+
+	/**
+	 * Marks field of the given position as missed.
+	 *
+	 * @param position
+	 */
+	markAsMissed( position: Position ): void {
+		if ( !this._hasField( position ) ) {
+			this._createField( position );
 		}
 
-		this._fields.delete( position.toString() );
+		this._getField( position ).markAsMissed();
+		this.fire( 'missed', position );
+	}
+
+	/**
+	 * Marks field of the given position as hit.
+	 *
+	 * @param position
+	 */
+	markAsHit( position: Position ): void {
+		if ( !this._hasField( position ) ) {
+			this._createField( position );
+		}
+
+		this._getField( position ).markAsHit();
+		this.fire( 'hit', position );
+	}
+
+	/**
+	 * Returns a list of all marked fields in JSON format.
+	 */
+	getFields(): Field[] {
+		return Array.from( this._fields.values() ).filter( field => !field.isUnmarked );
 	}
 
 	/**
@@ -108,71 +143,69 @@ class Battlefield {
 	 *
 	 * @param ship
 	 */
-	addShip( ship: Ship ): void {
-		if ( this._ships.has( ship ) ) {
+	protected _addShip( ship: Ship ): void {
+		if ( this._ships.has( ship.id ) ) {
 			throw new Error( 'Ship already added to the battlefield.' );
 		}
 
-		this._ships.add( ship );
+		this._ships.set( ship.id, ship );
 
 		if ( ship.position ) {
-			this.moveShip( ship, ship.position, ship.isRotated );
+			this.moveShip( ship.id, ship.position, ship.isRotated );
 		}
 	}
 
-	/**
-	 * Removes ship from the battlefield.
-	 *
-	 * @param ship
-	 */
-	removeShip( ship: Ship ): void {
-		if ( !this._ships.has( ship ) ) {
-			throw new Error( 'Cannot remove not existing ship.' );
+	getShip( shipId: string ): Ship {
+		if ( !this._ships.has( shipId ) ) {
+			throw new Error( 'There is no ship of given id.' );
 		}
 
-		this._ships.delete( ship );
+		return this._ships.get( shipId );
 	}
 
 	/**
-	 * Returns all ships on added to the battlefield.
+	 * Returns a list of all ships added to the battlefield in JSON format.
 	 */
-	getShips(): IterableIterator<Ship> {
-		return this._ships.values();
+	getShips(): Ship[] {
+		return Array.from( this._ships.values() );
 	}
 
 	/**
 	 * Places given ship on the given position on the battlefield.
 	 * Keeps ship in battlefield bounds.
 	 *
-	 * @param ship Ship to place.
+	 * @param shipId Id of ship to place.
 	 * @param position Target position.
 	 * @param isRotated Ship orientation.
 	 */
-	moveShip( ship: Ship, position: Position, isRotated?: boolean ): void {
+	moveShip( shipId: string, position: Position, isRotated?: boolean ): void {
 		if ( this.isLocked ) {
 			return;
 		}
+
+		const ship = this.getShip( shipId );
 
 		if ( isRotated === undefined ) {
 			isRotated = ship.isRotated;
 		}
 
 		let { x, y } = position;
-		const max = this.size - ship.length;
 
 		if ( isRotated ) {
-			y = Math.min( y, max );
+			x = clamp( x, 0, this.size - 1 );
+			y = clamp( y, 0, this.size - ship.length );
 		} else {
-			x = Math.min( x, max );
+			x = clamp( x, 0, this.size - ship.length );
+			y = clamp( y, 0, this.size - 1 );
 		}
 
 		// Update fields according to old coordinates of ship.
 		for ( const pos of ship.coordinates ) {
-			const field = this.getField( pos );
+			const field = this._getField( pos );
 
 			if ( field && field.hasShip( ship ) ) {
 				if ( field.length == 1 ) {
-					this.removeField( pos );
+					this._removeField( pos );
 				} else {
 					field.removeShip( ship );
 				}
@@ -185,11 +218,11 @@ class Battlefield {
 
 		// Update fields according to new coordinates of ship.
 		for ( const pos of ship.coordinates ) {
-			if ( !this.hasField( pos ) ) {
-				this.createField( pos );
+			if ( !this._hasField( pos ) ) {
+				this._createField( pos );
 			}
 
-			this.getField( pos ).addShip( ship );
+			this._getField( pos ).addShip( ship );
 		}
 
 		this.fire( 'shipMoved', ship );
@@ -198,10 +231,12 @@ class Battlefield {
 	/**
 	 * Changes ship orientation.
 	 *
-	 * @param ship
+	 * @param shipId
 	 */
-	rotateShip( ship: Ship ): void {
-		this.moveShip( ship, ship.position, !ship.isRotated );
+	rotateShip( shipId: string ): void {
+		const { position, isRotated } = this.getShip( shipId );
+
+		this.moveShip( shipId, position, !isRotated );
 	}
 
 	/**
@@ -229,11 +264,11 @@ class Battlefield {
 	/**
 	 * Creates a list of Ships based on the given ships JSON.
 	 */
-	static createShipsFromJSON( config: ShipConfig[] ): Ship[] {
-		return config.map( data => new Ship( data ) );
+	static createShipsFromJSON( data: ShipJSON[] ): Ship[] {
+		return data.map( shipJSON => Ship.fromJSON( shipJSON ) );
 	}
 }
 
-mix( Battlefield, Emitter );
+mix( Battlefield, Observable );
 
 export default Battlefield;

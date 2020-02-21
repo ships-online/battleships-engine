@@ -15,7 +15,7 @@ class RandomInterface {
 			return;
 		}
 
-		for ( const ship of this._ships ) {
+		for ( const ship of this.getShips() ) {
 			ship.position = null;
 		}
 
@@ -23,7 +23,7 @@ class RandomInterface {
 
 		const maxSize = this.size - 1;
 
-		for ( const ship of Array.from( this._ships ).reverse() ) {
+		for ( const ship of this.getShips().reverse() ) {
 			let done = false;
 			let attempts = 0;
 
@@ -32,7 +32,7 @@ class RandomInterface {
 				const x = random( 0, maxSize );
 				const y = random( 0, maxSize );
 
-				this.moveShip( ship, new Position( x, y ), isRotated );
+				this.moveShip( ship.id, new Position( x, y ), isRotated );
 
 				if ( attempts++ < 100 ) {
 					done = !this.checkCollision( ship );

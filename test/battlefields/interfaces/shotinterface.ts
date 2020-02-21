@@ -11,10 +11,11 @@ describe( 'ShotInterface', () => {
 	interface ShotBattlefield extends ShotInterface {}
 	mix( Battlefield, ShotInterface );
 
-	let battlefield: ShotBattlefield;
+	let battlefield: ShotBattlefield, initialShips: Ship[];
 
 	beforeEach( () => {
-		battlefield = new ShotBattlefield( 10, { 1: 4, 2: 3, 3: 2, 4: 1 } );
+		initialShips = Battlefield.createShipsFromSchema( { 2: 2 } );
+		battlefield = new ShotBattlefield( 10, { 2: 2 }, initialShips );
 	} );
 
 	afterEach( () => {
@@ -27,65 +28,89 @@ describe( 'ShotInterface', () => {
 
 	describe( 'shot', () => {
 		it( 'should mark field as missed and return data when field is empty', () => {
-			const result = battlefield.shot( new Position( 1, 1 ) );
 			const position = new Position( 1, 1 );
-
-			expect( battlefield.getField( position ).isMissed ).to.true;
-			expect( battlefield.getField( position ).isHit ).to.false;
-			expect( result ).to.deep.equal( { type: 'missed', position } );
-		} );
-
-		it( 'should mark field as hit and return data when ship is on the field', () => {
-			const ship = new Ship( { length: 2 } );
-			const position = new Position( 1, 1 );
-
-			battlefield.moveShip( ship, position );
 
 			const result = battlefield.shot( position );
 
-			expect( battlefield.getField( position ).isMissed ).to.false;
-			expect( battlefield.getField( position ).isHit ).to.true;
+			expect( result ).to.deep.equal( { type: 'missed', position } );
+
+			const fields = battlefield.getFields();
+
+			expect( fields ).to.length( 1 );
+			expect( fields[ 0 ].status ).to.equal( 'missed' );
+			expect( fields[ 0 ].position ).to.deep.equal( position );
+		} );
+
+		it( 'should return the same data when shot the same empty field more than once', () => {
+			const position = new Position( 1, 1 );
+
+			const result1 = battlefield.shot( position );
+			const result2 = battlefield.shot( position );
+
+			expect( result1 ).to.deep.equal( result2 );
+		} );
+
+		it( 'should mark field as hit and return data when ship is on the field', () => {
+			const position = new Position( 1, 1 );
+			const [ ship ] = initialShips;
+
+			battlefield.moveShip( ship.id, position );
+
+			const result = battlefield.shot( position );
+
+			const fields = battlefield.getFields();
+
 			expect( result ).to.deep.equal( { type: 'hit', position } );
+			expect( fields ).to.length( 1 );
+
+			expect( fields[ 0 ].position ).to.deep.equal( position );
+			expect( fields[ 0 ].status ).to.equal( 'hit' );
 		} );
 
-		it( 'should return data when field is already set as missed', () => {
+		it( 'should return the same data when shot the same non empty field more than once', () => {
 			const position = new Position( 1, 1 );
+			const [ ship ] = initialShips;
 
-			battlefield.createField( position ).markAsMissed();
+			battlefield.moveShip( ship.id, position );
 
-			expect( battlefield.shot( position ) ).to.deep.equal( { type: 'missed', position } );
+			const result1 = battlefield.shot( position );
+			const result2 = battlefield.shot( position );
+
+			expect( result1 ).to.deep.equal( result2 );
 		} );
 
-		it( 'should return data when field is already set as hit', () => {
-			const position = new Position( 1, 1 );
-			const ship = new Ship( { length: 2, position } );
-			const field = battlefield.createField( position );
+		it( 'should set damage to ship when ship is on the field (head)', () => {
+			const [ ship ] = initialShips;
 
-			field.addShip( ship );
-			field.markAsHit();
+			battlefield.moveShip( ship.id, new Position( 1, 1 ) );
+			battlefield.shot( new Position( 1, 1 ) );
 
-			expect( battlefield.shot( position ) ).to.deep.equal( { type: 'hit', position } );
+			expect( ship.hitFields ).to.have.members( [ true, false ] );
 		} );
 
-		it( 'should set damage to ship when ship is on the field', () => {
-			const ship = new Ship( { length: 2 } );
+		it( 'should set damage to ship when ship is on the field (tail)', () => {
+			const [ ship ] = initialShips;
 
-			battlefield.moveShip( ship, new Position( 1, 1 ) );
-
+			battlefield.moveShip( ship.id, new Position( 1, 1 ) );
 			battlefield.shot( new Position( 2, 1 ) );
 
 			expect( ship.hitFields ).to.have.members( [ false, true ] );
 		} );
 
 		it( 'should return sunken ship in the result', () => {
-			const ship = new Ship( { length: 2 } );
+			const [ ship ] = initialShips;
 
-			battlefield.moveShip( ship, new Position( 1, 1 ) );
-
+			battlefield.moveShip( ship.id, new Position( 1, 1 ) );
 			battlefield.shot( new Position( 1, 1 ) );
-			const result = battlefield.shot( new Position( 2, 1 ) );
 
-			expect( result ).to.have.property( 'sunkenShip', ship );
+			const position = new Position( 2, 1 );
+			const result = battlefield.shot( position );
+
+			expect( result ).to.deep.equal( {
+				type: 'hit',
+				position,
+				sunkenShip: ship
+			} );
 		} );
 	} );
 } );
